@@ -15,8 +15,8 @@ import com.google.common.collect.Sets;
 import com.testify.generators.api.GeneratorException;
 import com.testify.generators.api.IConstraint;
 import com.testify.generators.api.IGenerator;
-import com.testify.generators.CartesianProductGenerator;
 import com.testify.generators.utils.TestUtils;
+import com.testify.generators.CartesianProductGenerator;
 
 public class CartesianGeneratorTest extends CartesianProductGenerator<String>{
 	IGenerator<String> fGeneratorUnderTest;
