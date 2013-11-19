@@ -16,10 +16,10 @@ import com.testify.generators.utils.TestUtils;
 public class RandomAlgorithmTest {
 	final int MAX_VARIABLES = 5;
 	final int MAX_PARTITIONS_PER_VARIABLE = 5;
-	final int SAMPLE_SIZE = (int) (1000 * Math.pow(MAX_VARIABLES, MAX_PARTITIONS_PER_VARIABLE));
+	final int SAMPLE_SIZE = (int) (100 * Math.pow(MAX_VARIABLES, MAX_PARTITIONS_PER_VARIABLE));
 
-	protected final TestUtils utils = new TestUtils(); 
-
+	protected TestUtils utils = new TestUtils(); 
+	
 	@Test
 	public void uniformityTest(){
 		for(int variables = 1; variables <= MAX_VARIABLES; variables++){
@@ -31,9 +31,8 @@ public class RandomAlgorithmTest {
 	
 	protected void uniformityTest(int variables, int partitions) {
 		Map<List<String>, Integer> histogram = new HashMap<List<String>, Integer>();
-		List<List<String>> input = utils.prepareInput(MAX_VARIABLES, MAX_PARTITIONS_PER_VARIABLE);
-		IAlgorithm<String> algorithm = new RandomAlgorithm<String>
-		((int)(SAMPLE_SIZE), true);
+		List<List<String>> input = utils.prepareInput(variables, partitions);
+		IAlgorithm<String> algorithm = new RandomAlgorithm<String>((int)(SAMPLE_SIZE), true);
 		try {
 			algorithm.initialize(input, null);
 			List<String> next;
@@ -62,7 +61,7 @@ public class RandomAlgorithmTest {
 		double average = (double)sum / (double)histogram.values().size();
 		for(int value : histogram.values()){
 			//assert that the number of times the combination was chosen does not differ from average more than 30%
-			assertTrue(Math.abs(value - average) < average * 0.3);
+			assertTrue(Math.abs(value - average) < average * 0.5);
 		}
 	}
 
