@@ -44,11 +44,6 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tree;
 
-import com.testify.ecfeed.api.GeneratorException;
-import com.testify.ecfeed.api.IConstraint;
-import com.testify.ecfeed.api.IGenerator;
-import com.testify.ecfeed.api.IGeneratorParameter;
-import com.testify.ecfeed.api.IGeneratorParameter.TYPE;
 import com.testify.ecfeed.constants.Constants;
 import com.testify.ecfeed.constants.DialogStrings;
 import com.testify.ecfeed.model.CategoryNode;
@@ -61,6 +56,11 @@ import com.testify.ecfeed.model.constraint.Constraint;
 import com.testify.ecfeed.ui.common.TreeCheckStateListener;
 import com.testify.ecfeed.utils.EcModelUtils;
 import com.testify.generators.GeneratorFactory;
+import com.testify.generators.api.GeneratorException;
+import com.testify.generators.api.IConstraint;
+import com.testify.generators.api.IGenerator;
+import com.testify.generators.api.IGeneratorParameter;
+import com.testify.generators.api.IGeneratorParameter.TYPE;
 
 import org.eclipse.swt.widgets.Spinner;
 

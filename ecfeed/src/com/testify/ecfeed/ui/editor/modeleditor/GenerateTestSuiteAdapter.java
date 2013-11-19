@@ -27,9 +27,6 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Display;
 
-import com.testify.ecfeed.api.GeneratorException;
-import com.testify.ecfeed.api.IConstraint;
-import com.testify.ecfeed.api.IGenerator;
 import com.testify.ecfeed.constants.Constants;
 import com.testify.ecfeed.constants.DialogStrings;
 import com.testify.ecfeed.model.CategoryNode;
@@ -37,6 +34,9 @@ import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.ui.dialogs.GenerateTestSuiteDialog;
+import com.testify.generators.api.GeneratorException;
+import com.testify.generators.api.IConstraint;
+import com.testify.generators.api.IGenerator;
 
 class GenerateTestSuiteAdapter extends SelectionAdapter{
 

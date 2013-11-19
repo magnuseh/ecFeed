@@ -13,9 +13,9 @@ package com.testify.ecfeed.model.constraint;
 
 import java.util.List;
 
-import com.testify.ecfeed.api.IConstraint;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.PartitionNode;
+import com.testify.generators.api.IConstraint;
 
 public class Constraint implements IConstraint<PartitionNode> {
 	
