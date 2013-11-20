@@ -2,11 +2,14 @@ package com.testify.ecfeed.generators.algorithms;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.math3.stat.inference.TestUtils;
 import org.junit.Test;
 
 import com.testify.ecfeed.generators.utils.GeneratorTestUtils;
@@ -23,15 +26,15 @@ public class RandomAlgorithmTest {
 	
 	@Test
 	public void uniformityTest(){
-		for(int variables = 4; variables <= MAX_VARIABLES; variables++){
-			for(int partitions = 4; partitions <= MAX_PARTITIONS_PER_VARIABLE; partitions++){
+		for(int variables = 1; variables <= MAX_VARIABLES; variables++){
+			for(int partitions = 2; partitions <= MAX_PARTITIONS_PER_VARIABLE; partitions++){
 				uniformityTest(variables, partitions);
 			}
 		}
 	}
 	
 	protected void uniformityTest(int variables, int partitions) {
-		Map<List<String>, Integer> histogram = new HashMap<List<String>, Integer>();
+		Map<List<String>, Long> histogram = new HashMap<List<String>, Long>();
 		List<List<String>> input = utils.prepareInput(variables, partitions);
 		IAlgorithm<String> algorithm = new RandomAlgorithm<String>((int)(SAMPLE_SIZE), true);
 		try {
@@ -42,37 +45,25 @@ public class RandomAlgorithmTest {
 					histogram.put(next, histogram.get(next) + 1);
 				}
 				else{
-					histogram.put(next, 1);
+					histogram.put(next, 1l);
 				}
 			}
 		} catch (GeneratorException e) {
 			fail("Unexpected generator exception: " + e.getMessage());
 		}
-
-		//assert that every combination was chosen at least once
-		double expectedSize = Math.pow(partitions, variables); 
-		assertEquals((int)expectedSize, histogram.size());
-		testUniformity(histogram);
+		testUniformity(histogram.values());
 	}
 	
-	@SuppressWarnings("unused")
-	private void testUniformity(Map<List<String>, Integer> histogram) {
-		Collection<Integer> values = histogram.values();
-		int size = values.size();
+	private void testUniformity(Collection<Long> values) {
 		double expectedValue = mean(values);
-		double chi2 = 0;
-		for(int value : values){
-			chi2 += Math.pow((value - expectedValue), 2) / expectedValue; 
+		List<Double> expectedDistribution = new ArrayList<Double>();
+		for(int i = 0; i < values.size(); i++){
+			expectedDistribution.add(expectedValue);
 		}
-		double degOfFreedom = values.size() - 1;
-		double redusedChi2 = chi2 / degOfFreedom;
-//		for(int value : histogram.values()){
-//			//assert that the number of times the combination was chosen does not differ from average more than 30%
-//			double deviation = Math.abs(value - mean);
-//			int histogramSize = histogram.size();
-//			assertTrue(Math.abs(value - mean) < mean * 0.5);
-//		}
-		double variance = variance(histogram.values());
+		double[] expected = ArrayUtils.toPrimitive(expectedDistribution.toArray(new Double[]{}));
+		long[] observed = ArrayUtils.toPrimitive(values.toArray(new Long[]{}));
+		boolean notUniform = TestUtils.chiSquareTest(expected, observed, 0.01);
+		assertFalse(notUniform);
 	}
 
 	@Test
@@ -85,25 +76,25 @@ public class RandomAlgorithmTest {
 		
 	}
 	
-	public double mean(Collection<Integer> values){
+	public double mean(Collection<Long> values){
 		if(values.size() == 0) return 0;
 		int sum = 0;
-		for(Integer value: values){
+		for(long value: values){
 			sum += value;
 		}
 		return (double)sum / (double)values.size(); 
 	}
 	
-	public double variance(Collection<Integer> values){
+	public double variance(Collection<Long> values){
 		double mean = mean(values);
 		double sum = 0;
-		for(int value : values){
+		for(long value : values){
 			sum += (mean - (double)value) * (mean - (double)value);
 		}
 		return sum/(double)values.size();
 	}
 	
-	public double stdDev(Collection<Integer> values){
+	public double stdDev(Collection<Long> values){
 		return Math.sqrt(variance(values));
 	}
 }
