@@ -9,17 +9,17 @@ import java.util.Map;
 
 import org.junit.Test;
 
+import com.testify.ecfeed.generators.utils.GeneratorTestUtils;
 import com.testify.generators.ecfeed.algorithms.IAlgorithm;
 import com.testify.generators.ecfeed.algorithms.RandomAlgorithm;
 import com.testify.generators.ecfeed.api.GeneratorException;
-import com.testify.generators.utils.TestUtils;
 
 public class RandomAlgorithmTest {
 	final int MAX_VARIABLES = 5;
 	final int MAX_PARTITIONS_PER_VARIABLE = 5;
 	final int SAMPLE_SIZE = (int) (10 * Math.pow(MAX_PARTITIONS_PER_VARIABLE, MAX_VARIABLES));
 
-	protected TestUtils utils = new TestUtils(); 
+	protected GeneratorTestUtils utils = new GeneratorTestUtils(); 
 	
 	@Test
 	public void uniformityTest(){
@@ -64,7 +64,8 @@ public class RandomAlgorithmTest {
 		for(int value : values){
 			chi2 += Math.pow((value - expectedValue), 2) / expectedValue; 
 		}
-		double stdDev = stdDev(histogram.values());
+		double degOfFreedom = values.size() - 1;
+		double redusedChi2 = chi2 / degOfFreedom;
 //		for(int value : histogram.values()){
 //			//assert that the number of times the combination was chosen does not differ from average more than 30%
 //			double deviation = Math.abs(value - mean);

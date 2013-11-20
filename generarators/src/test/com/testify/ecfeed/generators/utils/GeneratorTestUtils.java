@@ -1,4 +1,4 @@
-package com.testify.generators.utils;
+package com.testify.ecfeed.generators.utils;
 
 import static org.junit.Assert.fail;
 
@@ -15,7 +15,7 @@ import com.testify.generators.ecfeed.api.GeneratorException;
 import com.testify.generators.ecfeed.api.IConstraint;
 import com.testify.generators.ecfeed.api.IGenerator;
 
-public class TestUtils{
+public class GeneratorTestUtils{
 	private class Constraint implements IConstraint<String>{
 		private Set<String> fRestrictedValues;
 

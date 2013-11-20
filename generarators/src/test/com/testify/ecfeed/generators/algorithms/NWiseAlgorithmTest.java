@@ -9,14 +9,14 @@ import java.util.List;
 import java.util.Set;
 
 import com.testify.ecfeed.generators.CartesianProductGenerator;
+import com.testify.ecfeed.generators.utils.GeneratorTestUtils;
 import com.testify.generators.ecfeed.algorithms.IAlgorithm;
 import com.testify.generators.ecfeed.algorithms.Tuples;
 import com.testify.generators.ecfeed.api.GeneratorException;
 import com.testify.generators.ecfeed.api.IConstraint;
-import com.testify.generators.utils.TestUtils;
 
 public class NWiseAlgorithmTest{
-	protected final TestUtils utils = new TestUtils(); 
+	protected final GeneratorTestUtils utils = new GeneratorTestUtils(); 
 	
 	@SuppressWarnings("rawtypes")
 	protected void testCorrectness(Class<? extends IAlgorithm> algorithmUnderTestClass, 

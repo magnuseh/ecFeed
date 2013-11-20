@@ -12,18 +12,18 @@ import java.util.Set;
 import org.junit.Test;
 
 import com.testify.ecfeed.generators.NWiseGenerator;
+import com.testify.ecfeed.generators.utils.GeneratorTestUtils;
 import com.testify.generators.ecfeed.algorithms.FastNWiseAlgorithm;
 import com.testify.generators.ecfeed.algorithms.OptimalNWiseAlgorithm;
 import com.testify.generators.ecfeed.api.GeneratorException;
 import com.testify.generators.ecfeed.api.IConstraint;
 import com.testify.generators.ecfeed.api.IGenerator;
-import com.testify.generators.utils.TestUtils;
 
 public class NWiseGeneratorTest extends NWiseGenerator<String>{
 	
 	int MAX_VARIABLES = 5;
 	int MAX_PARTITIONS = 5;
-	TestUtils utils = new TestUtils();
+	GeneratorTestUtils utils = new GeneratorTestUtils();
 	
 	@Test
 	public void initTest(){

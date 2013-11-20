@@ -10,18 +10,18 @@ import java.util.Set;
 import org.junit.Test;
 
 import com.google.common.collect.Sets;
+import com.testify.ecfeed.generators.utils.GeneratorTestUtils;
 import com.testify.generators.ecfeed.algorithms.CartesianProductAlgorithm;
 import com.testify.generators.ecfeed.algorithms.IAlgorithm;
 import com.testify.generators.ecfeed.api.GeneratorException;
 import com.testify.generators.ecfeed.api.IConstraint;
-import com.testify.generators.utils.TestUtils;
 
 public class CartesianProductTest{
 	
 	final int MAX_VARIABLES = 6;
 	final int MAX_PARTITIONS_PER_VARIABLE = 5;
 	final IAlgorithm<String> ALGORITHM = new CartesianProductAlgorithm<String>();
-	final TestUtils utils = new TestUtils();
+	final GeneratorTestUtils utils = new GeneratorTestUtils();
 	
 	@Test
 	public void testCorrectness(){
