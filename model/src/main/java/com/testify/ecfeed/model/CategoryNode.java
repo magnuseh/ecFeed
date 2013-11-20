@@ -35,13 +35,11 @@ public class CategoryNode extends GenericNode {
 		return fPartitions;
 	}
 	
-	//TODO unit tests
 	public void addPartition(PartitionNode partition) {
 		fPartitions.add(partition);
 		partition.setParent(this);
 	}
 	
-	//TODO unit tests
 	public PartitionNode getPartition(String name){
 		return (PartitionNode) super.getChild(name);
 	}
@@ -50,7 +48,6 @@ public class CategoryNode extends GenericNode {
 		return new String(getName() + ": " + getType());
 	}
 
-	//TODO unit tests
 	public List<PartitionNode> getPartitions() {
 		return fPartitions;
 	}
