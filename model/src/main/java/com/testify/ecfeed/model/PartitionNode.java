@@ -11,10 +11,9 @@
 
 package com.testify.ecfeed.model;
 
-import com.testify.ecfeed.constants.Constants;
-
 public class PartitionNode extends GenericNode {
 
+	public static final String NULL_VALUE_STRING_REPRESENTATION = "/null";
 	private Object fValue;
 
 	public PartitionNode(String name, Object value) {
@@ -31,7 +30,7 @@ public class PartitionNode extends GenericNode {
 	}
 	
 	public String getValueString(){
-		if(fValue == null) return Constants.NULL_VALUE_STRING_REPRESENTATION;
+		if(fValue == null) return NULL_VALUE_STRING_REPRESENTATION;
 		if(fValue instanceof Character){
 			if((Character)fValue != 0) return " \\" + (int)((char)fValue ) + " ['" + fValue + "']";
 			return "\\0";

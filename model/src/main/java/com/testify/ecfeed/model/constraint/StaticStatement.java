@@ -13,11 +13,13 @@ package com.testify.ecfeed.model.constraint;
 
 import java.util.List;
 
-import com.testify.ecfeed.constants.Constants;
 import com.testify.ecfeed.model.PartitionNode;
 
 public class StaticStatement extends BasicStatement {
 
+	public static final String STATIC_STATEMENT_TRUE_VALUE = "true";
+	public static final String STATIC_STATEMENT_FALSE_VALUE = "false";
+	
 	private boolean fValue;
 	
 	public StaticStatement(boolean value){
@@ -35,7 +37,7 @@ public class StaticStatement extends BasicStatement {
 
 	@Override
 	public String toString(){
-		return fValue?Constants.STATIC_STATEMENT_TRUE_VALUE:Constants.STATIC_STATEMENT_FALSE_VALUE;
+		return fValue?STATIC_STATEMENT_TRUE_VALUE:STATIC_STATEMENT_FALSE_VALUE;
 	}
 	
 	public void setValue(boolean value) {

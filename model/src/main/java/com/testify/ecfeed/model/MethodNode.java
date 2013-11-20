@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.ArrayList;
 
-import com.testify.generators.api.IConstraint;
+import com.testify.ecfeed.generators.api.IConstraint;
 
 public class MethodNode extends GenericNode {
 	private List<CategoryNode> fCategories;
