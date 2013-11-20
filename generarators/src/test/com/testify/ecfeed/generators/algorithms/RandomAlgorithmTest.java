@@ -67,15 +67,45 @@ public class RandomAlgorithmTest {
 	}
 
 	@Test
-	public void finitenessTest(){
-		
+	public void duplicatesTest(){
+		for(int variables = 1; variables <= MAX_VARIABLES; variables++){
+			for(int partitions = 2; partitions <= MAX_PARTITIONS_PER_VARIABLE; partitions++){
+				duplicatesTest(variables, partitions);
+			}
+		}
 	}
 
-	@Test
-	public void duplicatesTest(){
+	private void duplicatesTest(int variables, int partitions) {
+		Map<List<String>, Long> histogram = new HashMap<List<String>, Long>();
+		List<List<String>> input = utils.prepareInput(variables, partitions);
+		IAlgorithm<String> algorithm = new RandomAlgorithm<String>((int)(SAMPLE_SIZE), false);
+		try {
+			algorithm.initialize(input, null);
+			List<String> next;
+			while((next = algorithm.getNext()) != null){
+				if(histogram.containsKey(next)){
+					histogram.put(next, histogram.get(next) + 1);
+				}
+				else{
+					histogram.put(next, 1l);
+				}
+			}
+		} catch (GeneratorException e) {
+			fail("Unexpected generator exception: " + e.getMessage());
+		}
 		
+//		make sure that each value was chosen, given that the number of samples is higher than
+//		number of possible results
+		if(SAMPLE_SIZE > Math.pow(partitions, variables)){
+			assertEquals((int)Math.pow(partitions, variables), histogram.size());
+		}
+		
+//		check if no value was chosen more than once
+		for(long freq : histogram.values()){
+			assertEquals(1, freq);
+		}
 	}
-	
+
 	public double mean(Collection<Long> values){
 		if(values.size() == 0) return 0;
 		int sum = 0;
@@ -83,18 +113,5 @@ public class RandomAlgorithmTest {
 			sum += value;
 		}
 		return (double)sum / (double)values.size(); 
-	}
-	
-	public double variance(Collection<Long> values){
-		double mean = mean(values);
-		double sum = 0;
-		for(long value : values){
-			sum += (mean - (double)value) * (mean - (double)value);
-		}
-		return sum/(double)values.size();
-	}
-	
-	public double stdDev(Collection<Long> values){
-		return Math.sqrt(variance(values));
 	}
 }
