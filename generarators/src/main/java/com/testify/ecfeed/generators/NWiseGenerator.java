@@ -16,13 +16,13 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import com.testify.generators.ecfeed.algorithms.FastNWiseAlgorithm;
-import com.testify.generators.ecfeed.algorithms.IAlgorithm;
-import com.testify.generators.ecfeed.algorithms.OptimalNWiseAlgorithm;
-import com.testify.generators.ecfeed.api.GeneratorException;
-import com.testify.generators.ecfeed.api.IConstraint;
-import com.testify.generators.ecfeed.api.IGeneratorParameter;
-import com.testify.generators.ecfeed.api.IGeneratorParameter.TYPE;
+import com.testify.ecfeed.generators.algorithms.FastNWiseAlgorithm;
+import com.testify.ecfeed.generators.algorithms.IAlgorithm;
+import com.testify.ecfeed.generators.algorithms.OptimalNWiseAlgorithm;
+import com.testify.ecfeed.generators.api.GeneratorException;
+import com.testify.ecfeed.generators.api.IConstraint;
+import com.testify.ecfeed.generators.api.IGeneratorParameter;
+import com.testify.ecfeed.generators.api.IGeneratorParameter.TYPE;
 
 public class NWiseGenerator<E> extends AbstractGenerator<E>{
 	protected final static String N_PARAMETER_NAME = "N";

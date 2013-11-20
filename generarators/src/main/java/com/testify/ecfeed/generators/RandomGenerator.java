@@ -5,12 +5,12 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import com.testify.generators.ecfeed.algorithms.RandomAlgorithm;
-import com.testify.generators.ecfeed.api.GeneratorException;
-import com.testify.generators.ecfeed.api.IConstraint;
-import com.testify.generators.ecfeed.api.IGenerator;
-import com.testify.generators.ecfeed.api.IGeneratorParameter;
-import com.testify.generators.ecfeed.api.IGeneratorParameter.TYPE;
+import com.testify.ecfeed.generators.algorithms.RandomAlgorithm;
+import com.testify.ecfeed.generators.api.GeneratorException;
+import com.testify.ecfeed.generators.api.IConstraint;
+import com.testify.ecfeed.generators.api.IGenerator;
+import com.testify.ecfeed.generators.api.IGeneratorParameter;
+import com.testify.ecfeed.generators.api.IGeneratorParameter.TYPE;
 
 public class RandomGenerator<E> extends AbstractGenerator<E> implements
 		IGenerator<E> {

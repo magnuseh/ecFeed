@@ -8,11 +8,11 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.testify.generators.ecfeed.algorithms.FastNWiseAlgorithm;
-import com.testify.generators.ecfeed.algorithms.IAlgorithm;
-import com.testify.generators.ecfeed.algorithms.OptimalNWiseAlgorithm;
-import com.testify.generators.ecfeed.api.GeneratorException;
-import com.testify.generators.ecfeed.api.IConstraint;
+import com.testify.ecfeed.generators.algorithms.FastNWiseAlgorithm;
+import com.testify.ecfeed.generators.algorithms.IAlgorithm;
+import com.testify.ecfeed.generators.algorithms.OptimalNWiseAlgorithm;
+import com.testify.ecfeed.generators.api.GeneratorException;
+import com.testify.ecfeed.generators.api.IConstraint;
 
 public class FastNWiseAlgorithmTest extends NWiseAlgorithmTest {
 	final int MAX_VARIABLES = 5;

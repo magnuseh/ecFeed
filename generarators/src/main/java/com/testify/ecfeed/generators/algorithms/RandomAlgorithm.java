@@ -1,4 +1,4 @@
-package com.testify.generators.ecfeed.algorithms;
+package com.testify.ecfeed.generators.algorithms;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
-import com.testify.generators.ecfeed.api.GeneratorException;
-import com.testify.generators.ecfeed.api.IConstraint;
+import com.testify.ecfeed.generators.api.GeneratorException;
+import com.testify.ecfeed.generators.api.IConstraint;
 
 public class RandomAlgorithm<E> extends CartesianProductAlgorithm<E> {
 	

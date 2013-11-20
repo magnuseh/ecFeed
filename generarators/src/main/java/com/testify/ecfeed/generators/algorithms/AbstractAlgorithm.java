@@ -1,4 +1,4 @@
-package com.testify.generators.ecfeed.algorithms;
+package com.testify.ecfeed.generators.algorithms;
 
 public abstract class AbstractAlgorithm<E> implements IAlgorithm<E> {
 

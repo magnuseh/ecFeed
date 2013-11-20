@@ -10,11 +10,11 @@ import java.util.Set;
 import org.junit.Test;
 
 import com.google.common.collect.Sets;
-import com.testify.generators.ecfeed.algorithms.IAlgorithm;
-import com.testify.generators.ecfeed.algorithms.OptimalNWiseAlgorithm;
-import com.testify.generators.ecfeed.algorithms.Tuples;
-import com.testify.generators.ecfeed.api.GeneratorException;
-import com.testify.generators.ecfeed.api.IConstraint;
+import com.testify.ecfeed.generators.algorithms.IAlgorithm;
+import com.testify.ecfeed.generators.algorithms.OptimalNWiseAlgorithm;
+import com.testify.ecfeed.generators.algorithms.Tuples;
+import com.testify.ecfeed.generators.api.GeneratorException;
+import com.testify.ecfeed.generators.api.IConstraint;
 
 public class OptimalNWiseTest extends NWiseAlgorithmTest{
 

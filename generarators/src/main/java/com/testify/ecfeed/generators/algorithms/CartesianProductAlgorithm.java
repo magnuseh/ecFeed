@@ -1,12 +1,12 @@
-package com.testify.generators.ecfeed.algorithms;
+package com.testify.ecfeed.generators.algorithms;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 
-import com.testify.generators.ecfeed.api.GeneratorException;
-import com.testify.generators.ecfeed.api.IConstraint;
+import com.testify.ecfeed.generators.api.GeneratorException;
+import com.testify.ecfeed.generators.api.IConstraint;
 
 public class CartesianProductAlgorithm<E> extends AbstractAlgorithm<E> implements IAlgorithm<E>{
 	private boolean fInitialized;

@@ -9,11 +9,11 @@ import java.util.List;
 import java.util.Set;
 
 import com.testify.ecfeed.generators.CartesianProductGenerator;
+import com.testify.ecfeed.generators.algorithms.IAlgorithm;
+import com.testify.ecfeed.generators.algorithms.Tuples;
+import com.testify.ecfeed.generators.api.GeneratorException;
+import com.testify.ecfeed.generators.api.IConstraint;
 import com.testify.ecfeed.generators.utils.GeneratorTestUtils;
-import com.testify.generators.ecfeed.algorithms.IAlgorithm;
-import com.testify.generators.ecfeed.algorithms.Tuples;
-import com.testify.generators.ecfeed.api.GeneratorException;
-import com.testify.generators.ecfeed.api.IConstraint;
 
 public class NWiseAlgorithmTest{
 	protected final GeneratorTestUtils utils = new GeneratorTestUtils(); 

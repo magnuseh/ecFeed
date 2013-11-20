@@ -4,9 +4,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import com.testify.generators.ecfeed.algorithms.CartesianProductAlgorithm;
-import com.testify.generators.ecfeed.api.GeneratorException;
-import com.testify.generators.ecfeed.api.IConstraint;
+import com.testify.ecfeed.generators.algorithms.CartesianProductAlgorithm;
+import com.testify.ecfeed.generators.api.GeneratorException;
+import com.testify.ecfeed.generators.api.IConstraint;
 
 public class CartesianProductGenerator<E> extends AbstractGenerator<E> {
 

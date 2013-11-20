@@ -12,10 +12,10 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.math3.stat.inference.TestUtils;
 import org.junit.Test;
 
+import com.testify.ecfeed.generators.algorithms.IAlgorithm;
+import com.testify.ecfeed.generators.algorithms.RandomAlgorithm;
+import com.testify.ecfeed.generators.api.GeneratorException;
 import com.testify.ecfeed.generators.utils.GeneratorTestUtils;
-import com.testify.generators.ecfeed.algorithms.IAlgorithm;
-import com.testify.generators.ecfeed.algorithms.RandomAlgorithm;
-import com.testify.generators.ecfeed.api.GeneratorException;
 
 public class RandomAlgorithmTest {
 	final int MAX_VARIABLES = 5;

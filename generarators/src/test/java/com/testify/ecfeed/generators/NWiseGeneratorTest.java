@@ -12,12 +12,12 @@ import java.util.Set;
 import org.junit.Test;
 
 import com.testify.ecfeed.generators.NWiseGenerator;
+import com.testify.ecfeed.generators.algorithms.FastNWiseAlgorithm;
+import com.testify.ecfeed.generators.algorithms.OptimalNWiseAlgorithm;
+import com.testify.ecfeed.generators.api.GeneratorException;
+import com.testify.ecfeed.generators.api.IConstraint;
+import com.testify.ecfeed.generators.api.IGenerator;
 import com.testify.ecfeed.generators.utils.GeneratorTestUtils;
-import com.testify.generators.ecfeed.algorithms.FastNWiseAlgorithm;
-import com.testify.generators.ecfeed.algorithms.OptimalNWiseAlgorithm;
-import com.testify.generators.ecfeed.api.GeneratorException;
-import com.testify.generators.ecfeed.api.IConstraint;
-import com.testify.generators.ecfeed.api.IGenerator;
 
 public class NWiseGeneratorTest extends NWiseGenerator<String>{
 	

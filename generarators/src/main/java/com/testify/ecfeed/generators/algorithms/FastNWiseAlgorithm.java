@@ -1,10 +1,10 @@
-package com.testify.generators.ecfeed.algorithms;
+package com.testify.ecfeed.generators.algorithms;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.testify.generators.ecfeed.api.GeneratorException;
+import com.testify.ecfeed.generators.api.GeneratorException;
 
 public class FastNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
 

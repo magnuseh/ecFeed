@@ -23,7 +23,7 @@ import java.util.Set;
 import org.junit.Test;
 
 import com.google.common.collect.Sets;
-import com.testify.generators.ecfeed.algorithms.Tuples;
+import com.testify.ecfeed.generators.algorithms.Tuples;
 
 public class TupleTest{
 	private final List<String> fInput = new ArrayList<String>(Arrays.asList(new String[]{"a", "b", "c", "d", "e", "f"}));

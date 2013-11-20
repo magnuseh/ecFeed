@@ -1,4 +1,4 @@
-package com.testify.generators.ecfeed.api;
+package com.testify.ecfeed.generators.api;
 
 public interface IGeneratorParameter {
 	public enum TYPE{

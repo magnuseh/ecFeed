@@ -1,10 +1,10 @@
-package com.testify.generators.ecfeed.algorithms;
+package com.testify.ecfeed.generators.algorithms;
 
 import java.util.Collection;
 import java.util.List;
 
-import com.testify.generators.ecfeed.api.GeneratorException;
-import com.testify.generators.ecfeed.api.IConstraint;
+import com.testify.ecfeed.generators.api.GeneratorException;
+import com.testify.ecfeed.generators.api.IConstraint;
 
 public interface IAlgorithm<E> {
 	public void initialize(List<? extends List<E>> input, 

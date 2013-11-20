@@ -10,10 +10,10 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
-import com.testify.generators.ecfeed.algorithms.IAlgorithm;
-import com.testify.generators.ecfeed.api.GeneratorException;
-import com.testify.generators.ecfeed.api.IConstraint;
-import com.testify.generators.ecfeed.api.IGenerator;
+import com.testify.ecfeed.generators.algorithms.IAlgorithm;
+import com.testify.ecfeed.generators.api.GeneratorException;
+import com.testify.ecfeed.generators.api.IConstraint;
+import com.testify.ecfeed.generators.api.IGenerator;
 
 public class GeneratorTestUtils{
 	private class Constraint implements IConstraint<String>{

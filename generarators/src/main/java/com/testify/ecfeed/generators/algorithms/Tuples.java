@@ -9,7 +9,7 @@
  *     Patryk Chamuczynski (p.chamuczynski(at)gmail.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.generators.ecfeed.algorithms;
+package com.testify.ecfeed.generators.algorithms;
 
 import java.util.ArrayList;
 import java.util.BitSet;

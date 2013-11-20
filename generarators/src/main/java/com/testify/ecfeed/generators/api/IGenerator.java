@@ -9,7 +9,7 @@
  *     Patryk Chamuczynski (p.chamuczynski(at)gmail.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.generators.ecfeed.api;
+package com.testify.ecfeed.generators.api;
 
 import java.util.Collection;
 import java.util.List;
