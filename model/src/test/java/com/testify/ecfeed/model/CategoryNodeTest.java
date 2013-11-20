@@ -9,7 +9,7 @@
  *     Patryk Chamuczynski (p.chamuczynski(at)gmail.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.test.model;
+package com.testify.ecfeed.model;
 
 import static org.junit.Assert.*;
 
