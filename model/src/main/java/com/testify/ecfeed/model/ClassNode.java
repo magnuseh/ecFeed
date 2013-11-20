@@ -54,9 +54,9 @@ public class ClassNode extends GenericNode {
 	}
 
 	//TODO unit tests
-	public MethodNode getMethod(String name, ArrayList<String> argTypes) {
+	public MethodNode getMethod(String name, List<String> argTypes) {
 		for(MethodNode methodNode : getMethods()){
-			ArrayList<String> args = new ArrayList<String>();
+			List<String> args = new ArrayList<String>();
 			for(CategoryNode arg : methodNode.getCategories()){
 				args.add(arg.getType());
 			}
