@@ -13,6 +13,9 @@ package com.testify.ecfeed.model;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.Test;
 
 import com.testify.ecfeed.model.ClassNode;
@@ -24,59 +27,98 @@ public class ClassNodeTest extends ClassNode {
 	}
 
 	@Test
-	public void testGetName() {
-		ClassNode testNode = new ClassNode("com.testify.ecfeed.model.TestClassNode");
-		assertEquals("com.testify.ecfeed.model.TestClassNode", testNode.getName());
-		assertEquals("TestClassNode", testNode.getLocalName());
-		assertEquals("com.testify.ecfeed.model.TestClassNode", testNode.getQualifiedName());
-
-		ClassNode testNode1 = new ClassNode("TestClassNode");
-		assertEquals("TestClassNode", testNode1.getName());
-		assertEquals("TestClassNode", testNode1.getLocalName());
-		assertEquals("TestClassNode", testNode1.getQualifiedName());
-		
-		ClassNode testNode2 = new ClassNode("");
-		assertEquals("", testNode2.getName());
-		assertEquals("", testNode2.getLocalName());
-		assertEquals("", testNode2.getQualifiedName());
-
-		ClassNode testNode3 = new ClassNode(".");
-		assertEquals(".", testNode3.getName());
-		assertEquals("", testNode3.getLocalName());
-		assertEquals(".", testNode3.getQualifiedName());
-	}
-	
-	@Test
-	public void addMethod(){
-		ClassNode classNode = new ClassNode("com.testify.ecfeed.model.TestClassNode");
-		MethodNode method = new MethodNode("testMethod");
-		assertEquals(false, classNode.hasChildren());
-		assertEquals(0, classNode.getChildren().size());
-		assertEquals(null, method.getParent());
-
-		classNode.addMethod(method);
-		assertEquals(true, classNode.hasChildren());
-		assertEquals(1, classNode.getChildren().size());
-		assertEquals(classNode, method.getParent());
-		assertEquals(method, classNode.getChildren().get(0));
-	}
-	
-	@Test
-	public void testEquals(){
-		ClassNode classNode = new ClassNode("com.test.classNode");
+	public void getChildrenTest(){
+		ClassNode classNode = new ClassNode("com.example.ClassName");
 		MethodNode method1 = new MethodNode("method1");
-		MethodNode method2 = new MethodNode("method2");
+		MethodNode method2 = new MethodNode("method1");
+		
+		classNode.addMethod(method1);
+		classNode.addMethod(method2);
+		
+		List<MethodNode> methods = classNode.getMethods();
+		assertEquals(2, methods.size());
+		assertTrue(methods.contains(method1));
+		assertTrue(methods.contains(method2));
+	}
+	
+	@Test
+	public void getQualifiedNameTest() {
+		ClassNode classNode = new ClassNode("com.example.ClassName");
+		assertEquals("com.example.ClassName", classNode.getQualifiedName());
+		assertEquals("com.example.ClassName", classNode.getName());
+	}
+	
+	@Test
+	public void getLocalNameTest(){
+		ClassNode classNode = new ClassNode("com.example.ClassName");
+		assertEquals("ClassName", classNode.getLocalName());
+	}
+
+	@Test
+	public void getMethodTest() {
+		ClassNode classNode = new ClassNode("com.example.ClassName");
+		MethodNode method1 = new MethodNode("method");
+		MethodNode method2 = new MethodNode("method");
+		
+		List<String> method1Types = new ArrayList<String>();
+		method1Types.add("int");
+		method1Types.add("double");
+		
+		List<String> method2Types = new ArrayList<String>();
+		method2Types.add("int");
+		method2Types.add("int");
+
+		for(String type : method1Types){
+			method1.addCategory(new CategoryNode("category", type));
+		}
+
+		for(String type : method2Types){
+			method2.addCategory(new CategoryNode("category", type));
+		}
+		
+		classNode.addMethod(method1);
+		classNode.addMethod(method2);
+		
+		assertEquals(method1, classNode.getMethod("method", method1Types));
+		assertEquals(method2, classNode.getMethod("method", method2Types));
+	}
+
+	@Test
+	public void getMethodsTest() {
+		ClassNode classNode = new ClassNode("com.example.ClassName");
+		MethodNode method1 = new MethodNode("method");
+		MethodNode method2 = new MethodNode("method");
+		classNode.addMethod(method1);
+		classNode.addMethod(method2);
+		
+		assertTrue(classNode.getMethods().contains(method1));
+		assertTrue(classNode.getMethods().contains(method2));
+	}
+	
+	@Test
+	public void getTestSuitesTest(){
+		ClassNode classNode = new ClassNode("com.example.ClassName");
+		MethodNode method1 = new MethodNode("method");
+		MethodNode method2 = new MethodNode("method");
+
+		method1.addTestCase(new TestCaseNode("suite 1", null));
+		method1.addTestCase(new TestCaseNode("suite 2", null));
+		method1.addTestCase(new TestCaseNode("suite 2", null));
+		method1.addTestCase(new TestCaseNode("suite 3", null));
+
+		method2.addTestCase(new TestCaseNode("suite 1", null));
+		method2.addTestCase(new TestCaseNode("suite 4", null));
+		method2.addTestCase(new TestCaseNode("suite 2", null));
+		method2.addTestCase(new TestCaseNode("suite 3", null));
+		
 		classNode.addMethod(method1);
 		classNode.addMethod(method2);
 
-		ClassNode classNodeCopy = new ClassNode("com.test.classNode");
-		MethodNode method1Copy = new MethodNode("method1");
-		MethodNode method2Copy = new MethodNode("method2");
-		classNodeCopy.addMethod(method1Copy);
-		classNodeCopy.addMethod(method2Copy);
-		
-		assertTrue(classNode.equals(classNodeCopy));
-		method2Copy.setName("name");
-		assertFalse(classNode.equals(classNodeCopy));
-	}
+		assertEquals(4, classNode.getTestSuites().size());
+		assertTrue(classNode.getTestSuites().contains("suite 1"));
+		assertTrue(classNode.getTestSuites().contains("suite 2"));
+		assertTrue(classNode.getTestSuites().contains("suite 3"));
+		assertTrue(classNode.getTestSuites().contains("suite 4"));
+		assertFalse(classNode.getTestSuites().contains("unused test suite"));
+}
 }
