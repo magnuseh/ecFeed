@@ -10,11 +10,11 @@ import java.util.Set;
 import org.junit.Test;
 
 import com.google.common.collect.Sets;
-import com.testify.ecfeed.generators.utils.TestUtils;
 import com.testify.generators.ecfeed.algorithms.CartesianProductAlgorithm;
 import com.testify.generators.ecfeed.algorithms.IAlgorithm;
 import com.testify.generators.ecfeed.api.GeneratorException;
 import com.testify.generators.ecfeed.api.IConstraint;
+import com.testify.generators.utils.TestUtils;
 
 public class CartesianProductTest{
 	

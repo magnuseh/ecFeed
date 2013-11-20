@@ -13,10 +13,10 @@ import org.junit.Test;
 
 import com.google.common.collect.Sets;
 import com.testify.ecfeed.generators.CartesianProductGenerator;
-import com.testify.ecfeed.generators.utils.TestUtils;
 import com.testify.generators.ecfeed.api.GeneratorException;
 import com.testify.generators.ecfeed.api.IConstraint;
 import com.testify.generators.ecfeed.api.IGenerator;
+import com.testify.generators.utils.TestUtils;
 
 public class CartesianGeneratorTest extends CartesianProductGenerator<String>{
 	IGenerator<String> fGeneratorUnderTest;

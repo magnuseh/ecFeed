@@ -1,4 +1,4 @@
-package com.testify.ecfeed.generators.utils;
+package com.testify.generators.utils;
 
 import static org.junit.Assert.fail;
 
