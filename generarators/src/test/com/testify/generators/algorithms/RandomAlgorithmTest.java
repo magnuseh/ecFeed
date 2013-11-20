@@ -47,9 +47,10 @@ public class RandomAlgorithmTest {
 		} catch (GeneratorException e) {
 			fail("Unexpected generator exception: " + e.getMessage());
 		}
-		
+
 		//assert that every combination was chosen at least once
-		assertEquals((int)Math.pow(MAX_VARIABLES, MAX_PARTITIONS_PER_VARIABLE), histogram.size());
+		double expectedSize = Math.pow(partitions, variables); 
+		assertEquals((int)expectedSize, histogram.size());
 		testUniformity(histogram);
 	}
 	
