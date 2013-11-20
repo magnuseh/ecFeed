@@ -12,7 +12,9 @@
 package com.testify.ecfeed.model;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class CategoryNode extends GenericNode {
 	
@@ -53,8 +55,8 @@ public class CategoryNode extends GenericNode {
 		return fPartitions;
 	}
 
-	public ArrayList<String> getPartitionNames() {
-		ArrayList<String> names = new ArrayList<String>();
+	public Set<String> getPartitionNames() {
+		Set<String> names = new HashSet<String>();
 		for(PartitionNode partition : getPartitions()){
 			names.add(partition.getName());
 		}
