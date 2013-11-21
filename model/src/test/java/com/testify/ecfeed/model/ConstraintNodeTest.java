@@ -16,6 +16,13 @@ import com.testify.ecfeed.model.constraint.StaticStatement;
 public class ConstraintNodeTest {
 
 	@Test
+	public void testGetChildren(){
+		Constraint constraint = new Constraint(new StaticStatement(true), new StaticStatement(true));
+		ConstraintNode node = new ConstraintNode("name", constraint);
+		assertEquals(0, node.getChildren().size());
+	}
+	
+	@Test
 	public void testGetConstraint() {
 		Constraint constraint = new Constraint(new StaticStatement(true), new StaticStatement(true));
 		ConstraintNode node = new ConstraintNode("name", constraint);

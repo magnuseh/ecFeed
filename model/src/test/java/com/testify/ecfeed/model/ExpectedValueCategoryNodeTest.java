@@ -7,8 +7,15 @@ import org.junit.Test;
 public class ExpectedValueCategoryNodeTest {
 
 	@Test
+	public void testGetChildren(){
+		ExpectedValueCategoryNode category = new ExpectedValueCategoryNode("name", "type", 0);
+		assertEquals(0, category.getChildren().size());
+		assertFalse(category.hasChildren());
+	}
+	
+	@Test
 	public void testIsExpected() {
-		ExpectedValueCategoryNode category = new ExpectedValueCategoryNode("name", "type", new PartitionNode("name", null));
+		ExpectedValueCategoryNode category = new ExpectedValueCategoryNode("name", "type", 0);
 		assertTrue(category.isExpected());
 	}
 
