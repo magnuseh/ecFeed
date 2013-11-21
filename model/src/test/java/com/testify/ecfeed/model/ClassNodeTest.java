@@ -35,10 +35,10 @@ public class ClassNodeTest extends ClassNode {
 		classNode.addMethod(method1);
 		classNode.addMethod(method2);
 		
-		List<MethodNode> methods = classNode.getMethods();
-		assertEquals(2, methods.size());
-		assertTrue(methods.contains(method1));
-		assertTrue(methods.contains(method2));
+		List<? extends IGenericNode> children = classNode.getChildren();
+		assertEquals(2, children.size());
+		assertTrue(children.contains(method1));
+		assertTrue(children.contains(method2));
 	}
 	
 	@Test
