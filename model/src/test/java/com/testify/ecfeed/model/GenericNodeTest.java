@@ -13,115 +13,130 @@ package com.testify.ecfeed.model;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
+
 import org.junit.Test;
 
 import com.testify.ecfeed.model.GenericNode;
-//import com.testify.ecfeed.model.IGenericNode;
+import com.testify.ecfeed.model.constraint.Constraint;
+import com.testify.ecfeed.model.constraint.StaticStatement;
 
-//@RunWith(Feeder.class)
-public class GenericNodeTest extends GenericNode {
-
-	public GenericNodeTest() {
-		super("dummy");
-	}
-
-//	@Test
-	public void testName(String name, String newName) {
-		GenericNode node = new GenericNode(name);
+public class GenericNodeTest{
+	
+	@Test
+	public void testId(){
+		GenericNode node1 = new GenericNode("name");
+		GenericNode node2 = new GenericNode("name");
 		
-		assertEquals(name, node.getName());
-		
-		node.setName(newName);
-		assertEquals(newName, node.getName());
+		assertNotEquals(node1.getId(), node2.getId());
 	}
 	
 	@Test
-	public void testChildren(){
-//		IGenericNode parent = new GenericNode("parent");
-//		IGenericNode child1 = new GenericNode("child1");
-//		IGenericNode child2 = new GenericNode("child2");
-//		
-//		assertEquals(false, parent.hasChildren());
-//		assertEquals(0, parent.getChildren().size());
-//		
-//		parent.addChild(child1);
-//		assertEquals(true, parent.hasChildren());
-//		assertEquals(1, parent.getChildren().size());
-//		assertEquals(parent, child1.getParent());
-//		assertEquals(child1, parent.getChildren().elementAt(0));
-//		
-//		parent.addChild(child2);
-//		assertEquals(true, parent.hasChildren());
-//		assertEquals(2, parent.getChildren().size());
-//		assertEquals(parent, child2.getParent());
-//		assertEquals(child1, parent.getChildren().elementAt(0));
-//		assertEquals(child2, parent.getChildren().elementAt(1));
-//		
-//		parent.removeChild(child1);
-//		assertEquals(true, parent.hasChildren());
-//		assertEquals(1, parent.getChildren().size());
-//		assertEquals(null, child1.getParent());
-//		
-//		parent.removeChild(child2);
-//		assertEquals(false, parent.hasChildren());
-//		assertEquals(0, parent.getChildren().size());
-//		assertEquals(null, child2.getParent());
-//		
-//		child1.setParent(parent);
-//		assertEquals(true, parent.hasChildren());
-//		assertEquals(1, parent.getChildren().size());
-//		assertEquals(parent, child1.getParent());
-//		assertEquals(child1, parent.getChildren().elementAt(0));
-//
+	public void testName() {
+		GenericNode node = new GenericNode("name");
+		assertEquals("name", node.getName());
+		node.setName("new name");
+		assertEquals("new name", node.getName());
+	}
+
+	@Test
+	public void testParent(){
+		GenericNode parent = new GenericNode("parent");
+		GenericNode child = new GenericNode("child");
+		
+		assertEquals(null, child.getParent());
+		child.setParent(parent);
+		assertEquals(parent, child.getParent());
+	}
+		
+	@Test
+	public void testHasChildren(){
+		GenericNode node = new GenericNode("name");
+		assertFalse(node.hasChildren());
 	}
 	
 	@Test
 	public void testGetRoot(){
-//		GenericNode parent = new GenericNode("parent");
-//		GenericNode child = new GenericNode("child");
-//		GenericNode grandchild = new GenericNode("grandchild");
-//		
-//		parent.addChild(child);
-//		child.addChild(grandchild);
-//		
-//		assertEquals(parent, grandchild.getRoot());
+		RootNode root = new RootNode("root");
+		ClassNode classNode = new ClassNode("class");
+		MethodNode method = new MethodNode("method");
+		CategoryNode category = new CategoryNode("name", "type");
+		ExpectedValueCategoryNode expCat = new ExpectedValueCategoryNode("name", "type", 0);
+		ConstraintNode constraint = new ConstraintNode("name", new Constraint(new StaticStatement(true), new StaticStatement(false)));
+		TestCaseNode testCase = new TestCaseNode("name", new ArrayList<PartitionNode>());
+		PartitionNode partition = new PartitionNode("name", 0);
+		
+		category.addPartition(partition);
+		method.addCategory(category);
+		method.addCategory(expCat);
+		method.addConstraint(constraint);
+		method.addTestCase(testCase);
+		classNode.addMethod(method);
+		root.addClass(classNode);
+		
+		assertEquals(root, root.getRoot());
+		assertEquals(root, classNode.getRoot());
+		assertEquals(root, method.getRoot());
+		assertEquals(root, category.getRoot());
+		assertEquals(root, expCat.getRoot());
+		assertEquals(root, constraint.getRoot());
+		assertEquals(root, testCase.getRoot());
+		assertEquals(root, partition.getRoot());
+	}
+
+	@Test
+	public void testEquals(){
+		GenericNode node1 = new GenericNode("name");
+		GenericNode node2 = new GenericNode("name");
+		
+		assertNotEquals(node1, node2);
+		assertEquals(node1, node1);
+	}
+
+	@Test
+	public void testMoveChild(){
+		RootNode root = new RootNode("name");
+		ClassNode class1 = new ClassNode("name");
+		ClassNode class2 = new ClassNode("name");
+		ClassNode class3 = new ClassNode("name");
+		
+		root.addClass(class1);
+		root.addClass(class2);
+		root.addClass(class3);
+		
+		int index = root.getClasses().indexOf(class2);
+		root.moveChild(class2, true);
+		assertTrue(root.getClasses().indexOf(class2) == index - 1);
+		root.moveChild(class2, false);
+		assertTrue(root.getClasses().indexOf(class2) == index);
 	}
 	
 	@Test
-	public void testEquals(){
-//		GenericNode parent_1 = new GenericNode("parent");
-//		GenericNode child_1_1 = new GenericNode("child_1");
-//		GenericNode grandchild_1_1_1 = new GenericNode("grandchild_1_1");
-//		GenericNode grandchild_1_1_2 = new GenericNode("grandchild_1_2");
-//		GenericNode child_1_2 = new GenericNode("child_2");
-//		GenericNode grandchild_1_2_1 = new GenericNode("grandchild_2_1");
-//		GenericNode grandchild_1_2_2 = new GenericNode("grandchild_2_2");
-//		
-//		parent_1.addChild(child_1_1);
-//		child_1_1.addChild(grandchild_1_1_1);
-//		child_1_1.addChild(grandchild_1_1_2);
-//		parent_1.addChild(child_1_2);
-//		child_1_1.addChild(grandchild_1_2_1);
-//		child_1_1.addChild(grandchild_1_2_2);
-//		
-//		GenericNode parent_1_copy = new GenericNode("parent");
-//		GenericNode child_1_1_copy = new GenericNode("child_1");
-//		GenericNode grandchild_1_1_1_copy = new GenericNode("grandchild_1_1");
-//		GenericNode grandchild_1_1_2_copy = new GenericNode("grandchild_1_2");
-//		GenericNode child_1_2_copy = new GenericNode("child_2");
-//		GenericNode grandchild_1_2_1_copy = new GenericNode("grandchild_2_1");
-//		GenericNode grandchild_1_2_2_copy = new GenericNode("grandchild_2_2");
-//		
-//		parent_1_copy.addChild(child_1_1_copy);
-//		child_1_1_copy.addChild(grandchild_1_1_1_copy);
-//		child_1_1_copy.addChild(grandchild_1_1_2_copy);
-//		parent_1_copy.addChild(child_1_2_copy);
-//		child_1_1_copy.addChild(grandchild_1_2_1_copy);
-//		child_1_1_copy.addChild(grandchild_1_2_2_copy);
-//		
-//		assertTrue(parent_1.equals(parent_1_copy));
-//		
-//		grandchild_1_2_2_copy.setName("grandchild_2_2_changed");
-//		assertFalse(parent_1.equals(parent_1_copy));
+	public void testSubtreeSize(){
+		RootNode root = new RootNode("root");
+		ClassNode classNode = new ClassNode("class");
+		MethodNode method = new MethodNode("method");
+		CategoryNode category = new CategoryNode("name", "type");
+		ExpectedValueCategoryNode expCat = new ExpectedValueCategoryNode("name", "type", 0);
+		ConstraintNode constraint = new ConstraintNode("name", new Constraint(new StaticStatement(true), new StaticStatement(false)));
+		TestCaseNode testCase = new TestCaseNode("name", new ArrayList<PartitionNode>());
+		PartitionNode partition = new PartitionNode("name", 0);
+		
+		category.addPartition(partition);
+		method.addCategory(category);
+		method.addCategory(expCat);
+		method.addConstraint(constraint);
+		method.addTestCase(testCase);
+		classNode.addMethod(method);
+		root.addClass(classNode);
+
+		assertEquals(8, root.subtreeSize());
+		assertEquals(7, classNode.subtreeSize());
+		assertEquals(6, method.subtreeSize());
+		assertEquals(1, constraint.subtreeSize());
+		assertEquals(1, testCase.subtreeSize());
+		assertEquals(1, expCat.subtreeSize());
+		assertEquals(2, category.subtreeSize());
+		assertEquals(1, partition.subtreeSize());
 	}
 }
