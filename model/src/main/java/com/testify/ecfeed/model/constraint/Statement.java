@@ -36,43 +36,41 @@ public class Statement extends BasicStatement{
 
 	@Override
 	public boolean evaluate(List<PartitionNode> values) {
-		CategoryNode parentCategory = fCondition.getCategory();
-		MethodNode methodAncestor = parentCategory.getMethod();
-		int categoryIndex = methodAncestor.getCategories().indexOf(parentCategory);
+		try{
+			CategoryNode parentCategory = fCondition.getCategory();
+			MethodNode methodAncestor = parentCategory.getMethod();
+			int categoryIndex = methodAncestor.getCategories().indexOf(parentCategory);
 
-		if(values.size() < categoryIndex + 1){
-			return false;
-		}
-		
-		PartitionNode partition = values.get(categoryIndex);
-//		Object element = values.get(categoryIndex);
-//		if(element instanceof PartitionNode == false){
-//			return false;
-//		}
-//		
-//		PartitionNode partition = (PartitionNode)element;
-		List<PartitionNode> siblings = parentCategory.getPartitions();
-		int conditionIndex = siblings.indexOf(fCondition);
-		int partitionIndex = siblings.indexOf(partition);
-		
-		if(partition.getCategory() != parentCategory){
-			return false;
-		}
-		
-		switch (fRelation){
-		case EQUAL:
-			return partition == fCondition;
-		case GREATER:
-			return partitionIndex > conditionIndex;
-		case GREATER_EQUAL:
-			return partitionIndex >= conditionIndex;
-		case LESS:
-			return partitionIndex < conditionIndex;
-		case LESS_EQUAL:
-			return partitionIndex <= conditionIndex;
-		case NOT:
-			return partition != fCondition;
-		default:
+			if(values.size() < categoryIndex + 1){
+				return false;
+			}
+
+			PartitionNode partition = values.get(categoryIndex);
+			List<PartitionNode> siblings = parentCategory.getPartitions();
+			int conditionIndex = siblings.indexOf(fCondition);
+			int partitionIndex = siblings.indexOf(partition);
+
+			if(partition.getCategory() != parentCategory){
+				return false;
+			}
+
+			switch (fRelation){
+			case EQUAL:
+				return partition == fCondition;
+			case GREATER:
+				return partitionIndex > conditionIndex;
+			case GREATER_EQUAL:
+				return partitionIndex >= conditionIndex;
+			case LESS:
+				return partitionIndex < conditionIndex;
+			case LESS_EQUAL:
+				return partitionIndex <= conditionIndex;
+			case NOT:
+				return partition != fCondition;
+			default:
+				return false;
+			}
+		}catch(Exception e){
 			return false;
 		}
 	}
