@@ -57,6 +57,20 @@ public class CategoryNodeTest{
 		assertTrue(partitions.contains(partition1));
 		assertTrue(partitions.contains(partition2));
 	}
+	
+	@Test
+	public void getChildrenTest() {
+		CategoryNode category = new CategoryNode("category", "type");
+		PartitionNode partition1 = new PartitionNode("partition1", 0); 
+		PartitionNode partition2 = new PartitionNode("partition2", 0); 
+		category.addPartition(partition1);
+		category.addPartition(partition2);
+		
+		List<? extends IGenericNode> children = category.getChildren();
+		assertEquals(2, children.size());
+		assertTrue(children.contains(partition1));
+		assertTrue(children.contains(partition2));
+	}
 
 	@Test
 	public void getPartitionNames() {
