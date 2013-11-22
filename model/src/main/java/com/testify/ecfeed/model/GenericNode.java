@@ -95,7 +95,6 @@ public class GenericNode implements IGenericNode{
 		return getChildren().contains(potentialChild);
 	}
 
-	//TODO unit tests
 	@Override
 	public IGenericNode getChild(String name) {
 		for(IGenericNode child : getChildren()){
@@ -106,7 +105,6 @@ public class GenericNode implements IGenericNode{
 		return null;
 	}
 
-	//TODO unit tests
 	@Override
 	public void moveChild(IGenericNode child, boolean moveUp) {
 		int childIndex = getChildren().indexOf(child);

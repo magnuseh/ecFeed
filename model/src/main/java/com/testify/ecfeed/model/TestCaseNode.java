@@ -56,7 +56,6 @@ public class TestCaseNode extends GenericNode {
 		return result;
 	}
 
-	//TODO unit tests
 	public String toString(){
 		String methodName = null;
 		if (getParent() != null){
