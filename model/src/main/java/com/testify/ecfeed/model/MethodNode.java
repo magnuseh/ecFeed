@@ -33,24 +33,20 @@ public class MethodNode extends GenericNode {
 		fConstraints = new ArrayList<ConstraintNode>();
 	}
 	
-	//TODO Unit tests 
 	public void addCategory(CategoryNode category){
 		fCategories.add(category);
 		category.setParent(this);
 	}
 
-	//TODO Unit tests 
 	public void addCategory(ExpectedValueCategoryNode category){
 		addCategory((CategoryNode)category);
 	}
 
-	//TODO unit tests 
 	public void addConstraint(ConstraintNode constraint) {
 		fConstraints.add(constraint);
 		constraint.setParent(this);
 	}
 	
-	//TODO unit tests 
 	public void addTestCase(TestCaseNode testCase){
 		fTestCases.add(testCase);
 		testCase.setParent(this);
@@ -136,7 +132,6 @@ public class MethodNode extends GenericNode {
 		return fTestCases;
 	}
 	
-	//TODO unit tests
 	public Collection<TestCaseNode> getTestCases(String testSuite) {
 		ArrayList<TestCaseNode> testCases = new ArrayList<TestCaseNode>();
 		for(TestCaseNode testCase : getTestCases()){
@@ -147,7 +142,6 @@ public class MethodNode extends GenericNode {
 		return testCases;
 	}
 
-	//TODO unit tests
 	public Set<String> getTestSuites(){
 		Set<String> testSuites = new HashSet<String>();
 		for(TestCaseNode testCase : getTestCases()){
@@ -171,7 +165,6 @@ public class MethodNode extends GenericNode {
 		return(fCategories.size() != 0 || fConstraints.size() != 0 || fTestCases.size() != 0);
 	}
 	
-	//TODO unit tests
 	@SuppressWarnings("rawtypes")
 	@Override
 	public void moveChild(IGenericNode child, boolean moveUp){
@@ -198,34 +191,48 @@ public class MethodNode extends GenericNode {
 		}
 	}
 
-	//TODO unit tests
 	public boolean removeChild(TestCaseNode testCase){
+		return removeTestCase(testCase);
+	}
+	
+	public boolean removeChild(CategoryNode category){
+		return removeCategory(category);
+	}
+	
+	public boolean removeChild(ExpectedValueCategoryNode category){
+		return removeCategory(category);
+	}
+	
+	public boolean removeChild(ConstraintNode constraint){
+		return removeConstraint(constraint);
+	}
+
+	public boolean removeCategory(CategoryNode category){
+		category.setParent(null);
+		if(fCategories.remove(category)){
+			fTestCases.clear();
+			Iterator<ConstraintNode> it = fConstraints.iterator();
+			while(it.hasNext()){
+				ConstraintNode constraint = it.next();
+				if(constraint.mentions(category)){
+					it.remove();
+				}
+			}
+			return true;
+		}
+		return false;
+	}
+
+	public boolean removeTestCase(TestCaseNode testCase){
 		testCase.setParent(null);
 		return fTestCases.remove(testCase);
 	}
-	
-	//TODO unit tests
-	public boolean removeChild(CategoryNode category){
-		category.setParent(null);
-		return fCategories.remove(category);
-	}
-	
-	//TODO unit tests
-	public boolean removeChild(ExpectedValueCategoryNode category){
-		return removeChild((CategoryNode)category);
-	}
-	
-	//TODO unit tests
-	public boolean removeChild(ConstraintNode constraint){
+
+	public boolean removeConstraint(ConstraintNode constraint) {
 		constraint.setParent(null);
 		return fConstraints.remove(constraint);
 	}
 
-	public void removeConstraint(ConstraintNode constraint) {
-		fConstraints.remove(constraint);
-	}
-
-	//TODO unit tests
 	public void removeTestSuite(String suiteName) {
 		Iterator<TestCaseNode> iterator = getTestCases().iterator();
 		while(iterator.hasNext()){
@@ -237,27 +244,48 @@ public class MethodNode extends GenericNode {
 	}
 
 	public void replaceCategory(int index, CategoryNode newCategory){
+		replace(index, newCategory);
+		fTestCases.clear();
+	}
+	
+	public void replaceCategory(int index, ExpectedValueCategoryNode newCategory){
+		replace(index, newCategory);
+		for(TestCaseNode testCase : fTestCases){
+			testCase.replaceValue(index, newCategory.getDefaultValuePartition().getCopy());
+		}
+	}
+
+	protected void replace(int index, CategoryNode newCategory){
 		newCategory.setParent(this);
 		CategoryNode originalCategory = fCategories.get(index);
 		fCategories.set(index, newCategory);
-
-		if(newCategory instanceof ExpectedValueCategoryNode){
-			if (!originalCategory.isExpected()){
-				ExpectedValueCategoryNode expectedCategory = (ExpectedValueCategoryNode)newCategory;
-				for(TestCaseNode testCase : fTestCases){
-					testCase.replaceValue(index, expectedCategory.getDefaultValuePartition().getCopy());
-				}
-				Iterator<ConstraintNode> iterator = fConstraints.iterator();
-				while(iterator.hasNext()){
-					if(iterator.next().mentions(originalCategory)){
-						iterator.remove();
-					}
-				}
+		Iterator<ConstraintNode> iterator = fConstraints.iterator();
+		while(iterator.hasNext()){
+			if(iterator.next().mentions(originalCategory)){
+				iterator.remove();
 			}
 		}
-		else{
-			if(originalCategory.isExpected()){
-				fTestCases.clear();
+	}
+	
+	public void partitionRemoved(PartitionNode partition){
+		removeMentioningConstraints(partition);
+		removeMentioningTestCases(partition);
+	}
+
+	protected void removeMentioningConstraints(PartitionNode partition) {
+		Iterator<ConstraintNode> iterator = fConstraints.iterator();
+		while(iterator.hasNext()){
+			if(iterator.next().mentions(partition)){
+				iterator.remove();
+			}
+		}
+	}
+
+	protected void removeMentioningTestCases(PartitionNode partition) {
+		Iterator<TestCaseNode> iterator = fTestCases.iterator();
+		while(iterator.hasNext()){
+			if(iterator.next().mentions(partition)){
+				iterator.remove();
 			}
 		}
 	}
