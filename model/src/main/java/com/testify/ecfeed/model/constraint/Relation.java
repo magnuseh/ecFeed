@@ -34,10 +34,6 @@ public enum Relation{
 		fValue = value;
 	}
 	
-	public String toString(){
-		return fValue; 
-	}
-	
 	public static Relation getRelation(String text){
 		switch(text){
 		case RELATION_LESS:
@@ -54,5 +50,9 @@ public enum Relation{
 			return NOT;
 		}
 		return NOT;
+	}
+
+	public String toString(){
+		return fValue; 
 	}
 }

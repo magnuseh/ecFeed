@@ -51,6 +51,14 @@ public class Constraint implements IConstraint<PartitionNode> {
 		fConsequence = consequence;
 	}
 	
+	public boolean mentions(CategoryNode category) {
+		return fPremise.mentions(category) || fConsequence.mentions(category);
+	}
+
+	public boolean mentions(PartitionNode partition) {
+		return fPremise.mentions(partition) || fConsequence.mentions(partition);
+	}
+
 	@Override
 	public boolean evaluate(List<PartitionNode> values) {
 		if(fPremise == null) return true;
@@ -74,13 +82,5 @@ public class Constraint implements IConstraint<PartitionNode> {
 			return false;
 		}
 		return(ID == ((Constraint)obj).getId());
-	}
-
-	public boolean mentions(CategoryNode category) {
-		return fPremise.mentions(category) || fConsequence.mentions(category);
-	}
-
-	public boolean mentions(PartitionNode partition) {
-		return fPremise.mentions(partition) || fConsequence.mentions(partition);
 	}
 }

@@ -30,6 +30,10 @@ public class StaticStatement extends BasicStatement {
 		return fValue;
 	}
 	
+	public void setValue(boolean value) {
+		fValue = value;
+	}
+
 	@Override
 	public boolean evaluate(List<PartitionNode> values) {
 		return fValue;
@@ -38,9 +42,5 @@ public class StaticStatement extends BasicStatement {
 	@Override
 	public String toString(){
 		return fValue?STATIC_STATEMENT_TRUE_VALUE:STATIC_STATEMENT_FALSE_VALUE;
-	}
-	
-	public void setValue(boolean value) {
-		fValue = value;
 	}
 }
