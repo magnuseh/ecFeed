@@ -87,6 +87,7 @@ public class GenericNode implements IGenericNode{
 	}
 
 	@Override
+	@Deprecated
 	public boolean removeChild(IGenericNode child) {
 		boolean result = getChildren().remove(child);
 		if(result){
@@ -96,11 +97,13 @@ public class GenericNode implements IGenericNode{
 	}
 	
 	@Override
+	@Deprecated
 	public boolean removeChildren(Collection<IGenericNode> children){
 		return getChildren().removeAll(children);
 	}
 	
 	@Override
+	@Deprecated
 	public boolean isParent(IGenericNode potentialChild){
 		return getChildren().contains(potentialChild);
 	}
