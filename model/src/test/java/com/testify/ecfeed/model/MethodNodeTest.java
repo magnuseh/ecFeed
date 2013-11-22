@@ -281,6 +281,31 @@ public class MethodNodeTest {
 		assertEquals(0, method.getTestCases().size());
 	}
 
+	@Test
+	public void testGetExpectedCategoriesNames(){
+		MethodNode method = new MethodNode("name");
+		CategoryNode category = new CategoryNode("category", "type");
+		ExpectedValueCategoryNode expCat1 = new ExpectedValueCategoryNode("expCat1", "type", 0);
+		ExpectedValueCategoryNode expCat2 = new ExpectedValueCategoryNode("expCat2", "type", 0);
+		
+		method.addCategory(category);
+		method.addCategory(expCat1);
+		method.addCategory(expCat2);
+		
+		assertEquals(3, method.getCategories().size());
+		assertTrue(method.getCategories().contains(category));
+		assertTrue(method.getCategories().contains(expCat1));
+		assertTrue(method.getCategories().contains(expCat2));
+		
+		assertEquals(2,  method.getExpectedCategoriesNames().size());
+		assertTrue(method.getExpectedCategoriesNames().contains("expCat1"));
+		assertTrue(method.getExpectedCategoriesNames().contains("expCat2"));
+		
+		method.removeCategory(expCat1);
+		assertEquals(1,  method.getExpectedCategoriesNames().size());
+		assertFalse(method.getExpectedCategoriesNames().contains("expCat1"));
+		assertTrue(method.getExpectedCategoriesNames().contains("expCat2"));
+	}
 
 	@Test
 	public void testReplaceCategoryWithExpected(){

@@ -49,20 +49,6 @@ public class CategoryNode extends GenericNode {
 		return null;
 	}
 	
-	public boolean removePartition(PartitionNode partition){
-		if(fPartitions.contains(partition) && fPartitions.remove(partition)){
-			MethodNode parent = getMethod();
-			if(parent != null){
-				parent.partitionRemoved(partition);
-			}
-		}
-		return false;
-	}
-
-	public String toString(){
-		return new String(getName() + ": " + getType());
-	}
-
 	public List<PartitionNode> getPartitions() {
 		return fPartitions;
 	}
@@ -75,10 +61,25 @@ public class CategoryNode extends GenericNode {
 		return names;
 	}
 
+	public boolean removePartition(PartitionNode partition){
+		if(fPartitions.contains(partition) && fPartitions.remove(partition)){
+			MethodNode parent = getMethod();
+			if(parent != null){
+				parent.partitionRemoved(partition);
+			}
+		}
+		return false;
+	}
+
 	public MethodNode getMethod() {
 		return (MethodNode)getParent();
 	}
 
+	public String toString(){
+		return new String(getName() + ": " + getType());
+	}
+
+	@Deprecated
 	public boolean isExpected() {
 		return false;
 	}

@@ -23,6 +23,7 @@ import com.testify.ecfeed.generators.api.IConstraint;
 
 public class MethodNode extends GenericNode {
 	private List<CategoryNode> fCategories;
+	private List<ExpectedValueCategoryNode> fExpectedValueCategories;
 	private List<TestCaseNode> fTestCases;
 	private List<ConstraintNode> fConstraints;
 	
@@ -40,6 +41,7 @@ public class MethodNode extends GenericNode {
 
 	public void addCategory(ExpectedValueCategoryNode category){
 		addCategory((CategoryNode)category);
+		fExpectedValueCategories.add(category);
 	}
 
 	public void addConstraint(ConstraintNode constraint) {
@@ -83,10 +85,8 @@ public class MethodNode extends GenericNode {
 
 	public ArrayList<String> getExpectedCategoriesNames() {
 		ArrayList<String> names = new ArrayList<String>();
-		for(CategoryNode category : getCategories()){
-			if(category.isExpected()){
+		for(ExpectedValueCategoryNode category : fExpectedValueCategories){
 				names.add(category.getName());
-			}
 		}
 		return names;
 	}
@@ -226,6 +226,13 @@ public class MethodNode extends GenericNode {
 		}
 		return false;
 	}
+	
+	public boolean removeCategory(ExpectedValueCategoryNode category){
+		if(removeCategory((CategoryNode)category)){
+			return fExpectedValueCategories.remove(category);
+		}
+		return false;
+	}
 
 	public boolean removeTestCase(TestCaseNode testCase){
 		testCase.setParent(null);
@@ -300,7 +307,7 @@ public class MethodNode extends GenericNode {
 		ArrayList<String> types = getCategoriesTypes();
 		ArrayList<String> names = getCategoriesNames();
 		for(int i = 0; i < types.size(); i++){
-			if(getCategories().get(i).isExpected()){
+			if(getCategories().get(i) instanceof ExpectedValueCategoryNode){
 				result += "[e]";
 			}
 			result += types.get(i);

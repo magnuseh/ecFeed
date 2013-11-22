@@ -93,11 +93,4 @@ public class CategoryNodeTest{
 		
 		assertEquals(method, category.getMethod());
 	}
-
-	@Test
-	public void isExpectedTest() {
-		CategoryNode category = new CategoryNode("category", "type");
-		assertFalse(category.isExpected());
-	}
-
 }
