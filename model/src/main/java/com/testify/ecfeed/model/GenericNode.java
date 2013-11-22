@@ -74,19 +74,6 @@ public class GenericNode implements IGenericNode{
 	}
 
 	@Override
-	public String toString(){
-		return getName();
-	}
-	
-	@Override
-	public boolean equals(Object obj){
-		if(obj instanceof GenericNode){
-			return ((GenericNode)obj).getId() == fId;
-		}
-		return false;
-	}
-
-	@Override
 	@Deprecated
 	public boolean removeChild(IGenericNode child) {
 		boolean result = getChildren().remove(child);
@@ -138,5 +125,18 @@ public class GenericNode implements IGenericNode{
 			size += child.subtreeSize();
 		}
 		return size;
+	}
+
+	@Override
+	public String toString(){
+		return getName();
+	}
+
+	@Override
+	public boolean equals(Object obj){
+		if(obj instanceof GenericNode){
+			return ((GenericNode)obj).getId() == fId;
+		}
+		return false;
 	}
 }

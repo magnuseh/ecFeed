@@ -27,10 +27,6 @@ public class RootNode extends GenericNode {
 		node.setParent(this);
 	}
 
-	public List<? extends IGenericNode> getChildren(){
-		return fClasses;
-	}
-	
 	public List<ClassNode> getClasses() {
 		return fClasses;
 	}
@@ -46,5 +42,9 @@ public class RootNode extends GenericNode {
 			}
 		}
 		return null;
+	}
+
+	public List<? extends IGenericNode> getChildren(){
+		return fClasses;
 	}
 }

@@ -151,67 +151,6 @@ public class MethodNode extends GenericNode {
 		return testSuites;
 	}
 
-	@Override
-	public ArrayList<? extends IGenericNode> getChildren(){
-		ArrayList<IGenericNode> children = new ArrayList<IGenericNode>();
-		children.addAll(fCategories);
-		children.addAll(fConstraints);
-		children.addAll(fTestCases);
-		
-		return children;
-	}
-	
-	@Override
-	public boolean hasChildren(){
-		return(fCategories.size() != 0 || fConstraints.size() != 0 || fTestCases.size() != 0);
-	}
-	
-	@SuppressWarnings("rawtypes")
-	@Override
-	public void moveChild(IGenericNode child, boolean moveUp){
-		List childrenArray = null;
-		if(child instanceof CategoryNode){
-			childrenArray = fCategories;
-		}
-		if(child instanceof ConstraintNode){
-			childrenArray = fConstraints;
-		}
-		if(child instanceof TestCaseNode){
-			childrenArray = fTestCases;
-		}
-		if(childrenArray == null){
-			return;
-		}
-		
-		int childIndex = childrenArray.indexOf(child);
-		if(moveUp && childIndex > 0){
-			Collections.swap(childrenArray, childIndex, childIndex - 1);
-		}
-		if(!moveUp && childIndex < childrenArray.size() - 1){
-			Collections.swap(childrenArray, childIndex, childIndex + 1);
-		}
-	}
-
-	@Deprecated
-	public boolean removeChild(TestCaseNode testCase){
-		return removeTestCase(testCase);
-	}
-	
-	@Deprecated
-	public boolean removeChild(CategoryNode category){
-		return removeCategory(category);
-	}
-	
-	@Deprecated
-	public boolean removeChild(ExpectedValueCategoryNode category){
-		return removeCategory(category);
-	}
-	
-	@Deprecated
-	public boolean removeChild(ConstraintNode constraint){
-		return removeConstraint(constraint);
-	}
-
 	public boolean removeCategory(CategoryNode category){
 		category.setParent(null);
 		if(fCategories.remove(category)){
@@ -318,5 +257,66 @@ public class MethodNode extends GenericNode {
 		}
 		result += ")";
 		return result;
+	}
+
+	@Override
+	public ArrayList<? extends IGenericNode> getChildren(){
+		ArrayList<IGenericNode> children = new ArrayList<IGenericNode>();
+		children.addAll(fCategories);
+		children.addAll(fConstraints);
+		children.addAll(fTestCases);
+		
+		return children;
+	}
+
+	@Override
+	public boolean hasChildren(){
+		return(fCategories.size() != 0 || fConstraints.size() != 0 || fTestCases.size() != 0);
+	}
+
+	@SuppressWarnings("rawtypes")
+	@Override
+	public void moveChild(IGenericNode child, boolean moveUp){
+		List childrenArray = null;
+		if(child instanceof CategoryNode){
+			childrenArray = fCategories;
+		}
+		if(child instanceof ConstraintNode){
+			childrenArray = fConstraints;
+		}
+		if(child instanceof TestCaseNode){
+			childrenArray = fTestCases;
+		}
+		if(childrenArray == null){
+			return;
+		}
+		
+		int childIndex = childrenArray.indexOf(child);
+		if(moveUp && childIndex > 0){
+			Collections.swap(childrenArray, childIndex, childIndex - 1);
+		}
+		if(!moveUp && childIndex < childrenArray.size() - 1){
+			Collections.swap(childrenArray, childIndex, childIndex + 1);
+		}
+	}
+
+	@Deprecated
+	public boolean removeChild(TestCaseNode testCase){
+		return removeTestCase(testCase);
+	}
+
+	@Deprecated
+	public boolean removeChild(CategoryNode category){
+		return removeCategory(category);
+	}
+
+	@Deprecated
+	public boolean removeChild(ExpectedValueCategoryNode category){
+		return removeCategory(category);
+	}
+
+	@Deprecated
+	public boolean removeChild(ConstraintNode constraint){
+		return removeConstraint(constraint);
 	}
 }

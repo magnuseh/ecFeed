@@ -31,10 +31,6 @@ public class CategoryNode extends GenericNode {
 		return fType;
 	}
 
-	public List<? extends IGenericNode> getChildren(){
-		return fPartitions;
-	}
-	
 	public void addPartition(PartitionNode partition) {
 		fPartitions.add(partition);
 		partition.setParent(this);
@@ -73,6 +69,10 @@ public class CategoryNode extends GenericNode {
 
 	public MethodNode getMethod() {
 		return (MethodNode)getParent();
+	}
+
+	public List<? extends IGenericNode> getChildren(){
+		return fPartitions;
 	}
 
 	public String toString(){

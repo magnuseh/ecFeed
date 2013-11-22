@@ -24,36 +24,19 @@ public class ClassNode extends GenericNode {
 		fMethods = new ArrayList<MethodNode>();
 	}
 
-	@Override
-	public List<? extends IGenericNode> getChildren(){
-		return fMethods;
-	}
-	
-	public String getQualifiedName() {
-		return super.getName();
-	}
-	
 	public String getLocalName(){
 		return getLocalName(getName());
 	}
 
-	//TODO unit tests
+	public String getQualifiedName() {
+		return super.getName();
+	}
+	
 	public void addMethod(MethodNode method) {
 		fMethods.add(method);
 		method.setParent(this);
 	}
 	
-	private String getLocalName(String qualifiedName){
-		int lastDotIndex = qualifiedName.lastIndexOf('.');
-		return (lastDotIndex == -1)?qualifiedName: qualifiedName.substring(lastDotIndex + 1);
-	}
-	
-	@Override
-	public String toString(){
-		return getLocalName();
-	}
-
-	//TODO unit tests
 	public MethodNode getMethod(String name, List<String> argTypes) {
 		for(MethodNode methodNode : getMethods()){
 			List<String> args = new ArrayList<String>();
@@ -67,17 +50,30 @@ public class ClassNode extends GenericNode {
 		return null;
 	}
 
-	//TODO unit tests
 	public List<MethodNode> getMethods() {
 		return fMethods;
 	}
 	
-	//TODO unit tests
 	public Set<String> getTestSuites(){
 		Set<String> suites = new HashSet<String>();
 		for(MethodNode method : getMethods()){
 			suites.addAll(method.getTestSuites());
 		}
 		return suites;
+	}
+
+	@Override
+	public List<? extends IGenericNode> getChildren(){
+		return fMethods;
+	}
+
+	@Override
+	public String toString(){
+		return getLocalName();
+	}
+
+	private String getLocalName(String qualifiedName){
+		int lastDotIndex = qualifiedName.lastIndexOf('.');
+		return (lastDotIndex == -1)?qualifiedName: qualifiedName.substring(lastDotIndex + 1);
 	}
 }

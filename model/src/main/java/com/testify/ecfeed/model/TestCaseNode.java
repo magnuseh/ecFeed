@@ -25,23 +25,19 @@ public class TestCaseNode extends GenericNode {
 		return fTestData;
 	}
 	
-	//TODO unit tests
-	public String toString(){
-		String methodName = null;
-		if (getParent() != null){
-			methodName = getParent().getName();
-		}
-		String result = "[" + getName() + "]";
-				
-		if(methodName != null){
-			result += ": " + methodName + "(";
-			result += testDataString();
-			result += ")";
-		}
-		
-		return result;
+	public void replaceValue(int index, PartitionNode newValue) {
+		fTestData.set(index, newValue);
 	}
-	
+
+	public boolean mentions(PartitionNode partition) {
+		for(PartitionNode p : fTestData){
+			if(p == partition){
+				return true;
+			}
+		}
+		return false;
+	}
+
 	public String testDataString(){
 		String result = new String();
 		
@@ -59,17 +55,21 @@ public class TestCaseNode extends GenericNode {
 		}
 		return result;
 	}
-	
-	public boolean mentions(PartitionNode partition) {
-		for(PartitionNode p : fTestData){
-			if(p == partition){
-				return true;
-			}
-		}
-		return false;
-	}
 
-	public void replaceValue(int index, PartitionNode newValue) {
-		fTestData.set(index, newValue);
+	//TODO unit tests
+	public String toString(){
+		String methodName = null;
+		if (getParent() != null){
+			methodName = getParent().getName();
+		}
+		String result = "[" + getName() + "]";
+				
+		if(methodName != null){
+			result += ": " + methodName + "(";
+			result += testDataString();
+			result += ")";
+		}
+		
+		return result;
 	}
 }

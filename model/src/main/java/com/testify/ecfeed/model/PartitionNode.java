@@ -38,10 +38,6 @@ public class PartitionNode extends GenericNode {
 		return String.valueOf(fValue);
 	}
 	
-	public String toString(){
-		return getName() + ": " + getValueString();
-	}
-	
 	public CategoryNode getCategory() {
 		return (CategoryNode)getParent();
 	}
@@ -50,5 +46,9 @@ public class PartitionNode extends GenericNode {
 		PartitionNode copy = new PartitionNode(getName(), fValue);
 		copy.setParent(getParent());
 		return copy;
+	}
+
+	public String toString(){
+		return getName() + ": " + getValueString();
 	}
 }
