@@ -30,6 +30,7 @@ public class MethodNode extends GenericNode {
 	public MethodNode(String name){
 		super(name);
 		fCategories = new ArrayList<CategoryNode>();
+		fExpectedValueCategories = new ArrayList<ExpectedValueCategoryNode>();
 		fTestCases = new ArrayList<TestCaseNode>();
 		fConstraints = new ArrayList<ConstraintNode>();
 	}
