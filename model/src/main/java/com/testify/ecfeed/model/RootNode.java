@@ -34,8 +34,11 @@ public class RootNode extends GenericNode {
 	public List<ClassNode> getClasses() {
 		return fClasses;
 	}
+	
+	public boolean removeClass(ClassNode classNode){
+		return fClasses.remove(classNode);
+	}
 
-	//TODO unit tests
 	public ClassNode getClassModel(String name) {
 		for(ClassNode childClass : getClasses()){
 			if(childClass.getQualifiedName().equals(name)){
