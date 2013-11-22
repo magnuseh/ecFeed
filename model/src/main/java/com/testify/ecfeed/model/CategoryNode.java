@@ -41,7 +41,22 @@ public class CategoryNode extends GenericNode {
 	}
 	
 	public PartitionNode getPartition(String name){
-		return (PartitionNode) super.getChild(name);
+		for(PartitionNode partition : fPartitions){
+			if(partition.getName().equals(name)){
+				return partition;
+			}
+		}
+		return null;
+	}
+	
+	public boolean removePartition(PartitionNode partition){
+		if(fPartitions.contains(partition) && fPartitions.remove(partition)){
+			MethodNode parent = getMethod();
+			if(parent != null){
+				parent.partitionRemoved(partition);
+			}
+		}
+		return false;
 	}
 
 	public String toString(){
