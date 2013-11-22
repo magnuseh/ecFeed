@@ -191,18 +191,22 @@ public class MethodNode extends GenericNode {
 		}
 	}
 
+	@Deprecated
 	public boolean removeChild(TestCaseNode testCase){
 		return removeTestCase(testCase);
 	}
 	
+	@Deprecated
 	public boolean removeChild(CategoryNode category){
 		return removeCategory(category);
 	}
 	
+	@Deprecated
 	public boolean removeChild(ExpectedValueCategoryNode category){
 		return removeCategory(category);
 	}
 	
+	@Deprecated
 	public boolean removeChild(ConstraintNode constraint){
 		return removeConstraint(constraint);
 	}
