@@ -240,7 +240,7 @@ public class MethodNodeTest {
 		
 		assertEquals(4, method.getTestCases().size());
 		
-		method.removeChild(testCase1);
+		method.removeTestCase(testCase1);
 
 		assertEquals(3, method.getTestCases().size());
 		assertFalse(method.getTestCases().contains(testCase1));
@@ -274,7 +274,7 @@ public class MethodNodeTest {
 		assertTrue(method.getConstraintNodes().contains(notMentioningConstraintNode));
 		assertTrue(method.getTestCases().contains(testCaseNode));
 
-		assertTrue(method.removeChild(category));
+		assertTrue(method.removeCategory(category));
 		assertFalse(method.getCategories().contains(category));
 		assertFalse(method.getConstraintNodes().contains(mentioningConstraintNode));
 		assertTrue(method.getConstraintNodes().contains(notMentioningConstraintNode));
