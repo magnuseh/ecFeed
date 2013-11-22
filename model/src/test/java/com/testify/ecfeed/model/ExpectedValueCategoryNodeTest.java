@@ -14,12 +14,6 @@ public class ExpectedValueCategoryNodeTest {
 	}
 	
 	@Test
-	public void testIsExpected() {
-		ExpectedValueCategoryNode category = new ExpectedValueCategoryNode("name", "type", 0);
-		assertTrue(category.isExpected());
-	}
-
-	@Test
 	public void testGetDefaultValue() {
 		ExpectedValueCategoryNode category = new ExpectedValueCategoryNode("name", "type", 0);
 		assertEquals(0, category.getDefaultValue());
