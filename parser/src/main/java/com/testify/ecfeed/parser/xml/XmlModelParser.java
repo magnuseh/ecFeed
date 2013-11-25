@@ -9,7 +9,7 @@
  *     Patryk Chamuczynski (p.chamuczynski(at)gmail.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.parsers;
+package com.testify.ecfeed.parser.xml;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,7 +18,6 @@ import java.util.List;
 
 import nu.xom.*;
 
-import com.testify.ecfeed.constants.Constants;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.constraint.BasicStatement;
 import com.testify.ecfeed.model.constraint.Constraint;
@@ -34,62 +33,59 @@ import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.TestCaseNode;
+import com.testify.ecfeed.parser.ParserException;
+import com.testify.ecfeed.parser.Constants;
 
-public class EcParser {
+public class XmlModelParser {
 	
-	public RootNode parseEctFile(InputStream istream){
-		RootNode root = null;
+	public RootNode parseModel(InputStream istream) throws ParserException{
 		try {
 			Builder parser = new Builder();
 			Document document = parser.build(istream);
 			if(document.getRootElement().getLocalName() == Constants.ROOT_NODE_NAME){
-				root = (RootNode)parseRootElement(document.getRootElement());
+				return parseRootElement(document.getRootElement());
 			}
-		} catch (IOException|ParsingException e) {
-			System.out.println("Exception: " + e.getMessage());
-			return null;
-		} 
-		return root;
+			else{
+				throw new ParserException(Messages.WRONG_ROOT_ELEMENT_TAG);
+			}
+		} catch (ParsingException e) {
+			throw new ParserException(Messages.PARSING_EXCEPTION(e));
+		} catch (IOException e) {
+			throw new ParserException(Messages.IO_EXCEPTION(e));
+		}
 	}
 
-	private RootNode parseRootElement(Element element) {
-		String name = element.getAttributeValue(Constants.NODE_NAME_ATTRIBUTE);
-		if(name == null || element.getLocalName() != Constants.ROOT_NODE_NAME){
-			return null;
-		}
-
+	protected RootNode parseRootElement(Element element) throws ParserException {
+		String name = getElementName(element);
 		RootNode rootNode = new RootNode(name);
 		for(Element child : getIterableElements(element.getChildElements())){
 			if(child.getLocalName() == Constants.CLASS_NODE_NAME){
 				rootNode.addClass(parseClassElement(child));
 			}
+			else{
+				throw new ParserException(Messages.WRONG_CHILD_ELEMENT_TYPE(element, child.getLocalName()));
+			}
 		}
 		return rootNode;
 	}
 
-	private ClassNode parseClassElement(Element element) {
-		String qualifiedName = element.getAttributeValue(Constants.NODE_NAME_ATTRIBUTE);
-		if (qualifiedName == null){
-			return null;
-		}
-		
+	protected ClassNode parseClassElement(Element element) throws ParserException {
+		String qualifiedName = getElementName(element);
+
 		ClassNode classNode = new ClassNode(qualifiedName);
 		for(Element child : getIterableElements(element.getChildElements())){
 			if(child.getLocalName() == Constants.METHOD_NODE_NAME){
 				classNode.addMethod(parseMethodElement(child));
 			}
+			else{
+				throw new ParserException(Messages.WRONG_CHILD_ELEMENT_TYPE(element, child.getLocalName()));
+			}
 		}
-
 		return classNode;
 	}
 
-	//TODO unit tests
-	private MethodNode parseMethodElement(Element element) {
-		String name = element.getAttributeValue(Constants.NODE_NAME_ATTRIBUTE);
-		if (name == null){
-			return null;
-		}
-		
+	protected MethodNode parseMethodElement(Element element) throws ParserException {
+		String name = getElementName(element);
 		MethodNode methodNode = new MethodNode(name);
 		for(Element child : getIterableElements(element.getChildElements())){
 			if(child.getLocalName() == Constants.EXPECTED_VALUE_CATEGORY_NODE_NAME){
@@ -104,32 +100,47 @@ public class EcParser {
 			if(child.getLocalName() == Constants.CONSTRAINT_NODE_NAME){
 				methodNode.addConstraint(parseConstraintElement(child, methodNode));
 			}
+			else{
+				throw new ParserException(Messages.WRONG_CHILD_ELEMENT_TYPE(element, child.getLocalName()));
+			}
 		}
 		return methodNode;
 	}
 	
-	private ConstraintNode parseConstraintElement(Element constraintElement, MethodNode method) {
-		String name = constraintElement.getAttributeValue(Constants.NODE_NAME_ATTRIBUTE);
+	protected ConstraintNode parseConstraintElement(Element element, MethodNode method) throws ParserException {
+		String name = getElementName(element);
 		BasicStatement premise = null;
 		BasicStatement consequence = null;
-		for(Element child : getIterableElements(constraintElement.getChildElements())){
+		for(Element child : getIterableElements(element.getChildElements())){
 			if(child.getLocalName().equals(Constants.CONSTRAINT_PREMISE_NODE_NAME)){
-				if(child.getChildCount() > 0){
+				if(child.getChildCount() == 1){
 					//there is only one statement per premise or consequence that is either
 					//a single statement or statement array
 					premise = parseStatement(child.getChildElements().get(0), method);
 				}
-			}
-			else if(child.getLocalName().equals(Constants.CONSTRAINT_CONSEQUENCE_NODE_NAME)){
-				if(child.getChildCount() > 0){
-					consequence = parseStatement(child.getChildElements().get(0), method);
+				else{
+					throw new ParserException(Messages.MALFORMED_CONSTRAINT_NODE_DEFINITION(method.getName(), name));
 				}
 			}
+			else if(child.getLocalName().equals(Constants.CONSTRAINT_CONSEQUENCE_NODE_NAME)){
+				if(child.getChildCount() == 0){
+					consequence = parseStatement(child.getChildElements().get(0), method);
+				}
+				else{
+					throw new ParserException(Messages.MALFORMED_CONSTRAINT_NODE_DEFINITION(method.getName(), name));
+				}
+			}
+			else{
+				throw new ParserException(Messages.MALFORMED_CONSTRAINT_NODE_DEFINITION(method.getName(), name));
+			}
+		}
+		if(premise == null || consequence == null){
+			throw new ParserException(Messages.MALFORMED_CONSTRAINT_NODE_DEFINITION(method.getName(), name));
 		}
 		return new ConstraintNode(name, new Constraint(premise, consequence));
 	}
 
-	private BasicStatement parseStatement(Element element, MethodNode method) {
+	protected BasicStatement parseStatement(Element element, MethodNode method) throws ParserException {
 		switch(element.getLocalName()){
 		case Constants.CONSTRAINT_STATEMENT_NODE_NAME:
 			return parseSigleStatement(element, method);
@@ -141,9 +152,9 @@ public class EcParser {
 		}
 	}
 
-	private BasicStatement parseStatementArray(Element element, MethodNode method) {
+	protected BasicStatement parseStatementArray(Element element, MethodNode method) throws ParserException {
 		StatementArray statementArray = null;
-		String operatorValue = element.getAttributeValue(Constants.STATEMENT_OPERATOR_ATTRIBUTE_NAME);
+		String operatorValue = getAttributeValue(element, Constants.STATEMENT_OPERATOR_ATTRIBUTE_NAME);
 		switch(operatorValue){
 		case Constants.STATEMENT_OPERATOR_OR_ATTRIBUTE_VALUE:
 			statementArray = new StatementArray(Operator.OR);
@@ -151,7 +162,8 @@ public class EcParser {
 		case Constants.STATEMENT_OPERATOR_AND_ATTRIBUTE_VALUE:
 			statementArray = new StatementArray(Operator.AND);
 			break;
-		default: return null;
+		default: 
+			throw new ParserException(Messages.WRONG_STATEMENT_ARRAY_OPERATOR(method.getName(), operatorValue));
 		}
 		for(Element child : getIterableElements(element.getChildElements())){
 			BasicStatement childStatement = parseStatement(child, method);
@@ -162,61 +174,68 @@ public class EcParser {
 		return statementArray;
 	}
 
-	private BasicStatement parseStaticStatement(Element element) {
-		String valueString = element.getAttributeValue(Constants.STATIC_VALUE_ATTRIBUTE_NAME);
+	protected BasicStatement parseStaticStatement(Element element) throws ParserException {
+		String valueString = getAttributeValue(element, Constants.STATIC_VALUE_ATTRIBUTE_NAME);
 		switch(valueString){
 		case Constants.STATIC_STATEMENT_TRUE_VALUE:
 			return new StaticStatement(true);
 		case Constants.STATIC_STATEMENT_FALSE_VALUE:
 			return new StaticStatement(false);
-		default: return null;
+		default:
+			throw new ParserException(Messages.WRONG_STATIC_STATEMENT_VALUE(valueString));
 		}
 	}
 
-	private BasicStatement parseSigleStatement(Element element, MethodNode method) {
-		
-		String categoryName = element.getAttributeValue(Constants.STATEMENT_CATEGORY_ATTRIBUTE_NAME);
+	protected BasicStatement parseSigleStatement(Element element, MethodNode method) throws ParserException {
+		String categoryName = getAttributeValue(element, Constants.STATEMENT_CATEGORY_ATTRIBUTE_NAME);
 		CategoryNode category = method.getCategory(categoryName);
-		String partitionName = element.getAttributeValue(Constants.STATEMENT_PARTITION_ATTRIBUTE_NAME);
+		if(category == null){
+			throw new ParserException(Messages.WRONG_CATEGORY_NAME(categoryName, method.getName()));
+		}
+		String partitionName = getAttributeValue(element, Constants.STATEMENT_PARTITION_ATTRIBUTE_NAME);
 		PartitionNode partition = category.getPartition(partitionName);
+		if(partition == null){
+			throw new ParserException(Messages.WRONG_PARTITION_NAME(categoryName, method.getName()));
+		}
 
-		String relationName = element.getAttributeValue(Constants.STATEMENT_RELATION_ATTRIBUTE_NAME);
+		String relationName = getAttributeValue(element, Constants.STATEMENT_RELATION_ATTRIBUTE_NAME);
 		Relation relation = null;
 		switch(relationName){
 		case Constants.RELATION_LESS:
 			relation = Relation.LESS;
 			break;
 		case Constants.RELATION_LESS_EQUAL:
+		case Constants.RELATION_LESS_EQUAL_ASCII:
 			relation = Relation.LESS_EQUAL;
 			break;
 		case Constants.RELATION_EQUAL:
 			relation = Relation.EQUAL;
 			break;
 		case Constants.RELATION_GREATER_EQUAL:
+		case Constants.RELATION_GREATER_EQUAL_ASCII:
 			relation = Relation.GREATER_EQUAL;
 			break;
 		case Constants.RELATION_GREATER:
 			relation = Relation.GREATER;
 			break;
 		case Constants.RELATION_NOT:
+		case Constants.RELATION_NOT_ASCII:
 			relation = Relation.NOT;
 			break;
 		default:
-			relation = Relation.EQUAL;
-			break;
+			throw new ParserException(Messages.WRONG_OR_MISSING_RELATION_FORMAT(method.getName(), relationName));
 		}
 		
 		return new Statement(partition, relation);
 	}
 
-	//TODO unit tests
-	private TestCaseNode parseTestCaseElement(Element element, List<CategoryNode> categories) {
-		String testSuiteName = element.getAttributeValue(Constants.TEST_SUITE_NAME_ATTRIBUTE);
+	protected TestCaseNode parseTestCaseElement(Element element, List<CategoryNode> categories) throws ParserException {
+		String testSuiteName = getElementName(element);
 		ArrayList<PartitionNode> testData = new ArrayList<PartitionNode>();
-		ArrayList<Element> parameterElements = getIterableElements(element.getChildElements());
+		List<Element> parameterElements = getIterableElements(element.getChildElements());
 		
 		if(categories.size() != parameterElements.size()){
-			return null;
+			throw new ParserException(Messages.WRONG_TEST_PAREMETERS_NUMBER(testSuiteName));
 		}
 
 		for(int i = 0; i < parameterElements.size(); i++){
@@ -225,11 +244,14 @@ public class EcParser {
 			
 			PartitionNode testValue = null;
 			if(testParameterElement.getLocalName().equals(Constants.TEST_PARAMETER_NODE_NAME)){
-				String partitionName = testParameterElement.getAttributeValue(Constants.PARTITION_ATTRIBUTE_NAME);
+				String partitionName = getAttributeValue(testParameterElement, Constants.PARTITION_ATTRIBUTE_NAME);
 				testValue = category.getPartition(partitionName);
+				if(testValue == null){
+					throw new ParserException(Messages.PARTITION_DOES_NOT_EXIST(category.getName(), partitionName));
+				}
 			}
 			else if(testParameterElement.getLocalName().equals(Constants.EXPECTED_PARAMETER_NODE_NAME)){
-				String valueString = testParameterElement.getAttributeValue(Constants.VALUE_ATTRIBUTE_NAME);
+				String valueString = getAttributeValue(testParameterElement, Constants.VALUE_ATTRIBUTE_NAME);
 				Object value = parseValue(valueString, category.getType());
 				testValue = new PartitionNode(Constants.EXPECTED_VALUE_PARTITION_NAME, value);
 				testValue.setParent(category);
@@ -239,42 +261,35 @@ public class EcParser {
 		return new TestCaseNode(testSuiteName, testData);
 	}
 
-	private ExpectedValueCategoryNode parseExpectedValueCategoryElement(Element element) {
-		String name = element.getAttributeValue(Constants.NODE_NAME_ATTRIBUTE);
-		String type = element.getAttributeValue(Constants.TYPE_NAME_ATTRIBUTE);
-		String defaultValueString = element.getAttributeValue(Constants.DEFAULT_EXPECTED_VALUE_ATTRIBUTE);
+	protected ExpectedValueCategoryNode parseExpectedValueCategoryElement(Element element) throws ParserException {
+		String name = getElementName(element);
+		String type = getAttributeValue(element, Constants.TYPE_NAME_ATTRIBUTE);
+		String defaultValueString = getAttributeValue(element, Constants.DEFAULT_EXPECTED_VALUE_ATTRIBUTE);
 		Object defaultValue = parseValue(defaultValueString, type);
 		return new ExpectedValueCategoryNode(name, type, defaultValue);
 	}
 	
-	private CategoryNode parseCategoryElement(Element element) {
-		String name = element.getAttributeValue(Constants.NODE_NAME_ATTRIBUTE);
-		String type = element.getAttributeValue(Constants.TYPE_NAME_ATTRIBUTE);
-		if (name == null | type == null){
-			return null;
-		}
-		
+	protected CategoryNode parseCategoryElement(Element element) throws ParserException {
+		String name = getElementName(element);
+		String type = getAttributeValue(element, Constants.TYPE_NAME_ATTRIBUTE);
+
 		CategoryNode categoryNode = new CategoryNode(name, type);
 		for(Element child : getIterableElements(element.getChildElements())){
 			if(child.getLocalName() == Constants.PARTITION_NODE_NAME){
 				categoryNode.addPartition(parsePartitionElement(child, type));
 			}
 		}
-		
 		return categoryNode;
 	}
 
-	private PartitionNode parsePartitionElement(Element element, String typeSignature) {
-		String name = element.getAttributeValue(Constants.NODE_NAME_ATTRIBUTE);
-		String valueString = element.getAttributeValue(Constants.VALUE_ATTRIBUTE);
-		if (name == null | valueString == null){
-			return null;
-		}
+	protected PartitionNode parsePartitionElement(Element element, String typeSignature) throws ParserException {
+		String name = getElementName(element);
+		String valueString = getAttributeValue(element, Constants.VALUE_ATTRIBUTE);
 		Object value = parseValue(valueString, typeSignature);
 		return new PartitionNode(name, value);
 	}
 
-	private Object parseValue(String valueString, String type) {
+	protected Object parseValue(String valueString, String type) {
 		switch(type){
 		case Constants.TYPE_NAME_BOOLEAN:
 			return Boolean.parseBoolean(valueString);
@@ -303,15 +318,30 @@ public class EcParser {
 		}		
 	}
 
-	private ArrayList<Element> getIterableElements(Elements elements){
-		ArrayList<Element> v = new ArrayList<Element>();
+	protected List<Element> getIterableElements(Elements elements){
+		ArrayList<Element> list = new ArrayList<Element>();
 		for(int i = 0; i < elements.size(); i++){
 			Node node = elements.get(i);
 			if(node instanceof Element){
-				v.add((Element)node);
+				list.add((Element)node);
 			}
 		}
-		return v;
+		return list;
 	}
 
+	protected String getElementName(Element element) throws ParserException {
+		String name = element.getAttributeValue(Constants.NODE_NAME_ATTRIBUTE);
+		if(name == null){
+			throw new ParserException(Messages.MISSING_ATTRIBUTE(element, Constants.NODE_NAME_ATTRIBUTE));
+		}
+		return name;
+	}
+
+	protected String getAttributeValue(Element element, String attributeName) throws ParserException{
+		String value = element.getAttributeValue(attributeName);
+		if(value == null){
+			throw new ParserException(Messages.MISSING_ATTRIBUTE(element, attributeName));
+		}
+		return value;
+	}
 }
