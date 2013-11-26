@@ -23,10 +23,10 @@ import com.testify.ecfeed.runner.annotations.Generator;
 import com.testify.ecfeed.runner.annotations.GeneratorParameter;
 import com.testify.ecfeed.runner.annotations.GeneratorParameterNames;
 import com.testify.ecfeed.runner.annotations.GeneratorParameterValues;
-import com.testify.generators.api.GeneratorException;
-import com.testify.generators.api.IConstraint;
-import com.testify.generators.api.IGenerator;
-import com.testify.generators.api.IGeneratorParameter;
+import com.testify.ecfeed.generators.api.GeneratorException;
+import com.testify.ecfeed.generators.api.IConstraint;
+import com.testify.ecfeed.generators.api.IGenerator;
+import com.testify.ecfeed.generators.api.IGeneratorParameter;
 
 public class OnlineRunner extends StaticRunner {
 

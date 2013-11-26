@@ -7,8 +7,8 @@ import java.util.List;
 import org.junit.runners.model.FrameworkMethod;
 
 import com.testify.ecfeed.model.PartitionNode;
-import com.testify.generators.api.GeneratorException;
-import com.testify.generators.api.IGenerator;
+import com.testify.ecfeed.generators.api.GeneratorException;
+import com.testify.ecfeed.generators.api.IGenerator;
 
 public class RuntimeMethod extends FrameworkMethod{
 

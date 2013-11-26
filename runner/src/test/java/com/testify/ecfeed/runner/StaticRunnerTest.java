@@ -22,7 +22,9 @@ import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
-import com.testify.ecfeed.parsers.EcParser;
+import com.testify.ecfeed.parser.IModelParser;
+import com.testify.ecfeed.parser.ParserException;
+import com.testify.ecfeed.parser.xml.XmlModelParser;
 import com.testify.ecfeed.runner.RunnerException;
 import com.testify.ecfeed.runner.StaticRunner;
 import com.testify.ecfeed.runner.annotations.EcModel;
@@ -143,13 +145,16 @@ public class StaticRunnerTest extends StaticRunner{
 	}
 
 	protected RootNode getModel(String path){
-		EcParser parser = new EcParser();
+		IModelParser parser = new XmlModelParser();
 		InputStream istream;
 		try {
 			istream = new FileInputStream(new File(path));
-			return parser.parseEctFile(istream);
+			return parser.parseModel(istream);
 		} catch (FileNotFoundException e) {
 			fail("Cannot find file: " + path);
+			return null;
+		} catch (ParserException e) {
+			fail("Cannot parse file " + path + ": " + e.getMessage());
 			return null;
 		}
 	}

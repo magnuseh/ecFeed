@@ -9,9 +9,9 @@ import com.testify.ecfeed.runner.annotations.Generator;
 import com.testify.ecfeed.runner.annotations.GeneratorParameter;
 import com.testify.ecfeed.runner.annotations.GeneratorParameterNames;
 import com.testify.ecfeed.runner.annotations.GeneratorParameterValues;
-import com.testify.generators.CartesianProductGenerator;
-import com.testify.generators.NWiseGenerator;
-import com.testify.generators.RandomGenerator;
+import com.testify.ecfeed.generators.CartesianProductGenerator;
+import com.testify.ecfeed.generators.NWiseGenerator;
+import com.testify.ecfeed.generators.RandomGenerator;
 
 @RunWith(OnlineRunner.class)
 @Generator(CartesianProductGenerator.class)

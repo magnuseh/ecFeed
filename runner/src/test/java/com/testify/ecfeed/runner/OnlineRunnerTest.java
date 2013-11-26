@@ -26,11 +26,11 @@ import com.testify.ecfeed.runner.annotations.Constraints;
 import com.testify.ecfeed.runner.annotations.EcModel;
 import com.testify.ecfeed.runner.annotations.Generator;
 import com.testify.ecfeed.runner.annotations.GeneratorParameter;
-import com.testify.generators.CartesianProductGenerator;
-import com.testify.generators.NWiseGenerator;
-import com.testify.generators.api.GeneratorException;
-import com.testify.generators.api.IConstraint;
-import com.testify.generators.api.IGenerator;
+import com.testify.ecfeed.generators.CartesianProductGenerator;
+import com.testify.ecfeed.generators.NWiseGenerator;
+import com.testify.ecfeed.generators.api.GeneratorException;
+import com.testify.ecfeed.generators.api.IConstraint;
+import com.testify.ecfeed.generators.api.IGenerator;
 
 public class OnlineRunnerTest extends StaticRunnerTest{
 
