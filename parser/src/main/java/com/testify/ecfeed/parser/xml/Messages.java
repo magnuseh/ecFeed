@@ -8,6 +8,7 @@ import nu.xom.Element;
 import nu.xom.ParsingException;
 
 public class Messages {
+	
 	public static final String WRONG_ROOT_ELEMENT_TAG = 
 			"Parsing error: The XML root element must be " + Constants.ROOT_NODE_NAME;
 

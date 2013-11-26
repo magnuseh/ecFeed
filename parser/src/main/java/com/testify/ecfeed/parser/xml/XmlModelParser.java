@@ -91,13 +91,13 @@ public class XmlModelParser {
 			if(child.getLocalName() == Constants.EXPECTED_VALUE_CATEGORY_NODE_NAME){
 				methodNode.addCategory(parseExpectedValueCategoryElement(child));
 			}
-			if(child.getLocalName() == Constants.CATEGORY_NODE_NAME){
+			else if(child.getLocalName() == Constants.CATEGORY_NODE_NAME){
 				methodNode.addCategory(parseCategoryElement(child));
 			}
-			if(child.getLocalName() == Constants.TEST_CASE_NODE_NAME){
+			else if(child.getLocalName() == Constants.TEST_CASE_NODE_NAME){
 				methodNode.addTestCase(parseTestCaseElement(child, methodNode.getCategories()));
 			}
-			if(child.getLocalName() == Constants.CONSTRAINT_NODE_NAME){
+			else if(child.getLocalName() == Constants.CONSTRAINT_NODE_NAME){
 				methodNode.addConstraint(parseConstraintElement(child, methodNode));
 			}
 			else{
@@ -113,7 +113,7 @@ public class XmlModelParser {
 		BasicStatement consequence = null;
 		for(Element child : getIterableElements(element.getChildElements())){
 			if(child.getLocalName().equals(Constants.CONSTRAINT_PREMISE_NODE_NAME)){
-				if(child.getChildCount() == 1){
+				if(getIterableElements(child.getChildElements()).size() == 1){
 					//there is only one statement per premise or consequence that is either
 					//a single statement or statement array
 					premise = parseStatement(child.getChildElements().get(0), method);
@@ -123,7 +123,8 @@ public class XmlModelParser {
 				}
 			}
 			else if(child.getLocalName().equals(Constants.CONSTRAINT_CONSEQUENCE_NODE_NAME)){
-				if(child.getChildCount() == 0){
+				if(getIterableElements(child.getChildElements()).size() == 1){
+//					if(child.getChildCount() == 0){
 					consequence = parseStatement(child.getChildElements().get(0), method);
 				}
 				else{
@@ -230,7 +231,7 @@ public class XmlModelParser {
 	}
 
 	protected TestCaseNode parseTestCaseElement(Element element, List<CategoryNode> categories) throws ParserException {
-		String testSuiteName = getElementName(element);
+		String testSuiteName = getAttributeValue(element, Constants.TEST_SUITE_NAME_ATTRIBUTE);
 		ArrayList<PartitionNode> testData = new ArrayList<PartitionNode>();
 		List<Element> parameterElements = getIterableElements(element.getChildElements());
 		
