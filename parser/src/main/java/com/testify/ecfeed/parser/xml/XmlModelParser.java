@@ -33,10 +33,11 @@ import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.TestCaseNode;
+import com.testify.ecfeed.parser.IModelParser;
 import com.testify.ecfeed.parser.ParserException;
 import com.testify.ecfeed.parser.Constants;
 
-public class XmlModelParser {
+public class XmlModelParser implements IModelParser{
 	
 	public RootNode parseModel(InputStream istream) throws ParserException{
 		try {
