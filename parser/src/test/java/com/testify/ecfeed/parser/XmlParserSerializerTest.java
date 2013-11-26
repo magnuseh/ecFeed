@@ -67,7 +67,6 @@ public class XmlParserSerializerTest {
 			XmlModelSerializer serializer = new XmlModelSerializer(ostream);
 			XmlModelParser parser = new XmlModelParser();
 			serializer.writeXmlDocument(model);
-			System.out.println(ostream.toString());
 			ByteArrayInputStream istream = new ByteArrayInputStream(ostream.toByteArray());
 			RootNode parsedModel = parser.parseModel(istream);
 			compareModels(model, parsedModel);
