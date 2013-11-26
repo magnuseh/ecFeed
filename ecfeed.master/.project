@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>ecfeed.master</name>
+	<comment></comment>
+	<projects>
+		<project>generarators</project>
+		<project>model</project>
+		<project>parser</project>
+		<project>runner</project>
+	</projects>
+	<buildSpec>
+	</buildSpec>
+	<natures>
+	</natures>
+</projectDescription>
