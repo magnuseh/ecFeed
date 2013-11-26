@@ -39,7 +39,7 @@ public class OnlineRunnerTest extends StaticRunnerTest{
 		fExecuted = new HashSet<List<String>>();
 	}
 
-	protected final static String MODEL_PATH = "test/com/testify/ecfeed/runner/OnlineRunnerTest.ect";
+	protected final static String MODEL_PATH = "src/test/java/com/testify/ecfeed/runner/OnlineRunnerTest.ect";
 
 	protected final static String OVERRIDING_CONSTRAINT_NAME = "constraint";
 

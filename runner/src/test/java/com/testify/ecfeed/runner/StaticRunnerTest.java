@@ -35,7 +35,7 @@ public class StaticRunnerTest extends StaticRunner{
 		super(StaticRunnerTest.class);
 	}
 
-	protected final static String MODEL_PATH = "test/com/testify/ecfeed/runner/StaticRunnerTest.ect";
+	protected final static String MODEL_PATH = "src/test/java/com/testify/ecfeed/runner/StaticRunnerTest.ect";
 	protected final static String TEST_SUITES[] = {"Test Suite 1", "Test Suite 2"};
 	
 	protected static Set<List<Integer>> fExecutedTestCases;
