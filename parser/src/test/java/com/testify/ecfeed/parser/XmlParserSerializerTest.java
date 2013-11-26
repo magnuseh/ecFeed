@@ -361,8 +361,19 @@ public class XmlParserSerializerTest {
 
 	private void comparePartitions(PartitionNode partition1, PartitionNode partition2) {
 		compareNames(partition1.getName(), partition2.getName());
-		if(partition1.getValue().equals(partition2.getValue()) == false){
-			fail("Partition values differ");
+		compareValues(partition1.getValue(),partition2.getValue());
+	}
+
+	private void compareValues(Object value1, Object value2) {
+		boolean result = true;
+		if(value1 == null){
+			result = (value2 == null);
+		}
+		else{
+			result = value1.equals(value2); 
+		}
+		if(!result){
+			fail("Value " + value1 + " differ from " + value2);
 		}
 	}
 
@@ -419,7 +430,15 @@ public class XmlParserSerializerTest {
 		compareNames(testCase1.getName(), testCase2.getName());
 		compareSizes(testCase1.getTestData(), testCase2.getTestData());
 		for(int i = 0; i < testCase1.getTestData().size(); i++){
-			comparePartitions(testCase1.getTestData().get(i),testCase2.getTestData().get(i));
+			PartitionNode testValue1 = testCase1.getTestData().get(i);
+			PartitionNode testValue2 = testCase2.getTestData().get(i);
+			
+			if(testValue1.getCategory() instanceof ExpectedValueCategoryNode){
+				compareValues(testValue1.getValue(), testValue2.getValue());
+			}
+			else{
+				comparePartitions(testCase1.getTestData().get(i),testCase2.getTestData().get(i));
+			}
 		}
 	}
 
