@@ -111,7 +111,8 @@ public class XmlModelSerializer {
 	protected void createExpectedValueElement(Element testCaseElement,
 			PartitionNode parameter) {
 		Element testParameterElement = new Element(Constants.EXPECTED_PARAMETER_NODE_NAME);
-		Attribute partitionNameAttribute = new Attribute(Constants.VALUE_ATTRIBUTE_NAME, parameter.getValueString());
+		String valueString = getValueString(parameter.getCategory().getType(), parameter.getValue());
+		Attribute partitionNameAttribute = new Attribute(Constants.VALUE_ATTRIBUTE_NAME, valueString);
 		testParameterElement.addAttribute(partitionNameAttribute);
 		testCaseElement.appendChild(testParameterElement);
 	}
