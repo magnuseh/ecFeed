@@ -1,36 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" output="target/classes" path="src/main/java">
-		<attributes>
-			<attribute name="optional" value="true"/>
-			<attribute name="maven.pomderived" value="true"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry excluding="**" kind="src" output="target/classes" path="src/main/resources">
-		<attributes>
-			<attribute name="maven.pomderived" value="true"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="src" output="target/test-classes" path="src/test/java">
-		<attributes>
-			<attribute name="optional" value="true"/>
-			<attribute name="maven.pomderived" value="true"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry excluding="**" kind="src" output="target/test-classes" path="src/test/resources">
-		<attributes>
-			<attribute name="maven.pomderived" value="true"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/J2SE-1.5">
-		<attributes>
-			<attribute name="maven.pomderived" value="true"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="con" path="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER">
-		<attributes>
-			<attribute name="maven.pomderived" value="true"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="output" path="target/classes"/>
+  <classpathentry kind="src" path="src/test/java" output="target/test-classes" including="**/*.java"/>
+  <classpathentry kind="src" path="src/test/resources" output="target/test-classes" excluding="**/*.java"/>
+  <classpathentry kind="src" path="src/main/java" including="**/*.java"/>
+  <classpathentry kind="src" path="src/main/resources" excluding="**/*.java"/>
+  <classpathentry kind="output" path="target/classes"/>
+  <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+  <classpathentry kind="var" path="M2_REPO/com/testify/ecfeed/generarators/1.4.0-SNAPSHOT/generarators-1.4.0-SNAPSHOT.jar"/>
+  <classpathentry kind="var" path="M2_REPO/com/testify/ecfeed/model/1.4.0-SNAPSHOT/model-1.4.0-SNAPSHOT.jar"/>
+  <classpathentry kind="var" path="M2_REPO/com/testify/ecfeed/parser/1.4.0-SNAPSHOT/parser-1.4.0-SNAPSHOT.jar"/>
+  <classpathentry kind="var" path="M2_REPO/xom/xom/1.2.5/xom-1.2.5.jar" sourcepath="M2_REPO/xom/xom/1.2.5/xom-1.2.5-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/xml-apis/xml-apis/1.3.03/xml-apis-1.3.03.jar"/>
+  <classpathentry kind="var" path="M2_REPO/xerces/xercesImpl/2.8.0/xercesImpl-2.8.0.jar"/>
+  <classpathentry kind="var" path="M2_REPO/xalan/xalan/2.7.0/xalan-2.7.0.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/eclipse/jdt/core/3.3.0-v_771/core-3.3.0-v_771.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/eclipse/core/resources/3.3.0-v20070604/resources-3.3.0-v20070604.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/eclipse/core/expressions/3.3.0-v20070606-0010/expressions-3.3.0-v20070606-0010.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/eclipse/core/runtime/3.9.0-v20130326-1255/runtime-3.9.0-v20130326-1255.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/eclipse/osgi/3.9.1-v20130814-1242/osgi-3.9.1-v20130814-1242.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/eclipse/equinox/common/3.6.200-v20130402-1505/common-3.6.200-v20130402-1505.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/eclipse/core/jobs/3.5.300-v20130429-1813/jobs-3.5.300-v20130429-1813.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/eclipse/equinox/registry/3.5.301-v20130717-1549/registry-3.5.301-v20130717-1549.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/eclipse/equinox/preferences/3.5.100-v20130422-1538/preferences-3.5.100-v20130422-1538.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/eclipse/core/contenttype/3.4.200-v20130326-1255/contenttype-3.4.200-v20130326-1255.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/eclipse/equinox/app/1.3.100-v20130327-1442/app-1.3.100-v20130327-1442.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/eclipse/core/filesystem/1.1.0-v20070606/filesystem-1.1.0-v20070606.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/eclipse/text/3.3.0-v20070606-0010/text-3.3.0-v20070606-0010.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/eclipse/core/commands/3.3.0-I20070605-0010/commands-3.3.0-I20070605-0010.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/eclipse/swt/3.3.0-v3346/swt-3.3.0-v3346.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/eclipse/ui/forms/3.3.0-v20070511/forms-3.3.0-v20070511.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/eclipse/jface/3.3.0-I20070606-0010/jface-3.3.0-I20070606-0010.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/eclipse/swt/gtk/linux/x86_64/3.3.0-v3346/x86_64-3.3.0-v3346.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/mod4j/org/eclipse/jface/text/3.5.0/text-3.5.0.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/mod4j/org/eclipse/core/runtime/3.5.0/runtime-3.5.0.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/mod4j/org/eclipse/osgi/3.5.0/osgi-3.5.0.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/mod4j/org/eclipse/equinox/common/3.5.0/common-3.5.0.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/mod4j/org/eclipse/core/jobs/3.4.100/jobs-3.4.100.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/mod4j/org/eclipse/equinox/registry/3.4.100/registry-3.4.100.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/mod4j/org/eclipse/equinox/preferences/3.2.300/preferences-3.2.300.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/mod4j/org/eclipse/core/contenttype/3.4.0/contenttype-3.4.0.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/mod4j/org/eclipse/equinox/app/1.2.0/app-1.2.0.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/mod4j/org/eclipse/text/3.5.0/text-3.5.0.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/mod4j/org/eclipse/core/commands/3.5.0/commands-3.5.0.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/mod4j/org/eclipse/jface/3.5.0/jface-3.5.0.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/mod4j/org/eclipse/swt/3.5.0/swt-3.5.0.jar"/>
+  <classpathentry kind="var" path="M2_REPO/eclipse/eclipse-jface/2.1.0/eclipse-jface-2.1.0.jar"/>
 </classpath>
