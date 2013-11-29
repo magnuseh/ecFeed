@@ -32,6 +32,8 @@ import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
 
 public class ModelLabelProvider extends LabelProvider {
+	
+	protected final static String ICONS_FOLDER = "src/main/resources/icons";
 
 	public String getText(Object element){
 		if(element instanceof GenericNode){
@@ -70,7 +72,7 @@ public class ModelLabelProvider extends LabelProvider {
 	
 	private static Image getImage(String file) {
 	    Bundle bundle = FrameworkUtil.getBundle(ModelLabelProvider.class);
-	    URL url = FileLocator.find(bundle, new Path("icons/" + file), null);
+	    URL url = FileLocator.find(bundle, new Path(ICONS_FOLDER + file), null);
 	    ImageDescriptor image = ImageDescriptor.createFromURL(url);
 	    return image.createImage();
 

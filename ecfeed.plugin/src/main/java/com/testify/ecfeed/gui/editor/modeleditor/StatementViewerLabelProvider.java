@@ -28,6 +28,8 @@ import com.testify.ecfeed.model.constraint.StatementArray;
 
 public class StatementViewerLabelProvider extends LabelProvider {
 	
+	protected final static String ICONS_FOLDER = "src/main/resources/icons";
+
 	private Constraint fConstraint;
 
 	public StatementViewerLabelProvider(Constraint constraint){
@@ -56,7 +58,7 @@ public class StatementViewerLabelProvider extends LabelProvider {
 	
 	private static Image getImage(String file) {
 	    Bundle bundle = FrameworkUtil.getBundle(ModelLabelProvider.class);
-	    URL url = FileLocator.find(bundle, new Path("icons/" + file), null);
+	    URL url = FileLocator.find(bundle, new Path(ICONS_FOLDER + file), null);
 	    ImageDescriptor image = ImageDescriptor.createFromURL(url);
 	    return image.createImage();
 	  }
