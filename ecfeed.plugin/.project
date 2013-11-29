@@ -33,34 +33,14 @@
 	</natures>
 	<linkedResources>
 		<link>
-			<name>generarators-1.4.0-SNAPSHOT.jar</name>
+			<name>jdi.jar</name>
 			<type>1</type>
-			<location>/home/patryk/.m2/repository/com/testify/ecfeed/generarators/1.4.0-SNAPSHOT/generarators-1.4.0-SNAPSHOT.jar</location>
+			<location>/home/patryk/.m2/repository/.cache/tycho/org.eclipse.jdt.debug-3.8.0.v20130514-0841.jar/jdi.jar</location>
 		</link>
 		<link>
-			<name>model-1.4.0-SNAPSHOT.jar</name>
+			<name>jdimodel.jar</name>
 			<type>1</type>
-			<location>/home/patryk/.m2/repository/com/testify/ecfeed/model/1.4.0-SNAPSHOT/model-1.4.0-SNAPSHOT.jar</location>
-		</link>
-		<link>
-			<name>parser-1.4.0-SNAPSHOT.jar</name>
-			<type>1</type>
-			<location>/home/patryk/.m2/repository/com/testify/ecfeed/parser/1.4.0-SNAPSHOT/parser-1.4.0-SNAPSHOT.jar</location>
-		</link>
-		<link>
-			<name>xalan-2.7.0.jar</name>
-			<type>1</type>
-			<location>/home/patryk/.m2/repository/xalan/xalan/2.7.0/xalan-2.7.0.jar</location>
-		</link>
-		<link>
-			<name>xercesImpl-2.8.0.jar</name>
-			<type>1</type>
-			<location>/home/patryk/.m2/repository/xerces/xercesImpl/2.8.0/xercesImpl-2.8.0.jar</location>
-		</link>
-		<link>
-			<name>xml-apis-1.3.03.jar</name>
-			<type>1</type>
-			<location>/home/patryk/.m2/repository/xml-apis/xml-apis/1.3.03/xml-apis-1.3.03.jar</location>
+			<location>/home/patryk/.m2/repository/.cache/tycho/org.eclipse.jdt.debug-3.8.0.v20130514-0841.jar/jdimodel.jar</location>
 		</link>
 	</linkedResources>
 </projectDescription>

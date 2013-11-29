@@ -17,9 +17,5 @@ Require-Bundle: org.eclipse.ui,
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .,
- model-1.4.0-SNAPSHOT.jar,
- generarators-1.4.0-SNAPSHOT.jar,
- parser-1.4.0-SNAPSHOT.jar,
- xml-apis-1.3.03.jar,
- xercesImpl-2.8.0.jar,
- xalan-2.7.0.jar
+ jdi.jar,
+ jdimodel.jar
