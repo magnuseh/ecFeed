@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: ecFeed
 Bundle-SymbolicName: ecfeed.plugin;singleton:=true
 Bundle-Version: 1.4.0.qualifier
-Bundle-Activator: ecfeed.plugin.Activator
+Bundle-Activator: com.testify.ecfeed.plugin.Activator
 Bundle-Vendor: TESTIFY
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
