@@ -32,6 +32,8 @@ import com.testify.ecfeed.gui.editor.modeleditor.ModelPage;
 import com.testify.ecfeed.gui.editor.sourceviewer.SourceViewer;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.parser.IModelParser;
+import com.testify.ecfeed.parser.ParserException;
+import com.testify.ecfeed.parser.xml.XmlModelParser;
 
 public class EcMultiPageEditor extends FormEditor{
 	
@@ -61,11 +63,15 @@ public class EcMultiPageEditor extends FormEditor{
 			IFile file = ((FileEditorInput)input).getFile();
 			InputStream iStream;
 			try {
-				EcParser parser = new EcParser();
+				IModelParser parser = new XmlModelParser();
 				iStream = file.getContents();
-				root = parser.parseEctFile(iStream);
+				root = parser.parseModel(iStream);
 			} catch (CoreException e) {
 				System.out.println("Exception: " + e.getMessage());
+				e.printStackTrace();
+			} catch (ParserException e) {
+				System.out.println("Exception: " + e.getMessage());
+				e.printStackTrace();
 			}
 		}
 		return root;

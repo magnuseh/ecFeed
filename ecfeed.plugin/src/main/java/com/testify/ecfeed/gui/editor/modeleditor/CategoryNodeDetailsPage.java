@@ -38,13 +38,11 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.swt.layout.RowLayout;
 
 import com.testify.ecfeed.gui.common.Messages;
-import com.testify.ecfeed.gui.common.Constants;
 import com.testify.ecfeed.gui.dialogs.PartitionSettingsDialog;
 import com.testify.ecfeed.gui.editor.IModelUpdateListener;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.PartitionNode;
-import com.testify.ecfeed.plugin.utils.EcModelUtils;
 
 public class CategoryNodeDetailsPage extends GenericNodeDetailsPage implements IModelUpdateListener{
 
@@ -78,7 +76,7 @@ public class CategoryNodeDetailsPage extends GenericNodeDetailsPage implements I
 
 		@Override
 		protected void setValue(Object element, Object value) {
-			if(!EcModelUtils.validatePartitionName((String)value, fSelectedCategory, (PartitionNode)element)){
+			if(!fSelectedCategory.validatePartitionName((String)value)){
 				MessageDialog dialog = new MessageDialog(getActiveShell(), 
 						Messages.DIALOG_PARTITION_NAME_PROBLEM_TITLE, 
 						Display.getDefault().getSystemImage(SWT.ICON_ERROR), 
@@ -120,7 +118,7 @@ public class CategoryNodeDetailsPage extends GenericNodeDetailsPage implements I
 		@Override
 		protected void setValue(Object element, Object value) {
 			String valueString = (String)value;
-			if(!EcModelUtils.validatePartitionStringValue(valueString, fSelectedCategory)){
+			if(!fSelectedCategory.validatePartitionStringValue(valueString)){
 				MessageDialog dialog = new MessageDialog(getActiveShell(), 
 						Messages.DIALOG_PARTITION_VALUE_PROBLEM_TITLE, 
 						Display.getDefault().getSystemImage(SWT.ICON_ERROR), 
@@ -130,7 +128,7 @@ public class CategoryNodeDetailsPage extends GenericNodeDetailsPage implements I
 				dialog.open();
 			}
 			else{
-				Object newValue = EcModelUtils.getPartitionValueFromString(valueString, fSelectedCategory.getType());
+				Object newValue = fSelectedCategory.getPartitionValueFromString(valueString);
 				((PartitionNode)element).setValue(newValue);
 				updateModel((RootNode)fSelectedCategory.getRoot());
 			}
@@ -194,7 +192,7 @@ public class CategoryNodeDetailsPage extends GenericNodeDetailsPage implements I
 				if(partitionValue != null){
 					return partitionValue.toString();
 				}
-				return Constants.NULL_VALUE_STRING_REPRESENTATION;
+				return com.testify.ecfeed.parser.Constants.NULL_VALUE_STRING_REPRESENTATION;
 			}
 		});
 		valueViewerColumn.setEditingSupport(new PartitionValueEditingSupport(fPartitionsViewer));
@@ -233,8 +231,8 @@ public class CategoryNodeDetailsPage extends GenericNodeDetailsPage implements I
 				if (dialog.open() == Window.OK) {
 					for(Object partition : fPartitionsViewer.getCheckedElements()){
 						if(fSelectedCategory.getPartitions().size() > 1){
-							EcModelUtils.removeReferences((PartitionNode)partition);
-							fSelectedCategory.removeChild((PartitionNode)partition);
+							fSelectedCategory.getMethod().partitionRemoved((PartitionNode)partition);
+							fSelectedCategory.removePartition((PartitionNode)partition);
 						}
 						else{
 							MessageDialog dlg = new MessageDialog(getActiveShell(), 

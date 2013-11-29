@@ -62,7 +62,7 @@ public class RandomAlgorithmTest {
 		}
 		double[] expected = ArrayUtils.toPrimitive(expectedDistribution.toArray(new Double[]{}));
 		long[] observed = ArrayUtils.toPrimitive(values.toArray(new Long[]{}));
-		boolean notUniform = TestUtils.chiSquareTest(expected, observed, 0.01);
+		boolean notUniform = TestUtils.chiSquareTest(expected, observed, 0.0001);
 		assertFalse(notUniform);
 	}
 

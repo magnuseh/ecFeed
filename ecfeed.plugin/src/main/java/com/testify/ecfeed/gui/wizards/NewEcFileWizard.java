@@ -35,7 +35,7 @@ import com.testify.ecfeed.gui.common.Messages;
 import com.testify.ecfeed.gui.common.Constants;
 import com.testify.ecfeed.gui.editor.EcMultiPageEditor;
 import com.testify.ecfeed.model.RootNode;
-import com.testify.ecfeed.parser.IModelParser;
+import com.testify.ecfeed.parser.xml.XmlModelSerializer;
 
 public class NewEcFileWizard extends Wizard implements INewWizard {
 	
@@ -81,7 +81,7 @@ public class NewEcFileWizard extends Wizard implements INewWizard {
 			String modelName = newFileFullPath.removeFileExtension().lastSegment();
 			RootNode model = new RootNode(modelName != null ? modelName : Constants.DEFAULT_NEW_ECT_MODEL_NAME);
 			ByteArrayOutputStream ostream = new ByteArrayOutputStream();
-			EcWriter writer = new EcWriter(ostream);
+			XmlModelSerializer writer = new XmlModelSerializer(ostream);
 			writer.writeXmlDocument(model);
 			ByteArrayInputStream istream = new ByteArrayInputStream(ostream.toByteArray());
 			file.setContents(istream, true, true, null);

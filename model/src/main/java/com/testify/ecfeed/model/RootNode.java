@@ -44,6 +44,15 @@ public class RootNode extends GenericNode {
 		return null;
 	}
 
+	public static boolean validateModelName(String name){
+		if (name == null) return false;
+		if(name.length() == 0) return false;
+		if(name.length() >= Constants.MAX_MODEL_NAME_LENGTH) return false;
+		if(name.matches("[ ]+.*")) return false;
+		
+		return true;
+	}
+
 	public List<? extends IGenericNode> getChildren(){
 		return fClasses;
 	}

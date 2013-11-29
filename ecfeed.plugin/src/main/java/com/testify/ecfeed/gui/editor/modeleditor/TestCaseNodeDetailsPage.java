@@ -26,7 +26,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.IFormPart;
 import org.eclipse.ui.forms.widgets.Section;
 
-import com.testify.ecfeed.constants.DialogStrings;
+import com.testify.ecfeed.gui.common.Messages;
 import com.testify.ecfeed.gui.common.ColorConstants;
 import com.testify.ecfeed.gui.common.ColorManager;
 import com.testify.ecfeed.gui.common.IInputChangedListener;
@@ -36,7 +36,6 @@ import com.testify.ecfeed.model.ExpectedValueCategoryNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.TestCaseNode;
-import com.testify.ecfeed.plugin.utils.EcModelUtils;
 
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Label;
@@ -164,29 +163,16 @@ public class TestCaseNodeDetailsPage extends GenericNodeDetailsPage implements I
 			@Override
 			public String getText(Object element){
 				PartitionNode testValue = (PartitionNode)element;
-				if(testValue.getCategory().isExpected()){
+				if(testValue.getCategory() instanceof ExpectedValueCategoryNode){
 					return testValue.getValueString();
 				}
 				return testValue.toString();
-//				return testValue.getName();
 			}
 			@Override
 			public Color getForeground(Object element){
 				return getColor(element);
 			}
 		}); 
-				
-//		fValuesViewerColumn = createTableViewerColumn(fTestDataViewer, "Value", 100, new ColumnLabelProvider(){
-//			@Override
-//			public String getText(Object element){
-//				PartitionNode testValue = (PartitionNode)element;
-//				return testValue.getValueString();
-//			}
-//			@Override
-//			public Color getForeground(Object element){
-//				return getColor(element);
-//			}
-//		});
 	}
 
 	private Color getColor(Object element){
@@ -207,7 +193,7 @@ public class TestCaseNodeDetailsPage extends GenericNodeDetailsPage implements I
 		createButton(textClientComposite, "Remove", new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e){
-				fParent.removeChild(fSelectedTestCase);
+				fParent.removeTestCase(fSelectedTestCase);
 				getParentBlock().selectNode(fParent);
 				fSelectedTestCase = null;
 				updateModel(fParent);
@@ -237,7 +223,7 @@ public class TestCaseNodeDetailsPage extends GenericNodeDetailsPage implements I
 
 	private void renameTestCase() {
 		String newName = fTestSuiteNameCombo.getText();
-		if(EcModelUtils.validateTestSuiteName(newName)){
+		if(TestCaseNode.validateTestSuiteName(newName)){
 			fSelectedTestCase.setName(newName);
 			updateModel(fSelectedTestCase);
 		}

@@ -5,13 +5,22 @@
    <extension
          point="org.eclipse.ui.editors">
       <editor
-            name="Sample XML Editor"
-            extensions="xml"
+            class="com.testify.ecfeed.gui.editor.EcMultiPageEditor"
+            default="false"
+            extensions="ect"
             icon="icons/sample.gif"
-            contributorClass="org.eclipse.ui.texteditor.BasicTextEditorActionContributor"
-            class="ecfeed.plugin.editors.XMLEditor"
-            id="ecfeed.plugin.editors.XMLEditor">
+            id="com.testify.ecfeed.plugin.ectEditor"
+            name="Ect Editor">
       </editor>
+   </extension>
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <wizard
+            class="com.testify.ecfeed.gui.wizards.NewEcFileWizard"
+            icon="icons/sample.gif"
+            id="com.testify.ecfeed.plugin.newEctFileWizard"
+            name="NewEctFileWizard">
+      </wizard>
    </extension>
 
 </plugin>

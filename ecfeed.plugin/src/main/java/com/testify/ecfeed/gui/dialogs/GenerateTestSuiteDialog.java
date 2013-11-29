@@ -53,8 +53,8 @@ import com.testify.ecfeed.model.ExpectedValueCategoryNode;
 import com.testify.ecfeed.model.GenericNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.model.constraint.Constraint;
-import com.testify.ecfeed.plugin.utils.EcModelUtils;
 import com.testify.ecfeed.generators.GeneratorFactory;
 import com.testify.ecfeed.generators.api.GeneratorException;
 import com.testify.ecfeed.generators.api.IConstraint;
@@ -348,7 +348,7 @@ public class GenerateTestSuiteDialog extends TitleAreaDialog {
 	}
 
 	private void validateTestSuiteName() {
-		if(!EcModelUtils.validateTestSuiteName(fTestSuiteCombo.getText())){
+		if(!TestCaseNode.validateTestSuiteName(fTestSuiteCombo.getText())){
 			setErrorMessage(Messages.DIALOG_TEST_SUITE_NAME_PROBLEM_MESSAGE);
 			setOkButton(false);
 		}

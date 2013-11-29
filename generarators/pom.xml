@@ -2,7 +2,6 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.testify.ecfeed</groupId>
   <artifactId>generarators</artifactId>
-  <version>1.4.0-SNAPSHOT</version>
   <name>generators</name>
   <description>test data generators</description>
   <build>
@@ -47,4 +46,10 @@
   		<scope>test</scope>
   	</dependency>
   </dependencies>
+  <parent>
+  	<groupId>com.testify</groupId>
+  	<artifactId>ecfeed</artifactId>
+  	<version>1.4.0-SNAPSHOT</version>
+  	<relativePath>../ecfeed</relativePath>
+  </parent>
 </project>

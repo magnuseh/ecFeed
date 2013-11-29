@@ -54,6 +54,14 @@ public class ClassNode extends GenericNode {
 		return fMethods;
 	}
 	
+	public RootNode getRoot(){
+		return (RootNode) getParent();
+	}
+	
+	public boolean removeMethod(MethodNode method) {
+		return fMethods.remove(method);
+	}
+
 	public Set<String> getTestSuites(){
 		Set<String> suites = new HashSet<String>();
 		for(MethodNode method : getMethods()){

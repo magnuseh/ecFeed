@@ -29,7 +29,6 @@ import org.eclipse.swt.widgets.Text;
 import com.testify.ecfeed.gui.common.Messages;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.PartitionNode;
-import com.testify.ecfeed.plugin.utils.EcModelUtils;
 
 import org.eclipse.wb.swt.SWTResourceManager;
 
@@ -119,12 +118,12 @@ public class PartitionSettingsDialog extends TitleAreaDialog {
 		boolean inputValid = true;
 		String errorTitle = "";
 		String errorMessage = "";
-		if(!EcModelUtils.validatePartitionStringValue(fValueText.getText(), fParent)){
+		if(!fParent.validatePartitionStringValue(fValueText.getText())){
 			inputValid = false;
 			errorTitle = Messages.DIALOG_PARTITION_VALUE_PROBLEM_TITLE;
 			errorMessage = Messages.DIALOG_PARTITION_VALUE_PROBLEM_MESSAGE;
 		}
-		if(!EcModelUtils.validatePartitionName(fNameText.getText(), fParent, fPartition)){
+		if(!fParent.validatePartitionName(fNameText.getText())){
 			inputValid = false;
 			errorTitle = Messages.DIALOG_PARTITION_NAME_PROBLEM_TITLE;
 			errorMessage = Messages.DIALOG_PARTITION_NAME_PROBLEM_MESSAGE;
@@ -163,7 +162,7 @@ public class PartitionSettingsDialog extends TitleAreaDialog {
 	@Override
 	protected void okPressed() {
 		fPartitionName = fNameText.getText();
-		fPartitionValue = EcModelUtils.getPartitionValueFromString(fValueText.getText(), fParent.getType());
+		fPartitionValue = fParent.getPartitionValueFromString(fValueText.getText());
 		super.okPressed();
 	}
 

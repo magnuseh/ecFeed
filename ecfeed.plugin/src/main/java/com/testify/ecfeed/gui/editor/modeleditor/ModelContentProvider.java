@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.TreeNodeContentProvider;
 
-import com.testify.ecfeed.constants.Constants;
+import com.testify.ecfeed.gui.common.Constants;
 import com.testify.ecfeed.gui.editor.EcMultiPageEditor;
 import com.testify.ecfeed.model.IGenericNode;
 import com.testify.ecfeed.model.MethodNode;

@@ -28,7 +28,6 @@ import org.eclipse.wb.swt.SWTResourceManager;
 
 import com.testify.ecfeed.gui.common.Messages;
 import com.testify.ecfeed.model.RootNode;
-import com.testify.ecfeed.plugin.utils.EcModelUtils;
 
 public class RenameModelDialog extends TitleAreaDialog {
 	private Text fNameText;
@@ -80,7 +79,7 @@ public class RenameModelDialog extends TitleAreaDialog {
 	}
 
 	private void verifyName() {
-		if (EcModelUtils.validateModelName(fNameText.getText()) == false){
+		if (RootNode.validateModelName(fNameText.getText()) == false){
 			fOkButton.setEnabled(false);
 		}
 		else{

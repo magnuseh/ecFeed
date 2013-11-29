@@ -28,7 +28,7 @@ import org.eclipse.ui.forms.IFormPart;
 import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.wb.swt.TableViewerColumnSorter;
 
-import com.testify.ecfeed.constants.DialogStrings;
+import com.testify.ecfeed.gui.common.Messages;
 import com.testify.ecfeed.gui.dialogs.RenameModelDialog;
 import com.testify.ecfeed.gui.dialogs.TestClassSelectionDialog;
 import com.testify.ecfeed.model.RootNode;
@@ -55,7 +55,7 @@ public class RootNodeDetailsPage extends GenericNodeDetailsPage{
 
 			if(selectedClass != null){
 				ClassNode classNode = EcModelUtils.generateClassModel(selectedClass);
-				if(!EcModelUtils.classExists(fSelectedRoot, classNode.getQualifiedName())){
+				if(fSelectedRoot.getClassModel(classNode.getQualifiedName()) == null){
 					fSelectedRoot.addClass(classNode);
 					updateModel(fSelectedRoot);
 				}
@@ -97,7 +97,7 @@ public class RootNodeDetailsPage extends GenericNodeDetailsPage{
 		private void removeClasses(Object[] checkedElements) {
 			for(Object element : checkedElements){
 				if(element instanceof ClassNode){
-					fSelectedRoot.removeChild((ClassNode)element);
+					fSelectedRoot.removeClass((ClassNode)element);
 				}
 			}
 			updateModel(fSelectedRoot);

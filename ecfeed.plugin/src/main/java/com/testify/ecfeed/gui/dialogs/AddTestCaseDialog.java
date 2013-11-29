@@ -46,7 +46,7 @@ import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ExpectedValueCategoryNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
-import com.testify.ecfeed.plugin.utils.EcModelUtils;
+import com.testify.ecfeed.model.TestCaseNode;
 
 public class AddTestCaseDialog extends TitleAreaDialog implements IInputChangedListener {
 
@@ -202,7 +202,7 @@ public class AddTestCaseDialog extends TitleAreaDialog implements IInputChangedL
 	}
 	
 	private void validateTestSuiteName() {
-		if(!EcModelUtils.validateTestSuiteName(fTestSuiteCombo.getText())){
+		if(!TestCaseNode.validateTestSuiteName(fTestSuiteCombo.getText())){
 			setErrorMessage(Messages.DIALOG_TEST_SUITE_NAME_PROBLEM_MESSAGE);
 			setOkButton(false);
 		}

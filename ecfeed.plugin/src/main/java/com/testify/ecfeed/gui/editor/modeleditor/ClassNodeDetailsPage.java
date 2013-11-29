@@ -35,7 +35,7 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.ui.forms.IFormPart;
 import org.eclipse.ui.forms.widgets.Section;
 
-import com.testify.ecfeed.constants.DialogStrings;
+import com.testify.ecfeed.gui.common.Messages;
 import com.testify.ecfeed.gui.common.ColorConstants;
 import com.testify.ecfeed.gui.common.ColorManager;
 import com.testify.ecfeed.gui.dialogs.TestClassSelectionDialog;
@@ -64,7 +64,7 @@ public class ClassNodeDetailsPage extends GenericNodeDetailsPage{
 
 			if(selectedClass != null){
 				String qualifiedName = selectedClass.getFullyQualifiedName();
-				if(!EcModelUtils.classExists((RootNode)fSelectedClass.getRoot(), qualifiedName)){
+				if(fSelectedClass.getRoot().getClassModel(qualifiedName) == null){
 					fSelectedClass.setName(qualifiedName);
 					updateModel((RootNode)fSelectedClass.getRoot());
 				}
@@ -109,7 +109,7 @@ public class ClassNodeDetailsPage extends GenericNodeDetailsPage{
 
 		private void removeMethods(Object[] checkedElements) {
 			for(Object method : checkedElements){
-				fSelectedClass.removeChild((MethodNode)method);
+				fSelectedClass.removeMethod((MethodNode)method);
 			}
 		}
 	}
@@ -168,7 +168,7 @@ public class ClassNodeDetailsPage extends GenericNodeDetailsPage{
 						MessageDialog.QUESTION_WITH_CANCEL, new String[] {"OK", "Cancel"}, 0);
 				if(infoDialog.open() == 0){
 					RootNode root = (RootNode)fSelectedClass.getParent(); 
-					root.removeChild(fSelectedClass);
+					root.removeClass(fSelectedClass);
 					fSelectedClass = null;
 					getParentBlock().selectNode(root);
 					updateModel(root);

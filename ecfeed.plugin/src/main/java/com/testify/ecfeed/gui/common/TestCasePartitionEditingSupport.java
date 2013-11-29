@@ -25,7 +25,6 @@ import org.eclipse.swt.SWT;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ExpectedValueCategoryNode;
 import com.testify.ecfeed.model.PartitionNode;
-import com.testify.ecfeed.plugin.utils.EcModelUtils;
 
 public class TestCasePartitionEditingSupport extends EditingSupport {
 	private final TableViewer fViewer;
@@ -93,8 +92,8 @@ public class TestCasePartitionEditingSupport extends EditingSupport {
 		CategoryNode parent = (CategoryNode)((PartitionNode)element).getParent();
 		if(value instanceof String && parent instanceof ExpectedValueCategoryNode){
 			String valueString = (String)value;
-			if(EcModelUtils.validatePartitionStringValue(valueString, parent)){
-				Object newValue = EcModelUtils.getPartitionValueFromString(valueString, parent.getType());
+			if(parent.validatePartitionStringValue(valueString)){
+				Object newValue = parent.getPartitionValueFromString(valueString);
 				((PartitionNode)element).setValue(newValue);
 			}
 		}

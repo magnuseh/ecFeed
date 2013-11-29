@@ -3,7 +3,6 @@
 
   <artifactId>ecfeed.plugin</artifactId>
   <name>ecFeed</name>
-  <packaging>eclipse-plugin</packaging>
 
   <parent>
   	<groupId>com.testify</groupId>
@@ -28,21 +27,5 @@
       </plugin>
     </plugins>
   </build>
-  <dependencies>
-  	<dependency>
-  		<groupId>com.testify.ecfeed</groupId>
-  		<artifactId>model</artifactId>
-  		<version>1.4.0-SNAPSHOT</version>
-  	</dependency>
-  	<dependency>
-  		<groupId>com.testify.ecfeed</groupId>
-  		<artifactId>runner</artifactId>
-  		<version>1.4.0-SNAPSHOT</version>
-  	</dependency>
-  	<dependency>
-  		<groupId>com.testify.ecfeed</groupId>
-  		<artifactId>generarators</artifactId>
-  		<version>1.4.0-SNAPSHOT</version>
-  	</dependency>
-  </dependencies>
+  <packaging>eclipse-plugin</packaging>
 </project>

@@ -42,8 +42,8 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.TreeNodeContentProvider;
 
-import com.testify.ecfeed.constants.Constants;
-import com.testify.ecfeed.constants.DialogStrings;
+import com.testify.ecfeed.gui.common.Constants;
+import com.testify.ecfeed.gui.common.Messages;
 import com.testify.ecfeed.gui.common.ColorConstants;
 import com.testify.ecfeed.gui.common.ColorManager;
 import com.testify.ecfeed.gui.common.DefaultValueEditingSupport;
@@ -177,7 +177,8 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage implements IIn
 	}
 	
 	private void updateParameter(int index, CategoryNode newCategory){
-		boolean isOriginalCategoryExpected = fSelectedMethod.getCategories().get(index).isExpected();
+		boolean isOriginalCategoryExpected = fSelectedMethod.getCategories().get(index) 
+				instanceof ExpectedValueCategoryNode;
 		boolean isNewCategoryExpected = newCategory instanceof ExpectedValueCategoryNode;
 		if(isOriginalCategoryExpected == isNewCategoryExpected){
 			fSelectedMethod.getCategories().get(index).setName(newCategory.getName());
@@ -499,7 +500,7 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage implements IIn
 			private void removeCheckedTestCases() {
 				for(Object element : fTestCasesViewer.getCheckedElements()){
 					if(element instanceof TestCaseNode){
-						fSelectedMethod.removeChild((TestCaseNode)element);
+						fSelectedMethod.removeTestCase((TestCaseNode)element);
 					}
 				}
 			}

@@ -26,10 +26,9 @@ import org.eclipse.ui.forms.IFormPart;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.eclipse.ui.forms.widgets.Section;
 
-import com.testify.ecfeed.constants.DialogStrings;
+import com.testify.ecfeed.gui.common.Messages;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.PartitionNode;
-import com.testify.ecfeed.plugin.utils.EcModelUtils;
 
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Text;
@@ -101,7 +100,7 @@ public class PartitionNodeDetailsPage extends GenericNodeDetailsPage{
 
 	private void renamePartition(String name) {
 		CategoryNode parent = (CategoryNode)fSelectedPartition.getParent();
-		if(EcModelUtils.validatePartitionName(name, parent, fSelectedPartition)){
+		if(parent.validatePartitionName(name)){
 			fSelectedPartition.setName(name);
 			updateModel(fSelectedPartition);
 		}
@@ -118,8 +117,8 @@ public class PartitionNodeDetailsPage extends GenericNodeDetailsPage{
 
 	private void changePartitionValue(String valueString) {
 		CategoryNode parent = (CategoryNode)fSelectedPartition.getParent();
-		if(EcModelUtils.validatePartitionStringValue(valueString, parent)){
-			fSelectedPartition.setValue(EcModelUtils.getPartitionValueFromString(valueString, parent.getType()));
+		if(parent.validatePartitionStringValue(valueString)){
+			fSelectedPartition.setValue(parent.getPartitionValueFromString(valueString));
 			updateModel(fSelectedPartition);
 		}
 		else{

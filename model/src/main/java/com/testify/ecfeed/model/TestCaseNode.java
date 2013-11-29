@@ -56,6 +56,12 @@ public class TestCaseNode extends GenericNode {
 		return result;
 	}
 
+	public static boolean validateTestSuiteName(String newName) {
+		if(newName.length() < 1 || newName.length() > 64) return false;
+		if(newName.matches("[ ]+.*")) return false;
+		return true;
+	}
+
 	public String toString(){
 		String methodName = null;
 		if (getParent() != null){
