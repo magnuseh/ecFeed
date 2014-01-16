@@ -16,7 +16,7 @@ import com.testify.ecfeed.generators.RandomGenerator;
 @RunWith(OnlineRunner.class)
 @Generator(CartesianProductGenerator.class)
 @Constraints("constraint")
-@EcModel("test/com/testify/ecfeed/runner/OnlineRunnerTest.ect")
+@EcModel("src/test/java/com/testify/ecfeed/runner/OnlineRunnerTest.ect")
 public class OnlineRunnerTestClass {
 
 	@Test
