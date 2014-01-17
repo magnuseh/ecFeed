@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: EcFeed
 Bundle-SymbolicName: com.testify.ecfeed; singleton:=true
 Bundle-Version: 1.3.1.qualifier
-Bundle-Activator: com.testify.ecfeed.Activator
+Bundle-Activator: com.testify.ecfeed.plugin.Activator
 Bundle-Vendor: Testify
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
@@ -26,6 +26,6 @@ Import-Package:
  org.eclipse.ui.forms
 Bundle-ClassPath: lib/xom-1.2.10.jar,
  ecfeed.jar
-Export-Package: com.testify.generators, 
+Export-Package: com.testify.ecfeed.generators, 
  com.testify.ecfeed.runner,
  com.testify.ecfeed.runner.annotations

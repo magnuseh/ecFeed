@@ -25,23 +25,19 @@ public class TestCaseNode extends GenericNode {
 		return fTestData;
 	}
 	
-	//TODO unit tests
-	public String toString(){
-		String methodName = null;
-		if (getParent() != null){
-			methodName = getParent().getName();
-		}
-		String result = "[" + getName() + "]";
-				
-		if(methodName != null){
-			result += ": " + methodName + "(";
-			result += testDataString();
-			result += ")";
-		}
-		
-		return result;
+	public void replaceValue(int index, PartitionNode newValue) {
+		fTestData.set(index, newValue);
 	}
-	
+
+	public boolean mentions(PartitionNode partition) {
+		for(PartitionNode p : fTestData){
+			if(p == partition){
+				return true;
+			}
+		}
+		return false;
+	}
+
 	public String testDataString(){
 		String result = new String();
 		
@@ -59,17 +55,26 @@ public class TestCaseNode extends GenericNode {
 		}
 		return result;
 	}
-	
-	public boolean mentions(PartitionNode partition) {
-		for(PartitionNode p : fTestData){
-			if(p == partition){
-				return true;
-			}
-		}
-		return false;
+
+	public static boolean validateTestSuiteName(String newName) {
+		if(newName.length() < 1 || newName.length() > 64) return false;
+		if(newName.matches("[ ]+.*")) return false;
+		return true;
 	}
 
-	public void replaceValue(int index, PartitionNode newValue) {
-		fTestData.set(index, newValue);
+	public String toString(){
+		String methodName = null;
+		if (getParent() != null){
+			methodName = getParent().getName();
+		}
+		String result = "[" + getName() + "]";
+				
+		if(methodName != null){
+			result += ": " + methodName + "(";
+			result += testDataString();
+			result += ")";
+		}
+		
+		return result;
 	}
 }
