@@ -136,7 +136,30 @@ public class GenerateTestSuiteDialog extends TitleAreaDialog {
 		
 		@Override
 		public Object getParent(Object element){
-			if(element instanceof ConstraintNode){
+			if(element instanceof ConstraintNode)
+//				@SuppressWarnings("unchecked")
+//				private Map<String, IGenerator<PartitionNode>> getAvailableGenerators() {
+//					Map<String, IGenerator<PartitionNode>> result = new HashMap<String, IGenerator<PartitionNode>>();
+//					
+//					IExtensionRegistry reg = Platform.getExtensionRegistry();
+//					IConfigurationElement[] extensions = 
+//							reg.getConfigurationElementsFor(Constants.TEST_GENERATOR_EXTENSION_POINT_ID);
+//					for(IConfigurationElement element : extensions){
+//						try {
+//							String generatorName = element.getAttribute(Constants.GENERATOR_NAME_ATTRIBUTE);
+//							IGenerator<PartitionNode> implementation = (IGenerator<PartitionNode>)element.createExecutableExtension(Constants.TEST_GENERATOR_IMPLEMENTATION_ATTRIBUTE);
+//							if(generatorName != null && implementation != null){
+//								result.put(generatorName, implementation);
+//							}
+//						} catch (CoreException e) {
+//							MessageDialog.openError(getParentShell(), "Exception", e.getMessage());
+//							continue;
+//						}
+//					}
+//					return result;
+//				}
+			//	
+{
 				return ((ConstraintNode)element).getName();
 			}
 			return null;
@@ -540,28 +563,6 @@ public class GenerateTestSuiteDialog extends TitleAreaDialog {
 		text.setText((String)definition.defaultValue());
 	}
 
-//	@SuppressWarnings("unchecked")
-//	private Map<String, IGenerator<PartitionNode>> getAvailableGenerators() {
-//		Map<String, IGenerator<PartitionNode>> result = new HashMap<String, IGenerator<PartitionNode>>();
-//		
-//		IExtensionRegistry reg = Platform.getExtensionRegistry();
-//		IConfigurationElement[] extensions = 
-//				reg.getConfigurationElementsFor(Constants.TEST_GENERATOR_EXTENSION_POINT_ID);
-//		for(IConfigurationElement element : extensions){
-//			try {
-//				String generatorName = element.getAttribute(Constants.GENERATOR_NAME_ATTRIBUTE);
-//				IGenerator<PartitionNode> implementation = (IGenerator<PartitionNode>)element.createExecutableExtension(Constants.TEST_GENERATOR_IMPLEMENTATION_ATTRIBUTE);
-//				if(generatorName != null && implementation != null){
-//					result.put(generatorName, implementation);
-//				}
-//			} catch (CoreException e) {
-//				MessageDialog.openError(getParentShell(), "Exception", e.getMessage());
-//				continue;
-//			}
-//		}
-//		return result;
-//	}
-//	
 	private void saveConstraints() {
 		Object[] checkedObjects = fConstraintsViewer.getCheckedElements();
 		List<IConstraint<PartitionNode>> constraints = new ArrayList<IConstraint<PartitionNode>>();
