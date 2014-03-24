@@ -20,7 +20,6 @@ import java.util.Map;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -38,6 +37,7 @@ import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.dialogs.GenerateTestSuiteDialog;
+import com.testify.ecfeed.ui.dialogs.GeneratorProgressMonitorDialog;
 
 class GenerateTestSuiteAdapter extends SelectionAdapter{
 
@@ -71,7 +71,7 @@ class GenerateTestSuiteAdapter extends SelectionAdapter{
 			try {
 				fGenerator.initialize(fInput, fConstraints, fParameters);
 				monitor.beginTask("Generating test data", fGenerator.totalWork());
-				while((next = fGenerator.next()) != null && monitor.isCanceled() == false){
+				while(monitor.isCanceled() == false && (next = fGenerator.next()) != null){
 					fGeneratedData.add(next);
 					monitor.worked(fGenerator.workProgress());
 				}
@@ -116,8 +116,8 @@ class GenerateTestSuiteAdapter extends SelectionAdapter{
 			final Collection<IConstraint<PartitionNode>> constraints,
 			final Map<String, Object> parameters) {
 
-		ProgressMonitorDialog progressDialog = 
-				new ProgressMonitorDialog(getActiveShell());
+		GeneratorProgressMonitorDialog progressDialog = 
+				new GeneratorProgressMonitorDialog(getActiveShell(), generator);
 		List<List<PartitionNode>> generated = new ArrayList<List<PartitionNode>>();
 		fCanceled = false;
 		try {

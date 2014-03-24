@@ -22,6 +22,10 @@ public class FastNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
 	public FastNWiseAlgorithm(int n) {
 		super(n);
 	}
+	
+	public FastNWiseAlgorithm(int n, int coverage) {
+		super(n, coverage);
+	}
 
 	private Set<List<E>> fCoveredTuples;
 	

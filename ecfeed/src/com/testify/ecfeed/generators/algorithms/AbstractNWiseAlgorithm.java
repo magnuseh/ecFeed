@@ -26,8 +26,17 @@ public class AbstractNWiseAlgorithm<E> extends AbstractAlgorithm<E> implements I
 	protected int N  = -1;
 	private int fTuplesToGenerate;
 	protected int fProgress;
+
+	protected int fCoverage;
+	//protected int fCasesToCover;
 	
 	public AbstractNWiseAlgorithm(int n){
+		fCoverage = 100;
+		N = n;
+	}
+	
+	public AbstractNWiseAlgorithm(int n, int coverage){
+		fCoverage = coverage;
 		N = n;
 	}
 	
@@ -51,7 +60,7 @@ public class AbstractNWiseAlgorithm<E> extends AbstractAlgorithm<E> implements I
 	public void reset(){
 		fCartesianGenerator.reset();
 		fTuplesToGenerate = calculateTotalTuples();
-		setTotalWork(fTuplesToGenerate);
+		setTotalWork((int)Math.ceil(((double)(fCoverage*fTuplesToGenerate))/100));
 		super.reset();
 	}
 	
@@ -107,4 +116,18 @@ public class AbstractNWiseAlgorithm<E> extends AbstractAlgorithm<E> implements I
 	protected void cartesianReset(){
 		fCartesianGenerator.reset();
 	}
+	
+	@Override
+	public void cancel(){
+		fCartesianGenerator.cancel();
+	}
+	
+	public int getCoverage() {
+		return fCoverage;
+	}
+
+	public void setCoverage(int fCoverage) {
+		this.fCoverage = fCoverage;
+	}
+	
 }

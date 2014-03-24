@@ -18,27 +18,36 @@ import java.util.Set;
 import com.testify.ecfeed.generators.CartesianProductGenerator;
 import com.testify.ecfeed.generators.api.GeneratorException;
 
-public class OptimalNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E>{
+public class OptimalNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
 
 	CartesianProductGenerator<E> fCartesianGenerator;
 	private int K;
 	private Set<List<E>> fGeneratedTuples;
-	
+
 	public OptimalNWiseAlgorithm(int n) {
 		super(n);
 	}
-	
+
+	public OptimalNWiseAlgorithm(int n, int coverage) {
+		super(n, coverage);
+	}
+
 	@Override
-	public List<E> getNext() throws GeneratorException{
-		while(K != 0 && fGeneratedTuples.size() < tuplesToGenerate()){
+	public List<E> getNext() throws GeneratorException {
+		while (isCanceled() != true
+				&& (K != 0 && fGeneratedTuples.size() < tuplesToGenerate())) {
+
+			if (fGeneratedTuples.size() >= totalWork())
+				return null;
+
 			List<E> next = cartesianNext();
-			if(next == null){
+			if (next == null) {
 				--K;
 				cartesianReset();
 				continue;
 			}
-			Set<List<E>> originalTuples = originalTuples(next); 
-			if(originalTuples.size() == K){
+			Set<List<E>> originalTuples = originalTuples(next);
+			if (originalTuples.size() == K) {
 				fGeneratedTuples.addAll(originalTuples);
 				progress(originalTuples.size());
 				return next;
@@ -48,16 +57,16 @@ public class OptimalNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E>{
 	}
 
 	@Override
-	public void reset(){
+	public void reset() {
 		K = maxTuples(getInput(), N);
 		fGeneratedTuples = new HashSet<List<E>>();
 		super.reset();
 	}
-	
 
 	private Set<List<E>> originalTuples(List<E> next) {
 		Set<List<E>> originalTuples = getTuples(next);
 		originalTuples.removeAll(fGeneratedTuples);
 		return originalTuples;
 	}
+
 }

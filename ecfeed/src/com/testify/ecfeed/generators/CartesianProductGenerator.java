@@ -19,7 +19,8 @@ import com.testify.ecfeed.generators.algorithms.CartesianProductAlgorithm;
 import com.testify.ecfeed.generators.api.GeneratorException;
 import com.testify.ecfeed.generators.api.IConstraint;
 
-public class CartesianProductGenerator<E> extends AbstractGenerator<E> {
+public class CartesianProductGenerator<E> extends AbstractGenerator<E> {	
+	
 	@Override
 	public void initialize(List<List<E>> inputDomain,
 			Collection<IConstraint<E>> constraints,
@@ -28,4 +29,5 @@ public class CartesianProductGenerator<E> extends AbstractGenerator<E> {
 		super.initialize(inputDomain, constraints, parameters);
 		setAlgorithm(new CartesianProductAlgorithm<E>());
 	}
+
 }

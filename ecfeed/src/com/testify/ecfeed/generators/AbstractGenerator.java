@@ -127,6 +127,11 @@ public class AbstractGenerator<E> implements IGenerator<E> {
 		return fAlgorithm.totalProgress();
 	}
 	
+	@Override
+	public void cancel(){
+		fAlgorithm.cancel();
+	}
+	
 	protected void addParameterDefinition(IGeneratorParameter definition){
 		for(int i = 0; i < fParameterDefinitions.size(); i++){
 			if(fParameterDefinitions.get(i).getName().equals(definition.getName())){
@@ -231,6 +236,5 @@ public class AbstractGenerator<E> implements IGenerator<E> {
 	public Collection<? extends IConstraint<E>> getConstraints() {
 		return fAlgorithm.getConstraints();
 	}
-
 
 }
