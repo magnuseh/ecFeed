@@ -37,9 +37,6 @@ public class OptimalNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
 		while (isCanceled() != true
 				&& (K != 0 && fGeneratedTuples.size() < tuplesToGenerate())) {
 
-			if (fGeneratedTuples.size() >= totalWork())
-				return null;
-
 			List<E> next = cartesianNext();
 			if (next == null) {
 				--K;
