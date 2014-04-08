@@ -158,7 +158,6 @@ public class AlgorithmPerformanceTests {
 
 		try {
 			for (int n = 2; n < 4; n++) {
-				System.out.println("N: " + n);
 				List<List<String>> input = GeneratorTestUtils
 						.prepareInput(5, 6);
 				long totalTuples = calculateTotalTuples(input, n);
@@ -176,14 +175,11 @@ public class AlgorithmPerformanceTests {
 					while ((next = nwise.getNext()) != null) {
 						nwiseSuite.add(next);
 					}
-					System.out.println("Coverage (%): " + p);
 
 					int nwiseTuplesCovered = calculateCoveredTuples(nwiseSuite,
 							input, n);			
 					int leastTuplesExpected = (int)Math.ceil(((double) (p * totalTuples)) / 100);
 
-					System.out.println("nwise covered " + n + "-tuples: "
-							+ nwiseTuplesCovered + " / " + leastTuplesExpected);
 					assertTrue( nwiseTuplesCovered>= leastTuplesExpected);
 				}
 			}

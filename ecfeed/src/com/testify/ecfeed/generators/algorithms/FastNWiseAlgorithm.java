@@ -18,10 +18,6 @@ import java.util.Set;
 import com.testify.ecfeed.generators.api.GeneratorException;
 
 public class FastNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
-
-	public FastNWiseAlgorithm(int n) {
-		super(n);
-	}
 	
 	public FastNWiseAlgorithm(int n, int coverage) {
 		super(n, coverage);

@@ -29,5 +29,4 @@ public interface IAlgorithm<E> {
 	public int totalProgress();
 	public int workProgress();
 	public void cancel();
-	public boolean isCanceled();
 }

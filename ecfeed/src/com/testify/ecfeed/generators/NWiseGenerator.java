@@ -21,7 +21,9 @@ import com.testify.ecfeed.generators.api.IConstraint;
 
 public class NWiseGenerator<E> extends AbstractGenerator<E> {
 	public final static String N_PARAMETER_NAME = "N";
-	public final static String COVERAGE_PARAMETER_NAME = "Test area coverage (%)";
+	public final static String N_PARAMETER_DESCRIPTION = "N";
+	public final static String COVERAGE_PARAMETER_NAME = "coverage";
+	public final static String COVERAGE_PARAMETER_DESCRIPTION = "n-wise coverage (%)";	
 
 	public NWiseGenerator() throws GeneratorException{
 		addParameterDefinition(new IntegerParameter(N_PARAMETER_NAME, true, 2, 1, Integer.MAX_VALUE));

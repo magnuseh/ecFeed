@@ -123,14 +123,11 @@ public class NWiseAlgorithmTest{
 					while ((next = nwise.getNext()) != null) {
 						nwiseSuite.add(next);
 					}
-					System.out.println("Coverage (%): " + p);
 
 					int nwiseTuplesCovered = calculateCoveredTuples(nwiseSuite,
 							input, n);			
 					int leastTuplesExpected = (int)Math.ceil(((double) (p * totalTuples)) / 100);
 
-					System.out.println("nwise covered " + n + "-tuples: "
-							+ nwiseTuplesCovered + " / " + leastTuplesExpected);
 					assertTrue( nwiseTuplesCovered>= leastTuplesExpected);
 				}
 			}

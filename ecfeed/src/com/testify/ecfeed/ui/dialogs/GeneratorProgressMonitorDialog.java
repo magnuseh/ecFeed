@@ -9,18 +9,9 @@ public class GeneratorProgressMonitorDialog extends ProgressMonitorDialog {
 	
 	private IGenerator<?> fGenerator;
 
-	public GeneratorProgressMonitorDialog(Shell parent) {
-		super(parent);
-		// TODO Auto-generated constructor stub
-	}
 	public GeneratorProgressMonitorDialog(Shell parent, IGenerator<?> generator) {
 		super(parent);
 		this.fGenerator = generator;
-		// TODO Auto-generated constructor stub
-	}
-
-	public IGenerator<?> getGenerator() {
-		return fGenerator;
 	}
 
 	public void setGenerator(IGenerator<?> fGenerator) {

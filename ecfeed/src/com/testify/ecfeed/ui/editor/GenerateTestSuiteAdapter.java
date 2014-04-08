@@ -39,12 +39,12 @@ import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.dialogs.GenerateTestSuiteDialog;
 import com.testify.ecfeed.ui.dialogs.GeneratorProgressMonitorDialog;
 
-class GenerateTestSuiteAdapter extends SelectionAdapter{
+class GenerateTestSuiteAdapter extends SelectionAdapter {
 
 	private boolean fCanceled;
 	private TestCasesViewer fViewerSection;
 
-	private class GeneratorRunnable implements IRunnableWithProgress{
+	private class GeneratorRunnable implements IRunnableWithProgress {
 
 		private IGenerator<PartitionNode> fGenerator;
 		private List<List<PartitionNode>> fGeneratedData;
@@ -52,26 +52,22 @@ class GenerateTestSuiteAdapter extends SelectionAdapter{
 		private Collection<IConstraint<PartitionNode>> fConstraints;
 		private Map<String, Object> fParameters;
 
-		GeneratorRunnable(IGenerator<PartitionNode> generator, 
-				List<List<PartitionNode>> input, 
-				Collection<IConstraint<PartitionNode>> constraints, 
-				Map<String, Object> parameters, 
-				List<List<PartitionNode>> generated){
+		GeneratorRunnable(IGenerator<PartitionNode> generator, List<List<PartitionNode>> input,
+				Collection<IConstraint<PartitionNode>> constraints, Map<String, Object> parameters, List<List<PartitionNode>> generated) {
 			fGenerator = generator;
 			fInput = input;
 			fConstraints = constraints;
 			fParameters = parameters;
 			fGeneratedData = generated;
 		}
-		
+
 		@Override
-		public void run(IProgressMonitor monitor)
-				throws InvocationTargetException, InterruptedException {
+		public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 			List<PartitionNode> next;
 			try {
 				fGenerator.initialize(fInput, fConstraints, fParameters);
 				monitor.beginTask("Generating test data", fGenerator.totalWork());
-				while(monitor.isCanceled() == false && (next = fGenerator.next()) != null){
+				while (monitor.isCanceled() == false && (next = fGenerator.next()) != null) {
 					fGeneratedData.add(next);
 					monitor.worked(fGenerator.workProgress());
 				}
@@ -80,28 +76,27 @@ class GenerateTestSuiteAdapter extends SelectionAdapter{
 				throw new InvocationTargetException(e, e.getMessage());
 			}
 		}
-		
+
 	}
-	
+
 	GenerateTestSuiteAdapter(TestCasesViewer viewerSection) {
 		fViewerSection = viewerSection;
 	}
-	
-	private MethodNode getSelectedMethod(){
+
+	private MethodNode getSelectedMethod() {
 		return fViewerSection.getSelectedMethod();
 	}
 
 	@Override
-	public void widgetSelected(SelectionEvent e){
-		GenerateTestSuiteDialog dialog = 
-				new GenerateTestSuiteDialog(getActiveShell(), getSelectedMethod());
-		if(dialog.open() == IDialogConstants.OK_ID){
+	public void widgetSelected(SelectionEvent e) {
+		GenerateTestSuiteDialog dialog = new GenerateTestSuiteDialog(getActiveShell(), getSelectedMethod());
+		if (dialog.open() == IDialogConstants.OK_ID) {
 			IGenerator<PartitionNode> selectedGenerator = dialog.getSelectedGenerator();
 			List<List<PartitionNode>> algorithmInput = dialog.getAlgorithmInput();
 			Collection<IConstraint<PartitionNode>> constraints = dialog.getConstraints();
 			String testSuiteName = dialog.getTestSuiteName();
 			Map<String, Object> parameters = dialog.getGeneratorParameters();
-			
+
 			List<List<PartitionNode>> generatedData = generateTestData(selectedGenerator, algorithmInput, constraints, parameters);
 			addGeneratedDataToModel(testSuiteName, generatedData);
 		}
@@ -111,13 +106,10 @@ class GenerateTestSuiteAdapter extends SelectionAdapter{
 		return Display.getCurrent().getActiveShell();
 	}
 
-	private List<List<PartitionNode>> generateTestData(final IGenerator<PartitionNode> generator, 
-			final List<List<PartitionNode>> input, 
-			final Collection<IConstraint<PartitionNode>> constraints,
-			final Map<String, Object> parameters) {
+	private List<List<PartitionNode>> generateTestData(final IGenerator<PartitionNode> generator, final List<List<PartitionNode>> input,
+			final Collection<IConstraint<PartitionNode>> constraints, final Map<String, Object> parameters) {
 
-		GeneratorProgressMonitorDialog progressDialog = 
-				new GeneratorProgressMonitorDialog(getActiveShell(), generator);
+		GeneratorProgressMonitorDialog progressDialog = new GeneratorProgressMonitorDialog(getActiveShell(), generator);
 		List<List<PartitionNode>> generated = new ArrayList<List<PartitionNode>>();
 		fCanceled = false;
 		try {
@@ -127,73 +119,69 @@ class GenerateTestSuiteAdapter extends SelectionAdapter{
 		} catch (InvocationTargetException e) {
 			MessageDialog.openError(Display.getDefault().getActiveShell(), "Exception", e.getMessage());
 			fCanceled = true;
-		}catch (InterruptedException e) {
+		} catch (InterruptedException e) {
 			fCanceled = true;
 			MessageDialog.openError(Display.getDefault().getActiveShell(), "Exception", e.getMessage());
 			e.printStackTrace();
 		}
 		fCanceled |= progressDialog.getProgressMonitor().isCanceled();
-		if(!fCanceled){
+		if (!fCanceled) {
 			return generated;
-		}
-		else{
-			//return empty set if the operation was canceled
-			//TODO add a decision dialog where user may choose whether to add generated data
+		} else {
+			// return empty set if the operation was canceled
+			// TODO add a decision dialog where user may choose whether to add
+			// generated data
 			return new ArrayList<List<PartitionNode>>();
 		}
 	}
 
-	private void addGeneratedDataToModel(String testSuiteName, 
-			List<List<PartitionNode>> generatedData) {
+	private void addGeneratedDataToModel(String testSuiteName, List<List<PartitionNode>> generatedData) {
 		int dataLength = generatedData.size();
-		if(dataLength > 0){
-			if(generatedData.size() > Constants.TEST_SUITE_SIZE_WARNING_LIMIT){
-				if(MessageDialog.openConfirm(Display.getDefault().getActiveShell(),
-						Messages.DIALOG_LARGE_TEST_SUITE_GENERATED_TITLE,
-						Messages.DIALOG_LARGE_TEST_SUITE_GENERATED_MESSAGE(dataLength)) == false){
+		if (dataLength > 0) {
+			if (generatedData.size() > Constants.TEST_SUITE_SIZE_WARNING_LIMIT) {
+				if (MessageDialog.openConfirm(Display.getDefault().getActiveShell(), Messages.DIALOG_LARGE_TEST_SUITE_GENERATED_TITLE,
+						Messages.DIALOG_LARGE_TEST_SUITE_GENERATED_MESSAGE(dataLength)) == false) {
 					return;
 				}
 			}
 			addTestSuiteToModel(testSuiteName, generatedData);
-		}
-		else if (!fCanceled){
-			MessageDialog.openInformation(Display.getDefault().getActiveShell(),
-					Messages.DIALOG_EMPTY_TEST_SUITE_GENERATED_TITLE,
+		} else if (!fCanceled) {
+			MessageDialog.openInformation(Display.getDefault().getActiveShell(), Messages.DIALOG_EMPTY_TEST_SUITE_GENERATED_TITLE,
 					Messages.DIALOG_EMPTY_TEST_SUITE_GENERATED_MESSAGE);
 		}
 	}
 
 	private void addTestSuiteToModel(String testSuiteName, List<List<PartitionNode>> generatedData) {
 		List<TestCaseNode> testSuite = new ArrayList<TestCaseNode>();
-		for(List<PartitionNode> testCase : generatedData){
-			List<PartitionNode> testData = (List<PartitionNode>)testCase;
+		for (List<PartitionNode> testCase : generatedData) {
+			List<PartitionNode> testData = (List<PartitionNode>) testCase;
 			TestCaseNode testCaseNode = new TestCaseNode(testSuiteName, testData);
 			testSuite.add(testCaseNode);
 		}
 		replaceExpectedValues(testSuite);
-		for(TestCaseNode testCase : testSuite){
+		for (TestCaseNode testCase : testSuite) {
 			getSelectedMethod().addTestCase(testCase);
 		}
 		fViewerSection.modelUpdated();
 	}
 
 	private void replaceExpectedValues(List<TestCaseNode> testSuite) {
-		if(getSelectedMethod().getExpectedCategoriesNames().size() == 0){
+		if (getSelectedMethod().getExpectedCategoriesNames().size() == 0) {
 			return;
 		}
-		//replace expected values partitions with anonymous ones
-		for(TestCaseNode testCase : testSuite){
+		// replace expected values partitions with anonymous ones
+		for (TestCaseNode testCase : testSuite) {
 			List<PartitionNode> testData = testCase.getTestData();
-			for(int i = 0; i < testData.size(); i++){
+			for (int i = 0; i < testData.size(); i++) {
 				CategoryNode category = testData.get(i).getCategory();
-				if(category instanceof ExpectedValueCategoryNode){
-					PartitionNode anonymousPartition = 
-							new PartitionNode(Constants.EXPECTED_VALUE_PARTITION_NAME, 
-									testData.get(i).getValue());
+				if (category instanceof ExpectedValueCategoryNode) {
+					PartitionNode anonymousPartition =
+							new PartitionNode(Constants.EXPECTED_VALUE_PARTITION_NAME, testData.get(i).getValue());
 					anonymousPartition.setParent(category);
 					testData.set(i, anonymousPartition);
 				}
 			}
 		}
 	}
+	
 }

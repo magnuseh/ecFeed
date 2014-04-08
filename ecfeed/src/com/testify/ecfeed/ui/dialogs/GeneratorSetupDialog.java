@@ -90,8 +90,7 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 	public final static int TEST_SUITE_NAME_COMPOSITE = 1 << 2;
 	public final static int GENERATOR_SELECTION_COMPOSITE = 1 << 3;
 
-	private class CategoriesContentProvider extends TreeNodeContentProvider
-			implements ITreeContentProvider {
+	private class CategoriesContentProvider extends TreeNodeContentProvider implements ITreeContentProvider {
 		private final Object[] EMPTY_ARRAY = new Object[] {};
 
 		@Override
@@ -126,8 +125,7 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 		}
 	}
 
-	private class ConstraintsViewerContentProvider extends
-			TreeNodeContentProvider implements ITreeContentProvider {
+	private class ConstraintsViewerContentProvider extends TreeNodeContentProvider implements ITreeContentProvider {
 		private final Object[] EMPTY_ARRAY = new Object[] {};
 
 		@Override
@@ -140,8 +138,7 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 
 		public Object[] getChildren(Object element) {
 			if (element instanceof String) {
-				Object[] result = fMethod.getConstraints((String) element)
-						.toArray();
+				Object[] result = fMethod.getConstraints((String) element).toArray();
 				return result;
 			}
 			return EMPTY_ARRAY;
@@ -161,8 +158,7 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 		}
 	}
 
-	public GeneratorSetupDialog(Shell parentShell, MethodNode method,
-			int content, String title, String message) {
+	public GeneratorSetupDialog(Shell parentShell, MethodNode method, int content, String title, String message) {
 		super(parentShell);
 		setHelpAvailable(false);
 		setShellStyle(SWT.BORDER | SWT.RESIZE | SWT.TITLE);
@@ -212,10 +208,8 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 	 */
 	@Override
 	protected void createButtonsForButtonBar(Composite parent) {
-		fOkButton = createButton(parent, IDialogConstants.OK_ID,
-				IDialogConstants.OK_LABEL, true);
-		createButton(parent, IDialogConstants.CANCEL_ID,
-				IDialogConstants.CANCEL_LABEL, false);
+		fOkButton = createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL, true);
+		createButton(parent, IDialogConstants.CANCEL_ID, IDialogConstants.CANCEL_LABEL, false);
 	}
 
 	@Override
@@ -242,6 +236,7 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 		if ((fContent & GENERATOR_SELECTION_COMPOSITE) > 0) {
 			createGeneratorSelectionComposite(fMainContainer);
 		}
+		
 		return area;
 	}
 
@@ -251,8 +246,7 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
 		Label selectConstraintsLabel = new Label(composite, SWT.NONE);
-		selectConstraintsLabel
-				.setText(Messages.DIALOG_GENERATE_TEST_SUITES_SELECT_CONSTRAINTS_LABEL);
+		selectConstraintsLabel.setText(Messages.DIALOG_GENERATE_TEST_SUITES_SELECT_CONSTRAINTS_LABEL);
 
 		createConstraintsViewer(composite);
 
@@ -263,8 +257,7 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 		Tree tree = new Tree(parent, SWT.CHECK | SWT.BORDER);
 		tree.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, true, 1, 1));
 		fConstraintsViewer = new CheckboxTreeViewer(tree);
-		fConstraintsViewer
-				.setContentProvider(new ConstraintsViewerContentProvider());
+		fConstraintsViewer.setContentProvider(new ConstraintsViewerContentProvider());
 		fConstraintsViewer.setLabelProvider(new LabelProvider() {
 			@Override
 			public String getText(Object element) {
@@ -277,11 +270,9 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 				return null;
 			}
 		});
-		fConstraintsViewer.getTree().setLayoutData(
-				new GridData(SWT.FILL, SWT.FILL, true, true));
+		fConstraintsViewer.getTree().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		fConstraintsViewer.setInput(fMethod);
-		fConstraintsViewer.addCheckStateListener(new TreeCheckStateListener(
-				fConstraintsViewer));
+		fConstraintsViewer.addCheckStateListener(new TreeCheckStateListener(fConstraintsViewer));
 	}
 
 	private void createConstraintsButtons(Composite parent) {
@@ -316,10 +307,8 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
 		Label selectPartitionsLabel = new Label(composite, SWT.WRAP);
-		selectPartitionsLabel.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER,
-				true, false, 1, 1));
-		selectPartitionsLabel
-				.setText(Messages.DIALOG_GENERATE_TEST_SUITES_SELECT_PARTITIONS_LABEL);
+		selectPartitionsLabel.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+		selectPartitionsLabel.setText(Messages.DIALOG_GENERATE_TEST_SUITES_SELECT_PARTITIONS_LABEL);
 
 		createPartitionsViewer(composite);
 	}
@@ -338,14 +327,12 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 				return null;
 			}
 		});
-		fCategoriesViewer.getTree().setLayoutData(
-				new GridData(SWT.FILL, SWT.FILL, true, true));
+		fCategoriesViewer.getTree().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		fCategoriesViewer.setInput(fMethod);
 		for (CategoryNode category : fMethod.getCategories()) {
 			fCategoriesViewer.setSubtreeChecked(category, true);
 		}
-		fCategoriesViewer.addCheckStateListener(new TreeCheckStateListener(
-				fCategoriesViewer));
+		fCategoriesViewer.addCheckStateListener(new TreeCheckStateListener(fCategoriesViewer));
 		fCategoriesViewer.addCheckStateListener(new ICheckStateListener() {
 			@Override
 			public void checkStateChanged(CheckStateChangedEvent event) {
@@ -363,20 +350,16 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 	private void createTestSuiteComposite(Composite container) {
 		Composite composite = new Composite(container, SWT.NONE);
 		composite.setLayout(new GridLayout(2, false));
-		composite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false,
-				1, 1));
+		composite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 
 		Label testSuiteLabel = new Label(composite, SWT.NONE);
-		testSuiteLabel.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false,
-				false, 1, 1));
+		testSuiteLabel.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		testSuiteLabel.setText("Test suite");
 
 		ComboViewer testSuiteViewer = new ComboViewer(composite, SWT.NONE);
 		fTestSuiteCombo = testSuiteViewer.getCombo();
-		fTestSuiteCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
-				false, 1, 1));
-		fTestSuiteCombo.setItems(fMethod.getTestSuites().toArray(
-				new String[] {}));
+		fTestSuiteCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		fTestSuiteCombo.setItems(fMethod.getTestSuites().toArray(new String[] {}));
 		fTestSuiteCombo.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent e) {
@@ -406,12 +389,10 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 	private void createGeneratorSelectionComposite(Composite container) {
 		Composite generatorComposite = new Composite(container, SWT.NONE);
 		generatorComposite.setLayout(new GridLayout(2, false));
-		generatorComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER,
-				true, false, 1, 1));
+		generatorComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 
 		Label generatorLabel = new Label(generatorComposite, SWT.NONE);
-		generatorLabel.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false,
-				false, 1, 1));
+		generatorLabel.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		generatorLabel.setText("Generator");
 
 		createGeneratorViewer(generatorComposite);
@@ -420,16 +401,13 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 	private void createGeneratorViewer(final Composite parent) {
 		ComboViewer generatorViewer = new ComboViewer(parent, SWT.READ_ONLY);
 		fGeneratorCombo = generatorViewer.getCombo();
-		fGeneratorCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
-				false, 1, 1));
+		fGeneratorCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		fGeneratorCombo.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent e) {
 				try {
-					fSelectedGenerator = fGeneratorFactory
-							.getGenerator(fGeneratorCombo.getText());
-					createParametersComposite(parent,
-							fSelectedGenerator.parameters());
+					fSelectedGenerator = fGeneratorFactory.getGenerator(fGeneratorCombo.getText());
+					createParametersComposite(parent, fSelectedGenerator.parameters());
 					fMainContainer.layout();
 				} catch (GeneratorException exception) {
 					exception.printStackTrace();
@@ -438,8 +416,7 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 			}
 		});
 		if (fGeneratorFactory.availableGenerators().size() > 0) {
-			String[] availableGenerators = fGeneratorFactory
-					.availableGenerators().toArray(new String[] {});
+			String[] availableGenerators = fGeneratorFactory.availableGenerators().toArray(new String[] {});
 			for (String generator : availableGenerators) {
 				fGeneratorCombo.add(generator);
 			}
@@ -449,24 +426,21 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 
 	}
 
-	private void createParametersComposite(Composite parent,
-			List<IGeneratorParameter> parameters) {
+	private void createParametersComposite(Composite parent, List<IGeneratorParameter> parameters) {
 		fParameters = new HashMap<String, Object>();
 		if (fParametersComposite != null && !fParametersComposite.isDisposed()) {
 			fParametersComposite.dispose();
 		}
 		fParametersComposite = new Composite(parent, SWT.NONE);
 		fParametersComposite.setLayout(new GridLayout(2, false));
-		fParametersComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL,
-				true, false, 2, 1));
+		fParametersComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 2, 1));
 		for (IGeneratorParameter parameter : parameters) {
 			createParameterEdit(fParametersComposite, parameter);
 		}
 		parent.layout();
 	}
 
-	private void createParameterEdit(Composite parent,
-			IGeneratorParameter definition) {
+	private void createParameterEdit(Composite parent, IGeneratorParameter definition) {
 		fParameters.put(definition.getName(), definition.defaultValue());
 		if (definition.getType() == TYPE.BOOLEAN) {
 			createBooleanParameterEdit(parent, definition);
@@ -477,12 +451,10 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 			} else {
 				switch (definition.getType()) {
 				case INTEGER:
-					createIntegerParameterEdit(parent,
-							(IntegerParameter) definition);
+					createIntegerParameterEdit(parent, (IntegerParameter) definition);
 					break;
 				case DOUBLE:
-					createDoubleParameterEdit(parent,
-							(DoubleParameter) definition);
+					createDoubleParameterEdit(parent, (DoubleParameter) definition);
 					break;
 				case STRING:
 					createStringParameterEdit(parent, definition);
@@ -494,36 +466,30 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 		}
 	}
 
-	private void createBooleanParameterEdit(Composite parent,
-			final IGeneratorParameter definition) {
+	private void createBooleanParameterEdit(Composite parent, final IGeneratorParameter definition) {
 		final Button checkButton = new Button(parent, SWT.CHECK);
-		checkButton.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false,
-				2, 1));
+		checkButton.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false, 2, 1));
 		checkButton.setText(definition.getName());
 		checkButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				fParameters.put(definition.getName(),
-						checkButton.getSelection());
+				fParameters.put(definition.getName(), checkButton.getSelection());
 			}
 		});
 		checkButton.pack();
 	}
 
-	private void createComboParameterEdit(Composite parent,
-			final IGeneratorParameter definition) {
+	private void createComboParameterEdit(Composite parent, final IGeneratorParameter definition) {
 		final Combo combo = new Combo(parent, SWT.CENTER | SWT.READ_ONLY);
 		ModifyListener listener = new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent e) {
 				switch (definition.getType()) {
 				case INTEGER:
-					fParameters.put(definition.getName(),
-							Integer.parseInt(combo.getText()));
+					fParameters.put(definition.getName(), Integer.parseInt(combo.getText()));
 					break;
 				case DOUBLE:
-					fParameters.put(definition.getName(),
-							Double.parseDouble(combo.getText()));
+					fParameters.put(definition.getName(), Double.parseDouble(combo.getText()));
 					break;
 				case STRING:
 					fParameters.put(definition.getName(), combo.getText());
@@ -546,8 +512,7 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 		return values.toArray(new String[] {});
 	}
 
-	private void createIntegerParameterEdit(Composite parent,
-			final IntegerParameter definition) {
+	private void createIntegerParameterEdit(Composite parent, final IntegerParameter definition) {
 		final Spinner spinner = new Spinner(parent, SWT.BORDER | SWT.RIGHT);
 		spinner.addModifyListener(new ModifyListener() {
 			@Override
@@ -557,12 +522,10 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 		});
 		spinner.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 
-		spinner.setValues((int) definition.defaultValue(), definition.getMin(),
-				definition.getMax(), 0, 1, 1);
+		spinner.setValues((int) definition.defaultValue(), definition.getMin(), definition.getMax(), 0, 1, 1);
 	}
 
-	private void createDoubleParameterEdit(Composite parent,
-			final DoubleParameter definition) {
+	private void createDoubleParameterEdit(Composite parent, final DoubleParameter definition) {
 		final Spinner spinner = new Spinner(parent, SWT.BORDER);
 		final int FLOAT_DECIMAL_PLACES = 3;
 		spinner.addModifyListener(new ModifyListener() {
@@ -570,22 +533,18 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 			public void modifyText(ModifyEvent e) {
 				int selection = spinner.getSelection();
 				int digits = spinner.getDigits();
-				fParameters.put(definition.getName(),
-						selection / (Math.pow(10, digits)));
+				fParameters.put(definition.getName(), selection / (Math.pow(10, digits)));
 			}
 		});
 		spinner.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 		int factor = (int) Math.pow(10, FLOAT_DECIMAL_PLACES);
-		int defaultValue = (int) Math.round((double) definition.defaultValue()
-				* factor);
+		int defaultValue = (int) Math.round((double) definition.defaultValue() * factor);
 		int minValue = (int) Math.round((double) definition.getMin() * factor);
 		int maxValue = (int) Math.round((double) definition.getMax());
-		spinner.setValues(defaultValue, minValue, maxValue,
-				FLOAT_DECIMAL_PLACES, 1, 100);
+		spinner.setValues(defaultValue, minValue, maxValue, FLOAT_DECIMAL_PLACES, 1, 100);
 	}
 
-	private void createStringParameterEdit(Composite parent,
-			final IGeneratorParameter definition) {
+	private void createStringParameterEdit(Composite parent, final IGeneratorParameter definition) {
 		final Text text = new Text(parent, SWT.NONE);
 		text.addModifyListener(new ModifyListener() {
 			@Override
@@ -614,12 +573,10 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 		for (int i = 0; i < categories.size(); i++) {
 			List<PartitionNode> partitions = new ArrayList<PartitionNode>();
 			if (categories.get(i) instanceof ExpectedValueCategoryNode) {
-				ExpectedValueCategoryNode category = (ExpectedValueCategoryNode) categories
-						.get(i);
+				ExpectedValueCategoryNode category = (ExpectedValueCategoryNode) categories.get(i);
 				partitions.add(category.getDefaultValuePartition());
 			} else {
-				for (PartitionNode partition : categories.get(i)
-						.getLeafPartitions()) {
+				for (PartitionNode partition : categories.get(i).getLeafPartitions()) {
 					if (fCategoriesViewer.getChecked(partition)) {
 						partitions.add(partition);
 					}

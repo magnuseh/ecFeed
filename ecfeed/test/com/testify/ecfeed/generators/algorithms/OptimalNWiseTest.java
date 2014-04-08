@@ -50,19 +50,14 @@ public class OptimalNWiseTest extends NWiseAlgorithmTest {
 			for (int variables : new int[] { 1, 2, 5 }) {
 				for (int partitions : new int[] { 1, 2, 5 }) {
 					for (int n = 1; n <= variables; n++) {
-						List<List<String>> input = GeneratorTestUtils
-								.prepareInput(variables, partitions);
+						List<List<String>> input = GeneratorTestUtils.prepareInput(variables, partitions);
 						Collection<IConstraint<String>> constraints = EMPTY_CONSTRAINTS;
-						IAlgorithm<String> algorithm = new OptimalNWiseAlgorithm<String>(
-								n);
+						IAlgorithm<String> algorithm = new OptimalNWiseAlgorithm<String>(n, 100);
 
 						algorithm.initialize(input, constraints);
-						int generatedDataSize = GeneratorTestUtils
-								.algorithmResult(algorithm).size();
-						int referenceDataSize = referenceResult(input, n)
-								.size();
-						assertTrue(Math.abs(generatedDataSize
-								- referenceDataSize) <= referenceDataSize / 30);
+						int generatedDataSize = GeneratorTestUtils.algorithmResult(algorithm).size();
+						int referenceDataSize = referenceResult(input, n).size();
+						assertTrue(Math.abs(generatedDataSize - referenceDataSize) <= referenceDataSize / 30);
 					}
 				}
 			}
@@ -71,13 +66,9 @@ public class OptimalNWiseTest extends NWiseAlgorithmTest {
 		}
 	}
 
-
-	private Set<List<String>> referenceResult(List<List<String>> input, int n)
-			throws GeneratorException {
-		List<Set<String>> referenceInput = GeneratorTestUtils
-				.referenceInput(input);
-		Set<List<String>> cartesianProduct = Sets
-				.cartesianProduct(referenceInput);
+	private Set<List<String>> referenceResult(List<List<String>> input, int n) throws GeneratorException {
+		List<Set<String>> referenceInput = GeneratorTestUtils.referenceInput(input);
+		Set<List<String>> cartesianProduct = Sets.cartesianProduct(referenceInput);
 		Set<List<String>> referenceResult = new HashSet<List<String>>();
 		Set<List<String>> remainingTuples = getAllTuples(input, n);
 		for (int k = maxTuples(input, n); k > 0; k--) {

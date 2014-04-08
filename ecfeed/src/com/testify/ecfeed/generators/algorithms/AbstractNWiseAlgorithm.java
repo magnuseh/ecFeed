@@ -12,45 +12,36 @@
 package com.testify.ecfeed.generators.algorithms;
 
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import com.testify.ecfeed.generators.CartesianProductGenerator;
+import com.testify.ecfeed.generators.algorithms.utils.NWiseUtils;
 import com.testify.ecfeed.generators.api.GeneratorException;
 import com.testify.ecfeed.generators.api.IConstraint;
 
-public class AbstractNWiseAlgorithm<E> extends AbstractAlgorithm<E> implements
-		IAlgorithm<E> {
+public class AbstractNWiseAlgorithm<E> extends AbstractAlgorithm<E> implements IAlgorithm<E> {
 
 	private CartesianProductGenerator<E> fCartesianGenerator;
 	protected int N = -1;
 	private int fTuplesToGenerate;
 	protected int fProgress;
+	protected final NWiseUtils<E> fNWiseUtils = new NWiseUtils<>();
 
 	protected int fCoverage;
-
-	public AbstractNWiseAlgorithm(int n) {
-		fCoverage = 100;
-		N = n;
-	}
 
 	public AbstractNWiseAlgorithm(int n, int coverage) {
 		fCoverage = coverage;
 		N = n;
 	}
 
-	public void initialize(List<List<E>> input,
-			Collection<IConstraint<E>> constraints) throws GeneratorException {
+	public void initialize(List<List<E>> input, Collection<IConstraint<E>> constraints) throws GeneratorException {
 
 		if (N < 1 || N > input.size()) {
-			throw new GeneratorException(
-					"Value of N for this input must be between 1 and "
-							+ input.size());
+			throw new GeneratorException("Value of N for this input must be between 1 and " + input.size());
 		}
 		if (fCoverage > 100 || fCoverage < 0) {
-			throw new GeneratorException(
-					"Value of Test area coverage must be between 1 and 100");
+			throw new GeneratorException("Coverage must be between 1 and 100");
 		}
 		fCartesianGenerator = new CartesianProductGenerator<E>();
 		fCartesianGenerator.initialize(input, constraints, null);
@@ -65,27 +56,13 @@ public class AbstractNWiseAlgorithm<E> extends AbstractAlgorithm<E> implements
 	@Override
 	public void reset() {
 		fCartesianGenerator.reset();
-		fTuplesToGenerate = calculateTotalTuples();
+		fTuplesToGenerate = fNWiseUtils.calculateTotalTuples(getInput(), N, fCoverage);
 		setTotalWork(fTuplesToGenerate);
 		super.reset();
 	}
 
 	public int getN() {
 		return N;
-	}
-
-	private int calculateTotalTuples() {
-		int totalWork = 0;
-		Tuples<List<E>> tuples = new Tuples<List<E>>(getInput(), N);
-		while (tuples.hasNext()) {
-			long combinations = 1;
-			List<List<E>> tuple = tuples.next();
-			for (List<E> category : tuple) {
-				combinations *= category.size();
-			}
-			totalWork += combinations;
-		}
-		return (int) Math.ceil(((double) (fCoverage * totalWork)) / 100);
 	}
 
 	protected List<E> cartesianNext() throws GeneratorException {
@@ -98,22 +75,6 @@ public class AbstractNWiseAlgorithm<E> extends AbstractAlgorithm<E> implements
 
 	protected Set<List<E>> getTuples(List<E> vector) {
 		return (new Tuples<E>(vector, N)).getAll();
-	}
-
-	protected Set<List<E>> getAllTuples(List<List<E>> inputDomain, int n)
-			throws GeneratorException {
-		Set<List<E>> result = new HashSet<List<E>>();
-		Tuples<List<E>> categoryTuples = new Tuples<List<E>>(inputDomain, n);
-		while (categoryTuples.hasNext()) {
-			List<List<E>> next = categoryTuples.next();
-			CartesianProductGenerator<E> generator = new CartesianProductGenerator<E>();
-			generator.initialize(next, null, null);
-			List<E> tuple;
-			while ((tuple = generator.next()) != null) {
-				result.add(tuple);
-			}
-		}
-		return result;
 	}
 
 	protected long tuplesToGenerate() {

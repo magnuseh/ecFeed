@@ -24,17 +24,13 @@ public class OptimalNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
 	private int K;
 	private Set<List<E>> fGeneratedTuples;
 
-	public OptimalNWiseAlgorithm(int n) {
-		super(n);
-	}
-
 	public OptimalNWiseAlgorithm(int n, int coverage) {
 		super(n, coverage);
 	}
 
 	@Override
 	public List<E> getNext() throws GeneratorException {
-		while (isCanceled() != true
+		while (fCancel != true
 				&& (K != 0 && fGeneratedTuples.size() < tuplesToGenerate())) {
 
 			List<E> next = cartesianNext();

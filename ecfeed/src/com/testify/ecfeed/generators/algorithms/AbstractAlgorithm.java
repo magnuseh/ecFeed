@@ -27,7 +27,7 @@ public class AbstractAlgorithm<E> implements IAlgorithm<E> {
 
 	private List<List<E>> fInput;
 	private Collection<IConstraint<E>> fConstraints;
-	
+
 	@Override
 	public int totalWork() {
 		return fTotalWork;
@@ -39,38 +39,38 @@ public class AbstractAlgorithm<E> implements IAlgorithm<E> {
 		fProgress = 0;
 		return progress;
 	}
-	
+
 	@Override
-	public int totalProgress(){
+	public int totalProgress() {
 		return fTotalProgress;
 	}
 
-	
-	protected void progress(int progress){
+	protected void progress(int progress) {
 		fProgress += progress;
 		fTotalProgress += progress;
 	}
-	
-	protected void setTotalWork(int totalWork){
+
+	protected void setTotalWork(int totalWork) {
 		fTotalWork = totalWork;
 	}
-	
-	public void reset(){
+
+	public void reset() {
 		fProgress = 0;
 	}
-	
+
 	protected List<E> instance(List<Integer> vector) {
 		List<E> instance = new ArrayList<E>();
-		for(int i = 0; i < vector.size(); i++){
+		for (int i = 0; i < vector.size(); i++) {
 			instance.add(fInput.get(i).get(vector.get(i)));
 		}
 		return instance;
 	}
-	
-	protected List<Integer> representation(List<E> vector){
-		if(vector == null) return null;
+
+	protected List<Integer> representation(List<E> vector) {
+		if (vector == null)
+			return null;
 		List<Integer> representation = new ArrayList<Integer>();
-		for(int i = 0; i < vector.size(); i++){
+		for (int i = 0; i < vector.size(); i++) {
 			E element = vector.get(i);
 			representation.add(fInput.get(i).indexOf(element));
 		}
@@ -78,20 +78,19 @@ public class AbstractAlgorithm<E> implements IAlgorithm<E> {
 	}
 
 	protected boolean checkConstraints(List<E> vector) {
-			if (vector == null) return true;
-			for(IConstraint<E> constraint : fConstraints){
-				if(constraint.evaluate(vector) == false){
-					return false;
-				}
-			}
+		if (vector == null)
 			return true;
+		for (IConstraint<E> constraint : fConstraints) {
+			if (constraint.evaluate(vector) == false) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	@Override
-	public void initialize(List<List<E>> input,
-			Collection<IConstraint<E>> constraints)
-			throws GeneratorException {
-		if(input == null || constraints == null){
+	public void initialize(List<List<E>> input, Collection<IConstraint<E>> constraints) throws GeneratorException {
+		if (input == null || constraints == null) {
 			throw new GeneratorException("input or constraints of algorithm cannot be null");
 		}
 		fInput = input;
@@ -103,8 +102,8 @@ public class AbstractAlgorithm<E> implements IAlgorithm<E> {
 	public List<E> getNext() throws GeneratorException {
 		return null;
 	}
-	
-	public List<List<E>> getInput(){
+
+	public List<List<E>> getInput() {
 		return fInput;
 	}
 
@@ -122,15 +121,10 @@ public class AbstractAlgorithm<E> implements IAlgorithm<E> {
 	public Collection<? extends IConstraint<E>> getConstraints() {
 		return fConstraints;
 	}
-	
+
 	@Override
-	public void cancel(){
-		fCancel = true;		
-	}
-	
-	@Override
-	public boolean isCanceled(){
-		return fCancel;
+	public void cancel() {
+		fCancel = true;
 	}
 
 }
