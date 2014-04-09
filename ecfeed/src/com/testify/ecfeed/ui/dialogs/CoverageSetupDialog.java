@@ -248,7 +248,7 @@ public class CoverageSetupDialog extends TitleAreaDialog implements ChangeListen
 				gc.drawLine((int) (width) - linewidth / 2, topbarborder, (int) (width) - linewidth / 2, bottomborder);
 
 				DecimalFormat df = new DecimalFormat("#.00");
-				String nlabel = "For N= " + (n + 1) + ":  ";
+				String nlabel = "N= " + (n + 1);
 				String percentvalue = df.format(fResults[n]) + "%";
 				gc.drawString(nlabel, 10, topborder, true);
 				gc.drawString(percentvalue, (width / 2) - fontspacing, (int) (topbarborder), true);
