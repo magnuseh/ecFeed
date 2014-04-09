@@ -17,23 +17,23 @@ import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.CheckboxTreeViewer;
-import org.eclipse.jface.viewers.ICheckStateListener;
-import org.eclipse.jface.viewers.TreeNodeContentProvider;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Shell;
 
 import com.testify.ecfeed.generators.algorithms.Tuples;
 import com.testify.ecfeed.generators.algorithms.utils.NWiseUtils;
 import com.testify.ecfeed.model.CategoryNode;
+import com.testify.ecfeed.model.ExpectedValueCategoryNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.TestCaseNode;
+import com.testify.ecfeed.ui.common.TreeCheckStateListener;
 
 public class CoverageCalculator {
 
 	private int N;
 	private int[] fTuplesCovered;
 	private int[] fTotalWork;
+	private Map<Integer, PartitionNode> fExpectedPartitions;
 	private double[] fResults;
 	private boolean cancelled;
 	Set<ChangeListener> fListeners;
@@ -42,28 +42,26 @@ public class CoverageCalculator {
 	protected List<Map<List<PartitionNode>, Integer>> fTuples;
 
 	private CoverageTreeViewerListener fTreeListener;
-	// private CheckboxTreeViewer fCheckboxTreeViewer;
 	private final MethodNode fMethod;
-	private Shell fShell;
 
 	public final NWiseUtils<PartitionNode> fCoverageUtils = new NWiseUtils<>();
 
 	public CoverageCalculator(MethodNode method) {
 		this.fMethod = method;
-		// this.fCheckboxTreeViewer = treeViewer;
-		this.fShell = null;
 
 		initialize();
 	}
 
 	private void initialize() {
-		fInput = obtainInput();
+		fInput = prepareInput();
 		N = fInput.size();
 		fTuplesCovered = new int[N];
 		fTotalWork = new int[N];
 		fResults = new double[N];
-		fTuples = new ArrayList<Map<List<PartitionNode>, Integer>>();
+
 		fListeners = new HashSet<>();
+		fTuples = new ArrayList<Map<List<PartitionNode>, Integer>>();
+		fExpectedPartitions = prepareExpectedPartitions();
 
 		for (int n = 0; n < fTotalWork.length; n++) {
 			fTotalWork[n] = fCoverageUtils.calculateTotalTuples(fInput, n + 1, 100);
@@ -73,8 +71,8 @@ public class CoverageCalculator {
 
 	private class CalculatorRunnable implements IRunnableWithProgress {
 		private List<List<PartitionNode>> fTestCases;
-		private int N;
 		private CoverageCalculator fCalculator;
+		private int N;
 		// if true - add occurences, else substract them
 		private boolean fIsAdding;
 		boolean isCanceled;
@@ -116,7 +114,6 @@ public class CoverageCalculator {
 					mergeOccurrenceMaps(fCalculator.fTuples.get(n), map, fIsAdding);
 					fCalculator.fTuplesCovered[n] = fCalculator.fTuples.get(n).size();
 					fResults[n] = (((double) fTuplesCovered[n]) / ((double) fTotalWork[n])) * 100;
-					System.out.println(fResults[n]);
 					n++;
 				}
 			} else {
@@ -126,20 +123,19 @@ public class CoverageCalculator {
 		}
 	}
 
-	private class CoverageTreeViewerListener implements ICheckStateListener {
-		protected TreeNodeContentProvider fContentProvider;
+	public class CoverageTreeViewerListener extends TreeCheckStateListener{
 		protected CheckboxTreeViewer fViewer;
 		CoverageCalculator fCalculator;
 		List<TestCaseNode> fTestCases;
 		String fTestSuiteName;
-		boolean fSelection;
+		boolean fIsSelection;
 		// saved tree state
 		Object fTreeState[];
 
 		public CoverageTreeViewerListener(CoverageCalculator calculator, CheckboxTreeViewer treeViewer) {
+			super(treeViewer);
 			this.fCalculator = calculator;
 			fViewer = treeViewer;
-			fContentProvider = (TreeNodeContentProvider) fViewer.getContentProvider();
 			fTestCases = new ArrayList<>();
 			fTreeState = fViewer.getCheckedElements();
 		}
@@ -151,8 +147,9 @@ public class CoverageCalculator {
 		@Override
 		public void checkStateChanged(CheckStateChangedEvent event) {
 			Object element = event.getElement();
-			fSelection = event.getChecked();
-			if (fSelection) {
+			fIsSelection = event.getChecked();
+			// if action is selection
+			if (fIsSelection) {
 				// TestSuite
 				if (element instanceof String) {
 					fTestCases.clear();
@@ -166,7 +163,9 @@ public class CoverageCalculator {
 					fTestSuiteName = null;
 					fTestCases.add((TestCaseNode) element);
 				}
-			} else {
+			}
+			// if action is deselection
+			else {
 				// TestSuite
 				if (element instanceof String) {
 					fTestCases.clear();
@@ -193,39 +192,14 @@ public class CoverageCalculator {
 				}
 			}
 
-			fViewer.setSubtreeChecked(element, fSelection);
+			fViewer.setSubtreeChecked(element, fIsSelection);
 			setParentGreyed(element);
 
-			fCalculator.calculateCoverage();
-			fTreeState = fViewer.getCheckedElements();
-		}
-
-		protected void setParentGreyed(Object element) {
-			Object parent = fContentProvider.getParent(element);
-			if (parent == null)
-				return;
-			Object[] children = fContentProvider.getChildren(parent);
-			int checkedChildrenCount = getCheckedChildrenCount(parent);
-
-			if (checkedChildrenCount == 0) {
-				fViewer.setGrayChecked(parent, false);
-			} else if (checkedChildrenCount < children.length) {
-				fViewer.setGrayChecked(parent, true);
-			} else {
-				fViewer.setGrayed(parent, false);
-				fViewer.setChecked(parent, true);
+			// Execute core calculator function
+			if (fCalculator.calculateCoverage()) {
+				//if succeed - save changes to the tree
+				fTreeState = fViewer.getCheckedElements();
 			}
-			setParentGreyed(parent);
-		}
-
-		private int getCheckedChildrenCount(Object parent) {
-			int checkedChildrenCount = 0;
-			for (Object element : fViewer.getCheckedElements()) {
-				if (parent.equals(fContentProvider.getParent(element))) {
-					checkedChildrenCount++;
-				}
-			}
-			return checkedChildrenCount;
 		}
 
 		/*
@@ -239,34 +213,39 @@ public class CoverageCalculator {
 		 * @return if last action was selection (false if it was deselection);
 		 */
 		public boolean getLastAction() {
-			return fSelection;
+			return fIsSelection;
 		}
 
 	}
 
 	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ CORE METHOD ~~~~~~~~~~~~~~~~~~~~~~~~~~
-	public void calculateCoverage() {
-		ProgressMonitorDialog progressDialog = new ProgressMonitorDialog(fShell);
+	public boolean calculateCoverage() {
+		ProgressMonitorDialog progressDialog = new ProgressMonitorDialog(Display.getDefault().getActiveShell());
 		try {
 			CalculatorRunnable runnable =
-					new CalculatorRunnable(this, parseCasesToAdd(fTreeListener.getTestCases()), fTreeListener.getLastAction());
+					new CalculatorRunnable(this, prepareCasesToAdd(fTreeListener.getTestCases()), fTreeListener.getLastAction());
 			progressDialog.open();
 			progressDialog.run(true, true, runnable);
-			if (runnable.isCanceled)
+			if (runnable.isCanceled) {
 				fTreeListener.revertLastTreeChange();
-			else
+				return false;
+			} else {
 				notifyListeners();
+				return true;
+			}
 
 		} catch (InvocationTargetException e) {
 			MessageDialog.openError(Display.getDefault().getActiveShell(), "Exception", "Invocation: " + e.getCause());
+			return false;
 		} catch (InterruptedException e) {
 			MessageDialog.openError(Display.getDefault().getActiveShell(), "Exception", "Interrupted: " + e.getMessage());
 			e.printStackTrace();
+			return false;
 		}
 
 	}
 
-	protected List<List<PartitionNode>> obtainInput() {
+	protected List<List<PartitionNode>> prepareInput() {
 		List<List<PartitionNode>> input = new ArrayList<List<PartitionNode>>();
 		for (CategoryNode cnode : fMethod.getCategories()) {
 			List<PartitionNode> category = new ArrayList<PartitionNode>();
@@ -278,14 +257,43 @@ public class CoverageCalculator {
 		return input;
 	}
 
-	public List<List<PartitionNode>> parseCasesToAdd(List<TestCaseNode> TestCases) {
-		List<List<PartitionNode>> cases = new ArrayList<>();
-		for (TestCaseNode tcnode : TestCases) {
-			List<PartitionNode> partitions = new ArrayList<>();
-			for (PartitionNode pnode : tcnode.getTestData()) {
-				partitions.add(pnode);
+	private Map<Integer, PartitionNode> prepareExpectedPartitions() {
+		int n = 0;
+		Map<Integer, PartitionNode> expected = new HashMap<>();
+		for (CategoryNode cnode : fMethod.getCategories()) {
+			if (cnode instanceof ExpectedValueCategoryNode) {
+				expected.put(n, cnode.getPartitions().get(0));
 			}
-			cases.add(partitions);
+			n++;
+		}
+		return expected;
+	}
+
+	private List<List<PartitionNode>> prepareCasesToAdd(List<TestCaseNode> TestCases) {
+		List<List<PartitionNode>> cases = new ArrayList<>();
+		if (fExpectedPartitions.isEmpty()) {
+			for (TestCaseNode tcnode : TestCases) {
+				List<PartitionNode> partitions = new ArrayList<>();
+				for (PartitionNode pnode : tcnode.getTestData()) {
+					partitions.add(pnode);
+				}
+				cases.add(partitions);
+			}
+		} else {
+			for (TestCaseNode tcnode : TestCases) {
+				List<PartitionNode> partitions = new ArrayList<>();
+				int n = 0;
+				for (PartitionNode pnode : tcnode.getTestData()) {
+					if (fExpectedPartitions.containsKey(n)) {
+						partitions.add(fExpectedPartitions.get(n));
+					} else {
+						partitions.add(pnode);
+					}
+					n++;
+				}
+				cases.add(partitions);
+			}
+
 		}
 		return cases;
 	}
@@ -323,7 +331,8 @@ public class CoverageCalculator {
 			}
 		}
 	}
-
+	
+	//notify GUI to update
 	public void notifyListeners() {
 		for (ChangeListener listener : fListeners) {
 			listener.stateChanged(new ChangeEvent(fResults));
@@ -373,20 +382,12 @@ public class CoverageCalculator {
 		fListeners.add(listener);
 	}
 
-	public void setShell(Shell shell) {
-		this.fShell = shell;
+	public Map<Integer, PartitionNode> getExpectedPartitions() {
+		return fExpectedPartitions;
 	}
 
-	// private void updateCoverage() {
-	// for (int n = 1; n <= N; n++) {
-	// int covered =
-	// fCoverageUtils.calculateCoveredTuples(getSelectedTestCases(), n);
-	// if (fTotalWork[n - 1] == 0)
-	// fResults[n - 1] = 0;
-	// else
-	// fResults[n - 1] = ((double) covered / (double) fTotalWork[n - 1]) * 100;
-	// System.out.println("N: " + n + " => " + fResults[n - 1]);
-	// }
-	// }
+	public List<Map<List<PartitionNode>, Integer>> getTuples() {
+		return fTuples;
+	}
 
 }

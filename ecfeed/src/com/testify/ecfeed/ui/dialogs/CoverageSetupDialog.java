@@ -45,16 +45,11 @@ import org.eclipse.swt.widgets.ScrollBar;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Tree;
 
-import com.testify.ecfeed.generators.algorithms.utils.NWiseUtils;
-import com.testify.ecfeed.model.CategoryNode;
-import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.editor.CoverageCalculator;
 
 public class CoverageSetupDialog extends TitleAreaDialog implements ChangeListener {
 	private Button fOkButton;
-	private MethodNode fMethod;
 	private CheckboxTreeViewer fTestCasesViewer;
 	private CoverageCalculator fCalculator;
 
@@ -72,14 +67,10 @@ public class CoverageSetupDialog extends TitleAreaDialog implements ChangeListen
 
 	public final static int TEST_CASE_COMPOSITE = 1;
 	public final static int COVERAGE_GRAPH_COMPOSITE = 1 << 1;
-	public final NWiseUtils<PartitionNode> fCoverageUtils = new NWiseUtils<>();
 
 	public CoverageSetupDialog(Shell parentShell, CoverageCalculator calculator, int content, String title, String message,
 			IContentProvider contentProvider, IBaseLabelProvider labelProvider) {
 		super(parentShell);
-		fCalculator = calculator;
-		fCalculator.setShell(parentShell);
-		fMethod = calculator.getMethod();
 		setHelpAvailable(false);
 		setShellStyle(SWT.BORDER | SWT.RESIZE | SWT.TITLE);
 		fContent = content;
@@ -87,13 +78,15 @@ public class CoverageSetupDialog extends TitleAreaDialog implements ChangeListen
 		fMessage = message;
 		fContentProvider = contentProvider;
 		fLabelProvider = labelProvider;
+
+		fCalculator = calculator;
 		initialize(fCalculator);
 	}
 
 	protected void initialize(CoverageCalculator calculator) {
 		N = calculator.getN();
-		fCalculator.addChangeListener(this);
 		fResults = new double[N];
+		fCalculator.addChangeListener(this);
 	}
 
 	@Override
@@ -161,10 +154,8 @@ public class CoverageSetupDialog extends TitleAreaDialog implements ChangeListen
 		fTestCasesViewer.setContentProvider(fContentProvider);
 		fTestCasesViewer.setLabelProvider(fLabelProvider);
 		fTestCasesViewer.getTree().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-		fTestCasesViewer.setInput(fMethod);
-		for (CategoryNode category : fMethod.getCategories()) {
-			fTestCasesViewer.setSubtreeChecked(category, true);
-		}
+		fTestCasesViewer.setInput(fCalculator.getMethod());
+
 		fTestCasesViewer.addCheckStateListener(fCalculator.generateTreeViewerListener(this.fTestCasesViewer));
 	}
 
