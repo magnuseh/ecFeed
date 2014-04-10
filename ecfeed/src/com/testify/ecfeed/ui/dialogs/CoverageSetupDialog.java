@@ -276,7 +276,6 @@ public class CoverageSetupDialog extends TitleAreaDialog implements ChangeListen
 		fResults = fCalculator.getResults();
 		for (int n = 1; n <= N; n++) {
 			drawBarGraph();
-			System.out.println("N: " + n + " => " + fResults[n - 1]);
 		}
 	}
 

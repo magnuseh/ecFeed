@@ -21,8 +21,8 @@ import org.eclipse.swt.widgets.Display;
 
 import com.testify.ecfeed.generators.algorithms.Tuples;
 import com.testify.ecfeed.generators.algorithms.utils.NWiseUtils;
-import com.testify.ecfeed.model.CategoryNode;
-import com.testify.ecfeed.model.ExpectedValueCategoryNode;
+import com.testify.ecfeed.model.AbstractCategoryNode;
+import com.testify.ecfeed.model.ExpectedCategoryNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.TestCaseNode;
@@ -247,7 +247,7 @@ public class CoverageCalculator {
 
 	protected List<List<PartitionNode>> prepareInput() {
 		List<List<PartitionNode>> input = new ArrayList<List<PartitionNode>>();
-		for (CategoryNode cnode : fMethod.getCategories()) {
+		for (AbstractCategoryNode cnode : fMethod.getCategories()) {
 			List<PartitionNode> category = new ArrayList<PartitionNode>();
 			for (PartitionNode pnode : cnode.getLeafPartitions()) {
 				category.add(pnode);
@@ -260,9 +260,9 @@ public class CoverageCalculator {
 	private Map<Integer, PartitionNode> prepareExpectedPartitions() {
 		int n = 0;
 		Map<Integer, PartitionNode> expected = new HashMap<>();
-		for (CategoryNode cnode : fMethod.getCategories()) {
-			if (cnode instanceof ExpectedValueCategoryNode) {
-				expected.put(n, cnode.getPartitions().get(0));
+		for (AbstractCategoryNode cnode : fMethod.getCategories()) {
+			if (cnode instanceof ExpectedCategoryNode) {
+				expected.put(n, ((ExpectedCategoryNode)cnode).getDefaultValuePartition());
 			}
 			n++;
 		}

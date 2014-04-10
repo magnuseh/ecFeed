@@ -20,7 +20,7 @@ import com.testify.ecfeed.generators.algorithms.utils.NWiseUtils;
 import com.testify.ecfeed.generators.api.GeneratorException;
 import com.testify.ecfeed.generators.api.IConstraint;
 
-public class AbstractNWiseAlgorithm<E> extends AbstractAlgorithm<E> implements IAlgorithm<E> {
+public abstract class AbstractNWiseAlgorithm<E> extends AbstractAlgorithm<E> implements IAlgorithm<E> {
 
 	private CartesianProductGenerator<E> fCartesianGenerator;
 	protected int N = -1;
@@ -49,12 +49,7 @@ public class AbstractNWiseAlgorithm<E> extends AbstractAlgorithm<E> implements I
 	}
 
 	@Override
-	public List<E> getNext() throws GeneratorException {
-		return null;
-	}
-
-	@Override
-	public void reset() {
+	public void reset(){
 		fCartesianGenerator.reset();
 		fTuplesToGenerate = fNWiseUtils.calculateTotalTuples(getInput(), N, fCoverage);
 		setTotalWork(fTuplesToGenerate);
@@ -64,8 +59,8 @@ public class AbstractNWiseAlgorithm<E> extends AbstractAlgorithm<E> implements I
 	public int getN() {
 		return N;
 	}
-
-	protected List<E> cartesianNext() throws GeneratorException {
+	
+	protected List<E> cartesianNext() throws GeneratorException{
 		return fCartesianGenerator.next();
 	}
 
@@ -97,5 +92,4 @@ public class AbstractNWiseAlgorithm<E> extends AbstractAlgorithm<E> implements I
 	public void setCoverage(int fCoverage) {
 		this.fCoverage = fCoverage;
 	}
-
 }
