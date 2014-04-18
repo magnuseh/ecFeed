@@ -93,4 +93,8 @@ public abstract class BasicStatement implements IStatement {
 	public boolean adapt(List<PartitionNode> values){
 		return false;
 	}
+	
+	public Object serialize(IConstraintSerializer serializer){
+		return serializer.serialize(this);
+	}
 }

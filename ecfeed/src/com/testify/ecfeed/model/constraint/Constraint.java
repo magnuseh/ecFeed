@@ -92,4 +92,8 @@ public class Constraint implements IConstraint<PartitionNode> {
 	public boolean mentions(PartitionNode partition) {
 		return fPremise.mentions(partition) || fConsequence.mentions(partition);
 	}
+	
+	public Object serialize(IConstraintSerializer serializer){
+		return serializer.serialize(this);
+	}
 }

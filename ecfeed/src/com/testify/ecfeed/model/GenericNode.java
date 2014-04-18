@@ -153,4 +153,8 @@ public class GenericNode implements IGenericNode{
 		
 		return true;
 	}
+	
+	public Object serialize(IModelSerializer serializer){
+		return serializer.serialize(this);
+	}
 }
