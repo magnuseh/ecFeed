@@ -37,4 +37,6 @@ public interface IGenericNode {
 	public String getName();
 	public void setName(String newName);
 	public int subtreeSize();
+	
+	public Object serialize(IModelSerializer serializer);
 }
