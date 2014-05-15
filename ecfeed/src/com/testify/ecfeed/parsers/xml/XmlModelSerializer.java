@@ -302,7 +302,11 @@ public class XmlModelSerializer {
 			valueString = String.valueOf(representation);
 			break;
 		default:
-			valueString = value.toString();
+			if (value.getClass().isEnum()) {
+				valueString = ((Enum<?>) value).name();
+			} else {
+				valueString = value.toString();	
+			}
 			break;
 		}
 		return valueString;

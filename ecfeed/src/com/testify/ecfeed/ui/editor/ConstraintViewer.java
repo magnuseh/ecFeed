@@ -53,6 +53,7 @@ import com.testify.ecfeed.model.constraint.PartitionedCategoryStatement;
 import com.testify.ecfeed.model.constraint.Relation;
 import com.testify.ecfeed.model.constraint.StatementArray;
 import com.testify.ecfeed.model.constraint.StaticStatement;
+import com.testify.ecfeed.utils.ModelUtils;
 
 public class ConstraintViewer extends TreeViewerSection {
 
@@ -336,7 +337,7 @@ public class ConstraintViewer extends TreeViewerSection {
 				if(event.keyCode == SWT.CR || event.keyCode == SWT.KEYPAD_CR){
 					ExpectedValueStatement statement = (ExpectedValueStatement)fSelectedStatement;
 					AbstractCategoryNode category = statement.getCategory();
-					Object newValue = category.getPartitionValueFromString(fConditionText.getText());
+					Object newValue = ModelUtils.getPartitionValueFromString(fConditionText.getText(), category.getType());
 					if(newValue != null && !newValue.equals(statement.getCondition().getValue())){
 						statement.getCondition().setValue(newValue);
 						modelUpdated();

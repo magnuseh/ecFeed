@@ -17,7 +17,7 @@ import org.eclipse.jface.viewers.TreeNodeContentProvider;
 
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.TestCaseNode;
-import com.testify.ecfeed.ui.common.Constants;
+import com.testify.ecfeed.utils.Constants;
 
 public class TestCasesViewerContentProvider extends TreeNodeContentProvider implements ITreeContentProvider{
 	public final Object[] EMPTY_ARRAY = new Object[] {};

@@ -1,3 +1,5 @@
+package com.testify.ecfeed.utils;
+
 /*******************************************************************************
  * Copyright (c) 2013 Testify AS.                                                
  * All rights reserved. This program and the accompanying materials              
@@ -9,8 +11,7 @@
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.ui.common;
-
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,15 +32,17 @@ import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.PartitionedCategoryNode;
 
 public class ModelUtils {
-	public static ClassNode generateClassModel(IType type){
+	
+	public static ClassNode generateClassModel(IType type){ 
 		ClassNode classNode = new ClassNode(type.getFullyQualifiedName());
 		try{
+			Class<?> testClass = ClassUtils.getClassLoader(true, null).loadClass(type.getFullyQualifiedName());
 			for(IMethod method : type.getMethods()){
 				IAnnotation[] annotations = method.getAnnotations();
 				if(method.getParameters().length > 0){
 					for(IAnnotation annotation : annotations){
 						if(annotation.getElementName().equals("Test")){
-							MethodNode methodModel = generateMethodModel(method);
+							MethodNode methodModel = generateMethodModel(method, testClass);
 							if(methodModel != null){
 								classNode.addMethod(methodModel);
 							}
@@ -49,7 +52,7 @@ public class ModelUtils {
 				}
 			}
 		}
-		catch(JavaModelException e){
+		catch(Throwable e){
 			System.out.println("Unexpected error");
 		}
 		return classNode;
@@ -159,26 +162,24 @@ public class ModelUtils {
 		return null;
 	}
 	
-	private static MethodNode generateMethodModel(IMethod method) throws JavaModelException {
+	private static MethodNode generateMethodModel(IMethod method, Class<?> testClass) throws JavaModelException {
 		MethodNode methodNode = new MethodNode(method.getElementName());
 		for(ILocalVariable parameter : method.getParameters()){
 			if(isExpected(parameter)){
-				methodNode.addCategory(generateExpectedCategoryModel(parameter));
+				methodNode.addCategory(generateExpectedCategoryModel(parameter, getTypeName(parameter, method, testClass)));
 			}
 			else{
-				methodNode.addCategory(generatePartitionedCategoryModel(parameter));
+				methodNode.addCategory(generatePartitionedCategoryModel(parameter, getTypeName(parameter, method, testClass)));
 			}
 		}
 		return methodNode;
 	}
 
-	private static ExpectedCategoryNode generateExpectedCategoryModel(ILocalVariable parameter) {
-		String type = getTypeName(parameter.getTypeSignature());
+	private static ExpectedCategoryNode generateExpectedCategoryModel(ILocalVariable parameter, String type) {
 		return new ExpectedCategoryNode(parameter.getElementName(), type, getDefaultExpectedValue(type));
 	}
 
-	private static PartitionedCategoryNode generatePartitionedCategoryModel(ILocalVariable parameter) {
-		String type = getTypeName(parameter.getTypeSignature());
+	private static PartitionedCategoryNode generatePartitionedCategoryModel(ILocalVariable parameter, String type) {
 		PartitionedCategoryNode category = new PartitionedCategoryNode(parameter.getElementName(), type);
 		ArrayList<PartitionNode> defaultPartitions = generateDefaultPartitions(type);
 		for(PartitionNode partition : defaultPartitions){
@@ -217,12 +218,13 @@ public class ModelUtils {
 			return Constants.DEFAULT_EXPECTED_SHORT_VALUE;
 		case com.testify.ecfeed.model.Constants.TYPE_NAME_STRING:
 			return Constants.DEFAULT_EXPECTED_STRING_VALUE;
+		default:
+			return ClassUtils.defaultEnumExpectedValue(type);
 		}
-		return null;
 	}
 
-
-	private static String getTypeName(String typeSignature) {
+	private static String getTypeName(ILocalVariable parameter, IMethod method, Class<?> testClass) {
+		String typeSignature = parameter.getTypeSignature();
 		switch(typeSignature){
 		case Signature.SIG_BOOLEAN:
 			return com.testify.ecfeed.model.Constants.TYPE_NAME_BOOLEAN;
@@ -243,6 +245,17 @@ public class ModelUtils {
 		case "QString;":
 			return com.testify.ecfeed.model.Constants.TYPE_NAME_STRING;
 		default:
+			if (typeSignature.startsWith("Q") && typeSignature.endsWith(";")){
+				for (Method reflection : testClass.getMethods()) {
+					if (method.getElementName().equals(reflection.getName())) {
+						for (Class<?> type : reflection.getParameterTypes()) {
+							if (type.getSimpleName().equals(typeSignature.substring(1, typeSignature.lastIndexOf(";")))) {
+								return type.getCanonicalName();
+							}
+						}
+					}
+				}
+			}
 			return com.testify.ecfeed.model.Constants.TYPE_NAME_UNSUPPORTED;
 		}
 	}
@@ -268,7 +281,7 @@ public class ModelUtils {
 		case "String":
 			return defaultStringPartitions();
 		default:
-			return new ArrayList<PartitionNode>();
+			return ClassUtils.defaultEnumPartitions(typeSignature);
 		}
 	}
 
@@ -334,7 +347,7 @@ public class ModelUtils {
 	private static ArrayList<PartitionNode> defaultLongPartitions() {
 		ArrayList<PartitionNode> partitions = new ArrayList<PartitionNode>();
 		partitions.add(new PartitionNode("min", Long.MIN_VALUE));
-		partitions.add(new PartitionNode("negative", (long)-1));	
+		partitions.add(new PartitionNode("negative", (long)-1));
 		partitions.add(new PartitionNode("zero", (long)0));
 		partitions.add(new PartitionNode("positive", (long)1));	
 		partitions.add(new PartitionNode("max", Long.MAX_VALUE));
@@ -362,10 +375,44 @@ public class ModelUtils {
 		return partitions;
 	}
 
-
 	public static boolean validateConstraintName(String name) {
 		if(name.length() < 1 || name.length() > 64) return false;
 		if(name.matches("[ ]+.*")) return false;
 		return true;
+	}
+	
+	public static boolean validatePartitionStringValue(String valueString, String type){
+		if(type.equals(com.testify.ecfeed.model.Constants.TYPE_NAME_STRING)) return true;
+		return (getPartitionValueFromString(valueString, type) != null);
+	}
+
+	public static Object getPartitionValueFromString(String valueString, String type){
+		try{
+			switch(type){
+			case com.testify.ecfeed.model.Constants.TYPE_NAME_BOOLEAN:
+				return Boolean.valueOf(valueString).booleanValue();
+			case com.testify.ecfeed.model.Constants.TYPE_NAME_BYTE:
+				return Byte.valueOf(valueString).byteValue();
+			case com.testify.ecfeed.model.Constants.TYPE_NAME_CHAR:
+				if(valueString.charAt(0) != '\\' || valueString.length() == 1) return(valueString.charAt(0));
+				return Character.toChars(Integer.parseInt(valueString.substring(1)));
+			case com.testify.ecfeed.model.Constants.TYPE_NAME_DOUBLE:
+				return Double.valueOf(valueString).doubleValue();
+			case com.testify.ecfeed.model.Constants.TYPE_NAME_FLOAT:
+				return Float.valueOf(valueString).floatValue();
+			case com.testify.ecfeed.model.Constants.TYPE_NAME_INT:
+				return Integer.valueOf(valueString).intValue();
+			case com.testify.ecfeed.model.Constants.TYPE_NAME_LONG:
+				return Long.valueOf(valueString).longValue();
+			case com.testify.ecfeed.model.Constants.TYPE_NAME_SHORT:
+				return Short.valueOf(valueString).shortValue();
+			case com.testify.ecfeed.model.Constants.TYPE_NAME_STRING:
+				return valueString;
+			default:
+				return ClassUtils.enumPartitionValue(valueString, type, ClassUtils.getClassLoader(true, null));
+			}
+		}catch(NumberFormatException|IndexOutOfBoundsException e){
+			return null;
+		}
 	}
 }
