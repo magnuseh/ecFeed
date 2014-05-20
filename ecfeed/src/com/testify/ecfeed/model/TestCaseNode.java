@@ -11,9 +11,10 @@
 
 package com.testify.ecfeed.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class TestCaseNode extends GenericNode {
+public class TestCaseNode extends GenericNode implements IUpdateable {
 	List<PartitionNode> fTestData;
 	
 	public TestCaseNode(String name, List<PartitionNode> testData) {
@@ -80,5 +81,18 @@ public class TestCaseNode extends GenericNode {
 		}
 		
 		return result;
+	}
+	
+	public TestCaseNode getCopy(){
+		List<PartitionNode> testdata = new ArrayList<>();
+		for(PartitionNode partition: fTestData){
+			testdata.add(partition);
+		}
+		return new TestCaseNode(this.getName(), testdata);	
+	}
+
+	@Override
+	public void updateReferences(){
+		//!!! if unable to adapt - what then? Delete self? ???
 	}
 }

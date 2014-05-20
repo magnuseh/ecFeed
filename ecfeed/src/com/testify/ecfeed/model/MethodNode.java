@@ -11,13 +11,13 @@
 
 package com.testify.ecfeed.model;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import java.util.ArrayList;
 
 import com.testify.ecfeed.generators.api.IConstraint;
 
@@ -299,7 +299,7 @@ public class MethodNode extends GenericNode {
 			fCategories.add(index, newCategory);
 			fExpectedValueCategories.add(newCategory);
 			for(TestCaseNode testCase : fTestCases){
-				testCase.replaceValue(index, newCategory.getDefaultValuePartition().getCopy());
+				testCase.replaceValue(index, newCategory.getDefaultValuePartition().getStandaloneCopy());
 			}
 		}
 	}
@@ -346,4 +346,39 @@ public class MethodNode extends GenericNode {
 		fCategories.add(category);
 		category.setParent(this);
 	}
+	
+	@Override
+	public MethodNode getCopy(){
+		MethodNode copy = new MethodNode(this.getName());
+
+		for(AbstractCategoryNode category : fCategories){
+			if(category instanceof ExpectedCategoryNode){
+				copy.addCategory((ExpectedCategoryNode)category.getCopy());
+			} else if(category instanceof PartitionedCategoryNode){
+				copy.addCategory((PartitionedCategoryNode)category.getCopy());
+			}
+		}
+		for(TestCaseNode testcase : fTestCases){
+			List<PartitionNode> partitions = new ArrayList<>();
+			for(int i = 0; i < testcase.getTestData().size(); i++){
+				if(copy.getCategories().get(i) instanceof PartitionedCategoryNode){
+					partitions.add((PartitionNode)copy.getCategories().get(i).getChild(testcase.getTestData().get(i).getName()));
+				}
+				else if(copy.getCategories().get(i) instanceof ExpectedCategoryNode){
+					partitions.add(testcase.getTestData().get(i).getCopy());			
+				}
+			}
+			TestCaseNode tcase = new TestCaseNode(testcase.getName(), partitions);
+			copy.addTestCase(tcase);
+		}
+
+		for(ConstraintNode constraint : fConstraints){
+			constraint = constraint.getCopy();
+			copy.addConstraint(constraint);
+			constraint.updateReferences();
+		}
+		copy.setParent(this.getParent());
+		return copy;
+	}
 }
+

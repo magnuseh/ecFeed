@@ -14,9 +14,10 @@ package com.testify.ecfeed.model.constraint;
 import java.util.List;
 
 import com.testify.ecfeed.model.AbstractCategoryNode;
+import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 
-public abstract class BasicStatement implements IStatement {
+public abstract class BasicStatement implements IStatement, com.testify.ecfeed.model.ICopyable {
 	BasicStatement fParent = null;
 	private static int fLastId = 0;
 	private final int fId;
@@ -93,4 +94,10 @@ public abstract class BasicStatement implements IStatement {
 	public boolean adapt(List<PartitionNode> values){
 		return false;
 	}
+	
+	public abstract BasicStatement getCopy();
+	
+	public void updateReferences(MethodNode method){
+	};
+
 }

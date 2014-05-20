@@ -14,6 +14,7 @@ package com.testify.ecfeed.model.constraint;
 import java.util.List;
 
 import com.testify.ecfeed.model.AbstractCategoryNode;
+import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.PartitionedCategoryNode;
 
@@ -190,6 +191,29 @@ public class PartitionedCategoryStatement extends BasicStatement implements IRel
 	@Override
 	public Relation[] getAvailableRelations() {
 		return new Relation[]{Relation.EQUAL, Relation.NOT};
+	}
+	
+	public PartitionedCategoryStatement getCopy(){
+		if(fCondition instanceof LabelCondition){
+			return new PartitionedCategoryStatement(fCategory, fRelation, fCondition.toString());
+		} else if(fCondition instanceof PartitionCondition){
+			PartitionNode partition = (PartitionNode)fCondition.getCondition();
+			return new PartitionedCategoryStatement(fCategory, fRelation, partition);
+		}
+		else return null;
+	}
+	
+	@Override
+	public void updateReferences(MethodNode method){
+		PartitionedCategoryNode category = method.getPartitionedCategory(fCategory.getName());
+		if(category != null && category.getType().equals(fCategory.getType())){
+			PartitionNode partition = (PartitionNode)fCondition.getCondition();
+			PartitionNode newpartition = category.getPartition(partition.getName());
+			if(newpartition != null){
+				fCondition = new PartitionCondition(newpartition);
+			}
+			fCategory = category;
+		}
 	}
 
 }

@@ -84,4 +84,13 @@ public class ClassNode extends GenericNode {
 		int lastDotIndex = qualifiedName.lastIndexOf('.');
 		return (lastDotIndex == -1)?qualifiedName: qualifiedName.substring(lastDotIndex + 1);
 	}
+	
+	public ClassNode getCopy(){
+		ClassNode classnode = new ClassNode(this.getQualifiedName());
+		for(MethodNode method: fMethods){
+			classnode.addMethod(method.getCopy());
+		}
+		classnode.setParent(this.getParent());
+		return classnode;
+	}
 }

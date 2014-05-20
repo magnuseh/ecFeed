@@ -13,7 +13,7 @@ package com.testify.ecfeed.model;
 
 import java.util.List;
 
-public interface IGenericNode {
+public interface IGenericNode extends ICopyable {
 	
 	public boolean hasChildren();
 	public List<? extends IGenericNode> getChildren();
@@ -37,4 +37,6 @@ public interface IGenericNode {
 	public String getName();
 	public void setName(String newName);
 	public int subtreeSize();
+	
+	public IGenericNode getCopy();
 }

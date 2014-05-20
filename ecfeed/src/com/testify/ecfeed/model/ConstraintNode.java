@@ -15,7 +15,7 @@ import java.util.List;
 
 import com.testify.ecfeed.model.constraint.Constraint;
 
-public class ConstraintNode extends GenericNode{
+public class ConstraintNode extends GenericNode implements IUpdateable{
 
 	private Constraint fConstraint;
 
@@ -56,5 +56,14 @@ public class ConstraintNode extends GenericNode{
 	@Override
 	public String toString(){
 		return getName() + ": " + getConstraint().toString();
+	}
+	@Override
+	public ConstraintNode getCopy(){
+		return new ConstraintNode(this.getName(), fConstraint.getCopy());
+	}
+	@Override
+	public void updateReferences(){
+		MethodNode method = (MethodNode)this.getParent();
+		fConstraint.updateReferences(method);
 	}
 }

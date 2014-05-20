@@ -13,11 +13,12 @@ package com.testify.ecfeed.model.constraint;
 
 import java.util.List;
 
-import com.testify.ecfeed.model.AbstractCategoryNode;
-import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.generators.api.IConstraint;
+import com.testify.ecfeed.model.AbstractCategoryNode;
+import com.testify.ecfeed.model.MethodNode;
+import com.testify.ecfeed.model.PartitionNode;
 
-public class Constraint implements IConstraint<PartitionNode> {
+public class Constraint implements IConstraint<PartitionNode>, com.testify.ecfeed.model.ICopyable {
 	
 	private final int ID;
 	private static int fLastId = 0;
@@ -91,5 +92,15 @@ public class Constraint implements IConstraint<PartitionNode> {
 
 	public boolean mentions(PartitionNode partition) {
 		return fPremise.mentions(partition) || fConsequence.mentions(partition);
+	}
+	
+	@Override
+	public Constraint getCopy(){		
+		return new Constraint(fPremise.getCopy(), fConsequence.getCopy());
+	}	
+	
+	public void updateReferences(MethodNode method){
+		fPremise.updateReferences(method);
+		fConsequence.updateReferences(method);	
 	}
 }

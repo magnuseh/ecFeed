@@ -149,9 +149,20 @@ public class PartitionNode extends GenericNode implements IPartitionedNode{
 		return String.valueOf(fValue);
 	}
 	
-	public PartitionNode getCopy() {
+	public PartitionNode getStandaloneCopy() {
 		PartitionNode copy = new PartitionNode(getName(), fValue);
 		copy.setParent(fPartitionedParent);
+		return copy;
+	}
+	
+	public PartitionNode getCopy(){
+		PartitionNode copy = getStandaloneCopy();
+		for(PartitionNode partition : fPartitions){
+			copy.addPartition(partition.getCopy());
+		}
+		for(String label : fLabels){
+			copy.addLabel(label);
+		}
 		return copy;
 	}
 	
@@ -207,7 +218,7 @@ public class PartitionNode extends GenericNode implements IPartitionedNode{
 	}
 	
 	public Set<String> getAllDescendingLabels() {
-		Set<String> labels = getLabels();
+		Set<String> labels = new LinkedHashSet<>(getLabels());
 		for(PartitionNode p : fPartitions){
 			labels.addAll(p.getAllDescendingLabels());
 		}

@@ -92,4 +92,13 @@ public class PartitionedCategoryNode extends AbstractCategoryNode{
 		}
 		return labels;
 	}
+	
+	public PartitionedCategoryNode getCopy(){
+		PartitionedCategoryNode category = new PartitionedCategoryNode(this.getName(), this.getType());
+		category.setParent(this.getParent());
+		for(PartitionNode partition : fPartitions){
+			category.addPartition(partition.getCopy());
+		}
+		return category;
+	}
 }
