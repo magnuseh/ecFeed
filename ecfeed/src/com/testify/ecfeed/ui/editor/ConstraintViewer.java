@@ -80,6 +80,7 @@ public class ConstraintViewer extends TreeViewerSection {
 	private ControlMenuListener fConditionSelectionListener;
 	private Text fConditionText;
 	private ControlMenuListener fConditionBoolMenuListener;
+	private StatementSelectionListener fStatementChangeListener;
 	
 	private Button fAddStatementButton;
 	private Button fRemoveStatementButton;
@@ -223,7 +224,8 @@ public class ConstraintViewer extends TreeViewerSection {
 		fAddStatementButton = addButton("Add statement", new AddStatementAdapter());
 		fRemoveStatementButton = addButton("Remove statement", new RemoveStatementAdapter());
 		createStatementEditComposite();
-		getViewer().addSelectionChangedListener(new StatementSelectionListener());
+		fStatementChangeListener = new StatementSelectionListener();
+		getViewer().addSelectionChangedListener(fStatementChangeListener);
 	}
 
 	public void conditionButtonModified(String value, int index){
@@ -358,6 +360,15 @@ public class ConstraintViewer extends TreeViewerSection {
 		fConditionButton = new Button(conditionComposite, SWT.PUSH);
 		fConditionButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 		fConditionSelectionListener = new ControlMenuListener(conditionComposite, fConditionButton){
+			@Override
+			public void handleEvent(Event e){
+				// refresh menu in case of model changes affecting menu items
+				if(fSelectedStatement instanceof PartitionedCategoryStatement){
+					fStatementChangeListener.refreshConditionComposite((PartitionedCategoryStatement)fSelectedStatement);
+				}
+				super.handleEvent(e);
+			}
+			
 			@Override
 			public void menuItemSelected(int index, SelectionEvent e){
 				MenuItem item = (MenuItem)e.getSource();
