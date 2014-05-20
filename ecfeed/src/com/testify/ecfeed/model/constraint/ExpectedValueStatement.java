@@ -79,10 +79,12 @@ public class ExpectedValueStatement extends BasicStatement implements IRelationa
 	}
 	
 	@Override
-	public void updateReferences(MethodNode method){
+	public boolean updateReferences(MethodNode method){
 		ExpectedCategoryNode category = method.getExpectedCategory(fCategory.getName());
 		if(category != null && category.getType().equals(fCategory.getType())){
-			fCategory = category;			
+			fCategory = category;
+			return true;
 		}
+		return false;
 	}
 }

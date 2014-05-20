@@ -14,12 +14,11 @@ import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
 
 public class MenuPasteOperation extends MenuOperation{
-	private IGenericNode fSource;
-	private IGenericNode fTarget;
-	private ModelMasterSection fModel;
-	private final String DIALOG_OPERATION_FAILED_TITLE = "Paste failed";
-	private final String DIALOG_TESTCASE_CATEGORY_MESSAGE = "Categories type and order must match!";
-	private final String DIALOG_TESTCASE_PARTITION_MESSAGE = "Partitions must match!";
+	protected IGenericNode fSource;
+	protected IGenericNode fTarget;
+	protected ModelMasterSection fModel;
+	protected final String DIALOG_OPERATION_FAILED_TITLE = "Paste failed";
+	protected final String DIALOG_OPERATION_FAILED_MESSAGE = "Clipboard content doesn't match here.";
 
 	public MenuPasteOperation(String name, IGenericNode target, IGenericNode source, ModelMasterSection model){
 		super(name);
@@ -30,13 +29,17 @@ public class MenuPasteOperation extends MenuOperation{
 
 	@Override
 	public void operate(){
-		createPastable(true);
+		if(createPastable(true) == null){
+			MessageDialog.openInformation(Display.getCurrent().getActiveShell(), DIALOG_OPERATION_FAILED_TITLE,
+					DIALOG_OPERATION_FAILED_MESSAGE);
+		}
 	}
-
-	/* since we must do all the checks again while checking if operation is possible and then again while pasting
-	 * I think it is worth sacrificing dozen of miliseconds per menu selection for the sake of code quality.
+	/*
+	 * since we must do all the checks again while checking if operation is
+	 * possible and then again while pasting I think it is worth sacrificing
+	 * dozen of miliseconds per menu selection for the sake of code quality. the
+	 * function
 	 */
-	
 	public Object createPastable(boolean paste){
 		Object pastable = null;
 
@@ -49,9 +52,10 @@ public class MenuPasteOperation extends MenuOperation{
 						while(target.getPartition(source.getName()) != null){
 							source.setName(source.getName() + "1");
 						}
-						if(!paste)
-							return source;
-						target.addPartition(source);
+						pastable = source;
+						if(paste){
+							target.addPartition(source);
+						}
 					}
 				}
 			} else if(fTarget instanceof PartitionedCategoryNode){
@@ -62,9 +66,10 @@ public class MenuPasteOperation extends MenuOperation{
 						while(target.getPartitionNames().contains(source.getName())){
 							source.setName(source.getName() + "1");
 						}
-						if(!paste)
-							return source;
-						target.addPartition(source);
+						pastable = source;
+						if(paste){
+							target.addPartition(source);
+						}
 					}
 				}
 			} else if(fTarget instanceof MethodNode){
@@ -74,40 +79,44 @@ public class MenuPasteOperation extends MenuOperation{
 					while(target.getCategoriesNames().contains(source.getName())){
 						source.setName(source.getName() + "1");
 					}
-					if(!paste)
-						return source;
-					target.addCategory(source);
+					pastable = source;
+					if(paste){
+						target.addCategory(source);
+					}
 				} else if(fSource instanceof ExpectedCategoryNode){
 					ExpectedCategoryNode source = (ExpectedCategoryNode)fSource;
 					while(target.getCategoriesNames().contains(source.getName())){
 						source.setName(source.getName() + "1");
 					}
-					if(!paste)
-						return source;
-					target.addCategory(source);
+					pastable = source;
+					if(paste){
+						target.addCategory(source);
+					}
 				} else if(fSource instanceof ConstraintNode){
-
+					ConstraintNode source = (ConstraintNode)fSource;
+				    target.addConstraint(source);
+				    if(!source.updateReferences()){
+				    	target.removeConstraint(source);
+				    	return null;
+				    }
+				    if(!paste){
+				    	target.removeConstraint(source);
+				    	return source;
+				    }
+					pastable = source;
 				}
-				// add checking if adaptation is possible
 				else if(fSource instanceof TestCaseNode){
 					TestCaseNode source = (TestCaseNode)fSource.getCopy();
-					// Testcase copies have references to original partitions, which shouldn't be.
-					// We got fOriginalNode in clipboard to get details about node, test case should get updateReferences then.
-					if(source.getTestData().size() != target.getCategories().size()){
-						if(!paste){
-							return null;
-						}
-						MessageDialog.openInformation(Display.getCurrent().getActiveShell(), DIALOG_OPERATION_FAILED_TITLE, DIALOG_TESTCASE_CATEGORY_MESSAGE);
-					} else {
-						for(int i = 0; i < source.getTestData().size(); i++){
-							System.out.println(source.getTestData().get(i).getCategory().getType());
-						}
-							
-					}
-										
-					if(!paste)
-						return source;
 					target.addTestCase(source);
+					if(!source.updateReferences()){
+						target.removeTestCase(source);
+						return null;
+					}
+					if(!paste){
+						target.removeTestCase(source);
+						return source;
+					}
+					pastable = source;
 				}
 
 			} else if(fTarget instanceof ClassNode){
@@ -117,9 +126,10 @@ public class MenuPasteOperation extends MenuOperation{
 					while(target.getMethod(source.getName(), source.getCategoriesTypes()) != null){
 						source.setName(source.getName() + "1");
 					}
-					if(!paste)
-						return source;
-					target.addMethod(source);
+					pastable = source;
+					if(paste){
+						target.addMethod(source);
+					}
 				}
 			} else if(fTarget instanceof RootNode){
 				RootNode target = (RootNode)fTarget;
@@ -128,9 +138,10 @@ public class MenuPasteOperation extends MenuOperation{
 					while(target.getClassModel(source.getName()) != null){
 						source.setName(source.getName() + "1");
 					}
-					if(!paste)
-						return source;
-					target.addClass(source);
+					pastable = source;
+					if(paste){
+						target.addClass(source);
+					}
 				}
 			}
 		}

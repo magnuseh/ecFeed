@@ -99,8 +99,8 @@ public class Constraint implements IConstraint<PartitionNode>, com.testify.ecfee
 		return new Constraint(fPremise.getCopy(), fConsequence.getCopy());
 	}	
 	
-	public void updateReferences(MethodNode method){
-		fPremise.updateReferences(method);
-		fConsequence.updateReferences(method);	
+	public boolean updateReferences(MethodNode method){
+		return(fPremise.updateReferences(method) &&
+		fConsequence.updateReferences(method));
 	}
 }

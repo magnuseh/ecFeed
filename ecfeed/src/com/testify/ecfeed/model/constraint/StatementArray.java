@@ -121,9 +121,10 @@ public class StatementArray extends BasicStatement{
 		return copy;
 	}
 	@Override
-	public void updateReferences(MethodNode method){
+	public boolean updateReferences(MethodNode method){
 		for(BasicStatement statement: fStatements){
-			statement.updateReferences(method);
+			if(!statement.updateReferences(method)) return false;
 		}
+		return true;
 	}
 }

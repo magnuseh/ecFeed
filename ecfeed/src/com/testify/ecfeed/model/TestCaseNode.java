@@ -14,7 +14,7 @@ package com.testify.ecfeed.model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TestCaseNode extends GenericNode implements IUpdateable {
+public class TestCaseNode extends GenericNode implements IUpdateableReferences {
 	List<PartitionNode> fTestData;
 	
 	public TestCaseNode(String name, List<PartitionNode> testData) {
@@ -92,7 +92,37 @@ public class TestCaseNode extends GenericNode implements IUpdateable {
 	}
 
 	@Override
-	public void updateReferences(){
-		//!!! if unable to adapt - what then? Delete self? ???
+	public boolean updateReferences(){
+		if((getMethod() != null && fTestData != null && getMethod().getCategories() != null)
+				&& (fTestData.size() == getMethod().getCategories().size())
+				&& (fTestData.size() != 0 && getMethod().getCategories().size() != 0)){
+			List<AbstractCategoryNode> categories = getMethod().getCategories();
+
+			int i = 0;
+			for(AbstractCategoryNode category : categories){
+				if(getTestData().get(i).getCategory().getType().equals(category.getType())){
+					if(category instanceof ExpectedCategoryNode){
+						i++;
+						continue;
+					}		
+					else if(category.getPartition(getTestData().get(i).getName()) != null){
+						i++;
+						continue;
+					}
+					return false;
+				}
+				return false;
+			}
+			// passed, now replace partitions;
+			i = 0;
+			for(AbstractCategoryNode category : categories){
+				if(!(category instanceof ExpectedCategoryNode)){
+					getTestData().set(i, category.getPartition(getTestData().get(i).getName()));
+				}
+				i++;
+			}
+			return true;
+		} else
+			return false;
 	}
 }

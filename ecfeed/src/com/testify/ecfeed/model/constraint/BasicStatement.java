@@ -97,7 +97,8 @@ public abstract class BasicStatement implements IStatement, com.testify.ecfeed.m
 	
 	public abstract BasicStatement getCopy();
 	
-	public void updateReferences(MethodNode method){
+	public boolean updateReferences(MethodNode method){
+		return true;
 	};
 
 }

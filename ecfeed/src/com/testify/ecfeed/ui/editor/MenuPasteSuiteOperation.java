@@ -6,16 +6,10 @@ import com.testify.ecfeed.model.IGenericNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.TestCaseNode;
 
-public class MenuPasteSuiteOperation extends MenuOperation{
-	private IGenericNode fSource;
-	private IGenericNode fTarget;
-	private ModelMasterSection fModel;
+public class MenuPasteSuiteOperation extends MenuPasteOperation{
 
 	public MenuPasteSuiteOperation(String name, IGenericNode target, IGenericNode source, ModelMasterSection model){
-		super(name);
-		fTarget = target;
-		fSource = source;
-		fModel = model;
+		super(name, target, source, model);
 	}
 
 	@Override
@@ -26,7 +20,9 @@ public class MenuPasteSuiteOperation extends MenuOperation{
 				MethodNode targetmethod = (MethodNode)fTarget;
 				Collection<TestCaseNode> testsuite = tcase.getMethod().getTestCases(tcase.getName());
 				for(TestCaseNode tcnode : testsuite){
-					targetmethod.addTestCase(tcnode.getCopy());
+					TestCaseNode copy = tcnode.getCopy();
+					targetmethod.addTestCase(copy);
+					copy.updateReferences();
 				}
 			}
 			fModel.markDirty();
@@ -36,12 +32,15 @@ public class MenuPasteSuiteOperation extends MenuOperation{
 
 	@Override
 	public boolean isEnabled(){
-		if(fSource != null && fTarget != null){
-			if(fTarget instanceof MethodNode){
-				// add checking if adaptation is possible AND ask about TestSUITE node...
-				if(fSource instanceof TestCaseNode){
-					return true;
+		if(fSource != null && fTarget != null && fTarget instanceof MethodNode && fSource instanceof TestCaseNode){
+			TestCaseNode tcase = (TestCaseNode)fSource;
+			if(tcase.getMethod() != null){
+				Collection<TestCaseNode> testsuite = tcase.getMethod().getTestCases(tcase.getName());
+				for(TestCaseNode tcnode : testsuite){
+					fSource = tcnode;
+					if(!super.isEnabled()) return false;
 				}
+				return true;
 			}
 		}
 		return false;

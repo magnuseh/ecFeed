@@ -204,16 +204,18 @@ public class PartitionedCategoryStatement extends BasicStatement implements IRel
 	}
 	
 	@Override
-	public void updateReferences(MethodNode method){
+	public boolean updateReferences(MethodNode method){
 		PartitionedCategoryNode category = method.getPartitionedCategory(fCategory.getName());
 		if(category != null && category.getType().equals(fCategory.getType())){
 			PartitionNode partition = (PartitionNode)fCondition.getCondition();
 			PartitionNode newpartition = category.getPartition(partition.getName());
 			if(newpartition != null){
 				fCondition = new PartitionCondition(newpartition);
+				fCategory = category;
+				return true;
 			}
-			fCategory = category;
 		}
+		return false;
 	}
 
 }
