@@ -57,10 +57,12 @@ public class ConstraintNode extends GenericNode implements IUpdateableReferences
 	public String toString(){
 		return getName() + ": " + getConstraint().toString();
 	}
+	
 	@Override
 	public ConstraintNode getCopy(){
 		return new ConstraintNode(this.getName(), fConstraint.getCopy());
 	}
+	
 	@Override
 	public boolean updateReferences(){
 		MethodNode method = (MethodNode)this.getParent();

@@ -14,7 +14,7 @@ public class ExpectedValueStatement extends BasicStatement implements IRelationa
 	
 	public ExpectedValueStatement(ExpectedCategoryNode category, PartitionNode condition) {
 		fCategory = category;
-		fCondition = condition.getStandaloneCopy();
+		fCondition = condition.getTopPartitionCopy();
 	}
 	
 	@Override
@@ -41,7 +41,7 @@ public class ExpectedValueStatement extends BasicStatement implements IRelationa
 		if(values == null) return true;
 		if(fCategory.getMethod() != null){
 			int index = fCategory.getMethod().getCategories().indexOf(fCategory);
-			values.set(index, fCondition.getStandaloneCopy());
+			values.set(index, fCondition.getTopPartitionCopy());
 		}
 		return true;
 	}
@@ -73,7 +73,7 @@ public class ExpectedValueStatement extends BasicStatement implements IRelationa
 	}
 
 	public ExpectedValueStatement getCopy(){
-		ExpectedValueStatement statement = new ExpectedValueStatement(fCategory, fCondition.getStandaloneCopy());
+		ExpectedValueStatement statement = new ExpectedValueStatement(fCategory, fCondition.getTopPartitionCopy());
 		statement.setRelation(this.getRelation());
 		return statement;
 	}

@@ -11,13 +11,13 @@
 
 package com.testify.ecfeed.model;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.ArrayList;
 
 import com.testify.ecfeed.generators.api.IConstraint;
 
@@ -112,8 +112,8 @@ public class MethodNode extends GenericNode {
 	}
 	
 	public void addTestCase(TestCaseNode testCase){
-		testCase.setParent(this);
 		fTestCases.add(testCase);
+		testCase.setParent(this);
 	}
 	
 	public ClassNode getClassNode() {
@@ -299,7 +299,7 @@ public class MethodNode extends GenericNode {
 			fCategories.add(index, newCategory);
 			fExpectedValueCategories.add(newCategory);
 			for(TestCaseNode testCase : fTestCases){
-				testCase.replaceValue(index, newCategory.getDefaultValuePartition().getStandaloneCopy());
+				testCase.replaceValue(index, newCategory.getDefaultValuePartition().getTopPartitionCopy());
 			}
 		}
 	}

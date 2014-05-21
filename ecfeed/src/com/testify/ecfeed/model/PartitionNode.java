@@ -149,14 +149,15 @@ public class PartitionNode extends GenericNode implements IPartitionedNode{
 		return String.valueOf(fValue);
 	}
 	
-	public PartitionNode getStandaloneCopy() {
+	public PartitionNode getTopPartitionCopy() {
 		PartitionNode copy = new PartitionNode(getName(), fValue);
 		copy.setParent(fPartitionedParent);
 		return copy;
 	}
 	
+	@Override
 	public PartitionNode getCopy(){
-		PartitionNode copy = getStandaloneCopy();
+		PartitionNode copy = getTopPartitionCopy();
 		for(PartitionNode partition : fPartitions){
 			copy.addPartition(partition.getCopy());
 		}

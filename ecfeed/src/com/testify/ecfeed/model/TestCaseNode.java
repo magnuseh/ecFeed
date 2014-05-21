@@ -83,6 +83,7 @@ public class TestCaseNode extends GenericNode implements IUpdateableReferences {
 		return result;
 	}
 	
+	@Override
 	public TestCaseNode getCopy(){
 		List<PartitionNode> testdata = new ArrayList<>();
 		for(PartitionNode partition: fTestData){

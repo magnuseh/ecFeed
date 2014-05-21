@@ -93,6 +93,7 @@ public class PartitionedCategoryNode extends AbstractCategoryNode{
 		return labels;
 	}
 	
+	@Override
 	public PartitionedCategoryNode getCopy(){
 		PartitionedCategoryNode category = new PartitionedCategoryNode(this.getName(), this.getType());
 		category.setParent(this.getParent());

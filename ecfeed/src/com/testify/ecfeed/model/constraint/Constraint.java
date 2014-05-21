@@ -13,10 +13,10 @@ package com.testify.ecfeed.model.constraint;
 
 import java.util.List;
 
-import com.testify.ecfeed.generators.api.IConstraint;
 import com.testify.ecfeed.model.AbstractCategoryNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.generators.api.IConstraint;
 
 public class Constraint implements IConstraint<PartitionNode>, com.testify.ecfeed.model.ICopyable {
 	

@@ -85,7 +85,7 @@ public class ExpectedCategoryNode extends AbstractCategoryNode{
 	}
 	
 	public ExpectedCategoryNode getCopy(){
-		ExpectedCategoryNode category = new ExpectedCategoryNode(this.getName(), this.getType(),  fDefaultValue.getStandaloneCopy().getValue());
+		ExpectedCategoryNode category = new ExpectedCategoryNode(this.getName(), this.getType(),  fDefaultValue.getTopPartitionCopy().getValue());
 		category.setParent(this.getParent());
 		return category;
 	}

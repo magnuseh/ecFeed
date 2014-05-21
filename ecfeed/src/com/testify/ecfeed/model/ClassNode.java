@@ -85,6 +85,7 @@ public class ClassNode extends GenericNode {
 		return (lastDotIndex == -1)?qualifiedName: qualifiedName.substring(lastDotIndex + 1);
 	}
 	
+	@Override
 	public ClassNode getCopy(){
 		ClassNode classnode = new ClassNode(this.getQualifiedName());
 		for(MethodNode method: fMethods){

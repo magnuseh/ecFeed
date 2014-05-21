@@ -154,12 +154,9 @@ public class GenericNode implements IGenericNode{
 		return true;
 	}
 
+	@Override
 	public GenericNode getCopy(){
 		return new GenericNode(this.getName());
-	}
-	
-	public GenericNode getCopy(Object pasteTarget){
-		return getCopy();
 	}
 		
 }
