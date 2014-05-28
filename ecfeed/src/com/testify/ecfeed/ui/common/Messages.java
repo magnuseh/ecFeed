@@ -117,4 +117,26 @@ public class Messages {
 	}
 	public static final String DIALOG_EXECUTE_ONLINE_TITLE = "Execute online test";
 	public static final String DIALOG_EXECUTE_ONLINE_MESSAGE = "Setup the test data generator and select which constraints and partitions shall be considered for generating test cases";
+	public static final String DIALOG_TEST_CLASS_NAME_ERROR_MESSAGE = "Name of a test class must be between 1 and 64 characters long.";
+	public static final String DIALOG_RENAME_IMPLEMENTED_CLASS_MESSAGE = "You are about to rename implemented class. Continue?";
+	public static final String DIALOG_METHOD_EXISTS_TITLE = "Method exists";
+	public static final String DIALOG_METHOD_EXISTS_MESSAGE = "Entered method is already contained in the class.";
+	public static final String DIALOG_METHOD_INVALID_NAME_TITLE = "Invalid method name";
+	public static final String DIALOG_METHOD_INVALID_NAME_MESSAGE = "Entered method name is not valid.";
+	public static final String DIALOG_REMOVE_PARAMETERS_TITLE = "Remove parameters";
+	public static final String DIALOG_REMOVE_PARAMETERS_MESSAGE = "This operation will remove selected parameters from the method.";
+	public static final String DIALOG_CATEGORY_EXISTS_TITLE = "Category exists";
+	public static final String DIALOG_CATEGORY_EXISTS_MESSAGE = "Entered category is already contained in the method.";
+	public static final String DIALOG_CLASS_NAME_PROBLEM_TITLE = "Wrong class qualified name";
+	public static final String DIALOG_CLASS_NAME_PROBLEM_MESSAGE = "Class qualified name must contain between 1 and 64 characters " +
+			"may not contain only white characters and must contain package name, followed by \".\", followed by class name.";
+	public static final String DIALOG_METHOD_NAME_PROBLEM_TITLE = "Wrong method name";
+	public static final String DIALOG_METHOD_NAME_PROBLEM_MESSAGE = "Method name must contain between 1 and 64 characters " +
+			"and may not contain only white characters.";
+	public static final String DIALOG_PARAMETER_NAME_PROBLEM_TITLE = "Wrong parameter name";
+	public static final String DIALOG_PARAMETER_NAME_PROBLEM_MESSAGE = "Parameter name must contain between 1 and 64 characters " +
+			"and may not contain only white characters.";
+	public static final String DIALOG_PARAMETER_TYPE_PROBLEM_TITLE = "Wrong parameter type name";
+	public static final String DIALOG_PARAMETER_TYPE_PROBLEM_MESSAGE = "Parameter type name must contain between 1 and 64 characters " +
+			"and may not contain only white characters.";
 }

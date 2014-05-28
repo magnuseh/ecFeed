@@ -14,7 +14,7 @@ package com.testify.ecfeed.model.constraint;
 import java.io.IOException;
 import java.util.List;
 
-import com.testify.ecfeed.model.AbstractCategoryNode;
+import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.IModelConverter;
 import com.testify.ecfeed.model.IModelSerializer;
 import com.testify.ecfeed.model.PartitionNode;
@@ -75,7 +75,7 @@ public abstract class BasicStatement implements IStatement {
 		return false;
 	}
 
-	public boolean mentions(AbstractCategoryNode category) {
+	public boolean mentions(CategoryNode category) {
 		return false;
 	}
 

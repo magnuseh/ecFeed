@@ -14,7 +14,7 @@ package com.testify.ecfeed.ui.editor;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.viewers.ColumnLabelProvider;
+import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.ui.forms.widgets.FormToolkit;
@@ -30,8 +30,9 @@ public class ClassViewer extends CheckboxTableViewerSection {
 	private static final int STYLE = Section.EXPANDED | Section.TITLE_BAR;
 
 	private RootNode fModel;
+	private TableViewerColumn nameColumn;
 
-	private class AddClassAdapter extends SelectionAdapter {
+	private class AddImplementedClassAdapter extends SelectionAdapter {
 
 		@Override
 		public void widgetSelected(SelectionEvent e) {
@@ -87,30 +88,56 @@ public class ClassViewer extends CheckboxTableViewerSection {
 			}
 		}
 	}
+	
+	private class AddNewClassAdapter extends SelectionAdapter {
+		@Override
+		public void widgetSelected(SelectionEvent e) {
+			String startName = "NewPackage.NewClass";
+			String name = startName;
+			int i = 1;
+
+			while (true) {
+				if (fModel.getClassModel(name) == null) {
+					break;
+				}
+				name = startName + i;
+				++i;
+			}
+
+			ClassNode classNode = new ClassNode(name);
+			fModel.addClass(classNode);
+			modelUpdated();
+			selectElement(classNode);
+			nameColumn.getViewer().editElement(classNode, 0);
+		}
+	}
 
 	public ClassViewer(BasicDetailsPage parent, FormToolkit toolkit) {
 		super(parent.getMainComposite(), toolkit, STYLE, parent);
 		
 		setText("Classes");
-		addButton("Add test class..", new AddClassAdapter());
+		addButton("Add implemented class", new AddImplementedClassAdapter());
+		addButton("New test class", new AddNewClassAdapter());
 		addButton("Remove selected", new RemoveClassesAdapter());
 		addDoubleClickListener(new SelectNodeDoubleClickListener(parent.getMasterSection()));
 	}
 	
 	@Override
 	protected void createTableColumns(){
-		addColumn("Class", 150, new ColumnLabelProvider(){
+		nameColumn = addColumn("Class", 150, new ClassViewerColumnLabelProvider(){
 			@Override
 			public String getText(Object element){
 				return ((ClassNode)element).getLocalName();
 			}
 		});
-		addColumn("Qualified name", 150, new ColumnLabelProvider(){
+		nameColumn.setEditingSupport(new ClassNameEditingSupport(this, false));
+		TableViewerColumn qualifiedNameColumn = addColumn("Qualified name", 150, new ClassViewerColumnLabelProvider(){
 			@Override
 			public String getText(Object element){
 				return ((ClassNode)element).getQualifiedName();
 			}
 		});
+		qualifiedNameColumn.setEditingSupport(new ClassNameEditingSupport(this, true));
 	}
 	
 	public void setInput(RootNode model){

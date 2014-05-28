@@ -13,6 +13,7 @@ package com.testify.ecfeed.utils;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -25,11 +26,11 @@ import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.Signature;
 
+import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ClassNode;
-import com.testify.ecfeed.model.ExpectedCategoryNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
-import com.testify.ecfeed.model.PartitionedCategoryNode;
+import com.testify.ecfeed.model.TestCaseNode;
 
 public class ModelUtils {
 	
@@ -165,27 +166,23 @@ public class ModelUtils {
 	private static MethodNode generateMethodModel(IMethod method, Class<?> testClass) throws JavaModelException {
 		MethodNode methodNode = new MethodNode(method.getElementName());
 		for(ILocalVariable parameter : method.getParameters()){
-			if(isExpected(parameter)){
-				methodNode.addCategory(generateExpectedCategoryModel(parameter, getTypeName(parameter, method, testClass)));
-			}
-			else{
-				methodNode.addCategory(generatePartitionedCategoryModel(parameter, getTypeName(parameter, method, testClass)));
-			}
+			methodNode.addCategory(generateCategoryModel(parameter, getTypeName(parameter, method, testClass), isExpected(parameter)));
 		}
 		return methodNode;
 	}
-
-	private static ExpectedCategoryNode generateExpectedCategoryModel(ILocalVariable parameter, String type) {
-		return new ExpectedCategoryNode(parameter.getElementName(), type, getDefaultExpectedValue(type));
-	}
-
-	private static PartitionedCategoryNode generatePartitionedCategoryModel(ILocalVariable parameter, String type) {
-		PartitionedCategoryNode category = new PartitionedCategoryNode(parameter.getElementName(), type);
-		ArrayList<PartitionNode> defaultPartitions = generateDefaultPartitions(type);
-		for(PartitionNode partition : defaultPartitions){
-			category.addPartition(partition);
+	
+	private static CategoryNode generateCategoryModel(ILocalVariable parameter, String type, boolean expected){
+		CategoryNode category = new CategoryNode(parameter.getElementName(), type, expected);
+		if(expected){
+			category.setDefaultValue(getDefaultExpectedValue(type));
+			return category;
+		} else{
+			ArrayList<PartitionNode> defaultPartitions = generateDefaultPartitions(type);
+			for(PartitionNode partition : defaultPartitions){
+				category.addPartition(partition);
+			}
+			return category;
 		}
-		return category;
 	}
 
 	private static boolean isExpected(ILocalVariable parameter) throws JavaModelException {
@@ -260,7 +257,7 @@ public class ModelUtils {
 		}
 	}
 
-	private static ArrayList<PartitionNode> generateDefaultPartitions(String typeSignature) {
+	public static ArrayList<PartitionNode> generateDefaultPartitions(String typeSignature) {
 		switch(typeSignature){
 		case "boolean":
 			return defaultBooleanPartitions();
@@ -381,6 +378,36 @@ public class ModelUtils {
 		return true;
 	}
 	
+	public static boolean validateNodeName(String name){
+		if(name.length() < 1) return false;
+		if(!name.matches("(^[a-zA-Z][a-zA-Z0-9_$]*)|(^[_][a-zA-Z0-9_$]+)")) return false;
+		return assertNotKeyword(name);
+	}
+	
+	public static boolean assertNotKeyword(String name){
+		String[] javaKeywords =
+				{ "abstract", "continue", "for", "new", "switch", "assert", "default", "goto", "package", "synchronized", "boolean", "do",
+						"if", "private", "this", "break", "double", "implements", "protected", "throw", "byte", "else", "import", "public",
+						"throws", "case", "enum", "instanceof", "return", "transient", "catch", "extends", "int", "short", "try", "char",
+						"final", "interface", "static", "void", "class", "finally", "long", "strictfp", "volatile", "const", "float",
+						"native", "super", "while", "null", "true", "false" };
+		for(String keyword : javaKeywords){
+			if(name.equals(keyword)) return false;
+		}
+		return true;
+	}
+
+	public static boolean isClassQualifiedNameValid(String qualifiedName) {
+		int lastDotIndex = qualifiedName.lastIndexOf('.');
+		boolean valid = (lastDotIndex != -1) ? true : false;
+		if (valid) {
+			String packageName = qualifiedName.substring(0, lastDotIndex);
+			String className = qualifiedName.substring(lastDotIndex + 1, qualifiedName.length());
+			valid = ModelUtils.validateNodeName(packageName) && ModelUtils.validateNodeName(className);
+		}
+		return valid;
+	}
+
 	public static boolean validatePartitionStringValue(String valueString, String type){
 		if(type.equals(com.testify.ecfeed.model.Constants.TYPE_NAME_STRING)) return true;
 		return (getPartitionValueFromString(valueString, type) != null);
@@ -415,4 +442,203 @@ public class ModelUtils {
 			return null;
 		}
 	}
+
+	public static boolean classDefinitionImplemented(ClassNode node) {
+		boolean implemented = false;
+		try {
+			Class<?> typeClass = ClassUtils.getClassLoader(true, null).loadClass(node.getQualifiedName());
+			if (typeClass != null) {
+				implemented = true;
+			}
+		} catch (Throwable e) {
+		}
+		return implemented;
+	}
+
+	public static boolean classMethodsImplemented(ClassNode node) {
+		boolean implemented = true;
+
+		for (MethodNode method : node.getMethods()) {
+			if (!isMethodImplemented(method)) {
+				implemented = false;
+				break;
+			}
+		}
+
+		return implemented;
+	}
+
+	public static boolean isClassImplemented(ClassNode node) {
+		return classDefinitionImplemented(node) && classMethodsImplemented(node);
+	}
+
+	public static boolean isClassPartiallyImplemented(ClassNode node) {
+		return classDefinitionImplemented(node) && !classMethodsImplemented(node);
+	}
+
+	public static boolean isPartitionImplemented(PartitionNode node) {
+		boolean implemented = true;
+		
+		Object value = node.getValue();
+		if (value != null) {
+			if (value.getClass().isEnum()) {
+				ClassLoader loader = ClassUtils.getClassLoader(true, null);
+				if (ClassUtils.enumPartitionValue(((Enum<?>)value).name(), value.getClass().getName(), loader) == null) {
+					implemented = false;
+				}
+			}
+		} else if (!node.getCategory().getType().equals("String")) {
+			implemented = false;
+		}
+
+		return implemented;
+	}
+	
+	public static boolean isTestCaseImplemented(TestCaseNode node) {
+		return allPartitionsImplemented(node.getTestData());
+	}
+	
+	public static boolean isTestCasePartiallyImplemented(TestCaseNode node) {
+		return anyPartitionImplemented(node.getTestData());
+	}
+
+	public static boolean isTestSuiteImplemented(MethodNode methodNode, String suiteName) {
+		Collection<TestCaseNode> testSuite = methodNode.getTestCases(suiteName);
+		boolean implemented = (testSuite.size() > 0) ? true : false;
+
+		for (TestCaseNode testCase : testSuite) {
+			implemented = ModelUtils.isTestCaseImplemented(testCase);
+			if (implemented == false) {
+				break;
+			}
+		}
+
+		return implemented;
+	}
+
+	private static boolean allPartitionsImplemented(List<PartitionNode> partitions) {
+		boolean implemented = (partitions.size() > 0) ? true : false;
+
+		for (PartitionNode partition : partitions) {
+			implemented = isPartitionImplemented(partition);
+			if (implemented == false) {
+				break;
+			}
+		}
+		
+		return implemented;		
+	}
+	
+	private static boolean anyPartitionImplemented(List<PartitionNode> partitions) {
+		boolean implemented = false;
+		
+		for (PartitionNode partition : partitions) {
+			implemented = isPartitionImplemented(partition);
+			if (implemented == true) {
+				break;
+			}
+		}
+		
+		return implemented;		
+	}
+	
+	public static boolean isCategoryImplemented(CategoryNode node) {
+		if(node.isExpected()){
+			return ModelUtils.isPartitionImplemented(node.getDefaultValuePartition());
+		}
+		else{
+			return allPartitionsImplemented(node.getPartitions());
+		}
+	}
+	
+	public static boolean isCategoryPartiallyImplemented(CategoryNode node) {
+		return anyPartitionImplemented(node.getPartitions());
+	}
+
+	public static boolean methodDefinitionImplemented(MethodNode methodModel) {
+		boolean implemented = false;
+		
+		try {
+			IType type = getTypeObject(methodModel.getClassNode().getQualifiedName());
+			Class<?> testClass = ClassUtils.getClassLoader(true, null).loadClass(methodModel.getClassNode().getQualifiedName());
+			if ((type != null) && (testClass != null)) {
+				for (IMethod method : type.getMethods()){
+					if (method.getElementName().equals(methodModel.getName())) {
+						List<String> argTypes = getArgTypes(method, testClass);
+						List<String> paramNames = getParamNames(method);
+						if (methodModel.getCategoriesTypes().equals(argTypes) &&
+								methodModel.getCategoriesNames().equals(paramNames)) {
+							implemented = true;
+							
+							List<CategoryNode> categories = methodModel.getCategories();
+							for (int i = 0; i < categories.size(); ++i) {
+								if (categories.get(i).isExpected()) {
+									ILocalVariable parameter = method.getParameters()[i];
+									IAnnotation[] annotations = parameter.getAnnotations();
+									if ((annotations.length < 1) || !annotations[0].getElementName().equals("expected")) {
+										implemented = false;
+										break;
+									}
+								}
+							}
+							break;
+						}
+					}
+				}
+			}
+		} catch (Throwable e) {
+		}
+		
+		return implemented;
+	}
+
+	public static boolean methodCategoriesImplemented(MethodNode methodModel) {
+		boolean implemented = true;
+
+		for (CategoryNode category : methodModel.getCategories()) {
+			if (!isCategoryImplemented(category)) {
+				implemented = false;
+				break;
+			}
+		}
+
+		return implemented;
+	}
+
+	public static boolean isMethodImplemented(MethodNode methodModel) {
+		return methodDefinitionImplemented(methodModel) && methodCategoriesImplemented(methodModel);
+	}
+
+	public static boolean isMethodPartiallyImplemented(MethodNode methodModel) {
+		return methodDefinitionImplemented(methodModel) && !methodCategoriesImplemented(methodModel);
+	}
+
+	private static List<String> getArgTypes(IMethod method, Class<?> testClass) {
+		List<String> argTypes = new ArrayList<String>();
+		
+		try {
+			for (ILocalVariable arg : method.getParameters()){
+				argTypes.add(getTypeName(arg, method, testClass));
+			}
+		} catch (Throwable e) {
+			e.printStackTrace();
+		}
+		
+		return argTypes;
+	}
+	
+	private static List<String> getParamNames(IMethod method) {
+		List<String> argTypes = new ArrayList<String>();
+		
+		try {
+			for (ILocalVariable arg : method.getParameters()){
+				argTypes.add(arg.getElementName());
+			}
+		} catch (Throwable e) {
+			e.printStackTrace();
+		}
+		
+		return argTypes;
+	}
+	
 }
