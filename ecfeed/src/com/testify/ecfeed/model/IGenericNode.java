@@ -11,9 +11,10 @@
 
 package com.testify.ecfeed.model;
 
+import java.io.IOException;
 import java.util.List;
 
-public interface IGenericNode {
+public interface IGenericNode{
 	
 	public boolean hasChildren();
 	public List<? extends IGenericNode> getChildren();
@@ -38,5 +39,6 @@ public interface IGenericNode {
 	public void setName(String newName);
 	public int subtreeSize();
 	
-	public Object serialize(IModelSerializer serializer);
+	public void serialize(IModelSerializer serializer) throws IOException;
+	public Object convert(IModelConverter converter);
 }

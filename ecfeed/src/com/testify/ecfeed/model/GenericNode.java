@@ -11,6 +11,7 @@
 
 package com.testify.ecfeed.model;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -154,7 +155,12 @@ public class GenericNode implements IGenericNode{
 		return true;
 	}
 	
-	public Object serialize(IModelSerializer serializer){
-		return serializer.serialize(this);
+	public void serialize(IModelSerializer serializer) throws IOException{
+		serializer.serialize(this);
 	}
+	
+	public Object convert(IModelConverter converter){
+		return converter.convert(this);
+	}
+
 }

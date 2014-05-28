@@ -20,6 +20,14 @@ import nu.xom.ParsingException;
 
 public class Messages {
 	
+	public static final String ELEMENT_TYPE_MISMATCH(String expectedType, String receivedType){
+		return "Type mismatch: expected type was " + expectedType + ", received was " + receivedType;
+	}
+	
+	public static final String UNSUPPORTED_STATEMENT_TYPE(String type){ 
+		return "Unsupported statemet type " + type;
+	}
+
 	public static final String WRONG_ROOT_ELEMENT_TAG = 
 			"Parsing error: The XML root element must be " + Constants.ROOT_NODE_NAME;
 

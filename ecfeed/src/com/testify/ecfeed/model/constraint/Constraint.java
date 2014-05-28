@@ -13,9 +13,9 @@ package com.testify.ecfeed.model.constraint;
 
 import java.util.List;
 
+import com.testify.ecfeed.generators.api.IConstraint;
 import com.testify.ecfeed.model.AbstractCategoryNode;
 import com.testify.ecfeed.model.PartitionNode;
-import com.testify.ecfeed.generators.api.IConstraint;
 
 public class Constraint implements IConstraint<PartitionNode> {
 	
@@ -93,7 +93,4 @@ public class Constraint implements IConstraint<PartitionNode> {
 		return fPremise.mentions(partition) || fConsequence.mentions(partition);
 	}
 	
-	public Object serialize(IConstraintSerializer serializer){
-		return serializer.serialize(this);
-	}
 }

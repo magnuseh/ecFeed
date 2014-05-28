@@ -45,7 +45,7 @@ import com.testify.ecfeed.parsers.IModelParser;
 import com.testify.ecfeed.parsers.ParserException;
 import com.testify.ecfeed.utils.ClassUtils;
 
-public class XmlModelParser implements IModelParser{
+public class XmlModelParser {//implements IModelParser{
 	
 	public RootNode parseModel(InputStream istream) throws ParserException{
 		try {

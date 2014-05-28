@@ -11,9 +11,12 @@
 
 package com.testify.ecfeed.model.constraint;
 
+import java.io.IOException;
 import java.util.List;
 
 import com.testify.ecfeed.model.AbstractCategoryNode;
+import com.testify.ecfeed.model.IModelConverter;
+import com.testify.ecfeed.model.IModelSerializer;
 import com.testify.ecfeed.model.PartitionNode;
 
 public abstract class BasicStatement implements IStatement {
@@ -94,7 +97,11 @@ public abstract class BasicStatement implements IStatement {
 		return false;
 	}
 	
-	public Object serialize(IConstraintSerializer serializer){
-		return serializer.serialize(this);
+	public void serialize(IModelSerializer serializer) throws IOException{
+		serializer.serialize(this);
+	}
+	
+	public Object convert(IModelConverter converter){
+		return converter.convert(this);
 	}
 }
