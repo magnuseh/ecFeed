@@ -40,5 +40,6 @@ public interface IGenericNode{
 	public int subtreeSize();
 	
 	public void serialize(IModelSerializer serializer) throws IOException;
-	public Object convert(IModelConverter converter);
+	
+	public boolean compare(IGenericNode node);
 }

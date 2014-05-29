@@ -159,8 +159,10 @@ public class GenericNode implements IGenericNode{
 		serializer.serialize(this);
 	}
 	
-	public Object convert(IModelConverter converter){
-		return converter.convert(this);
+	public boolean compare(IGenericNode node){
+		if(node.getName().equals(getName())){
+			return true;
+		}
+		return false;
 	}
-
 }

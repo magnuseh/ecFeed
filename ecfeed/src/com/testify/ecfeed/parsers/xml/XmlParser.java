@@ -1,7 +1,7 @@
 package com.testify.ecfeed.parsers.xml;
 
-import static com.testify.ecfeed.parsers.Constants.*;
-import static com.testify.ecfeed.parsers.xml.Messages.*;
+import static com.testify.ecfeed.parsers.xml.Messages.IO_EXCEPTION;
+import static com.testify.ecfeed.parsers.xml.Messages.PARSING_EXCEPTION;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,12 +10,11 @@ import nu.xom.Builder;
 import nu.xom.Document;
 import nu.xom.ParsingException;
 
+import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
-import com.testify.ecfeed.model.ExpectedCategoryNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
-import com.testify.ecfeed.model.PartitionedCategoryNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.model.constraint.StatementArray;
@@ -57,14 +56,7 @@ public class XmlParser implements IModelParser{
 	}
 
 	@Override
-	public ExpectedCategoryNode parseExpectedCategory(InputStream istream)
-			throws ParserException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public PartitionedCategoryNode parsePartitionedCategory(InputStream istream)
+	public CategoryNode parseCategory(InputStream istream)
 			throws ParserException {
 		// TODO Auto-generated method stub
 		return null;

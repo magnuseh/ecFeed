@@ -288,7 +288,7 @@ public class MethodNode extends GenericNode {
 			// from partitioned to expected
 			else{
 				if(category.getDefaultValue() == null)
-					category.setDefaultValue(category.getPartitions().get(0).getValue());
+					category.setDefaultValue(category.getPartitions().get(0).getValueRepresentation());
 				for(TestCaseNode testCase : fTestCases){
 					testCase.replaceValue(index, category.getDefaultValuePartition().getCopy());
 				}

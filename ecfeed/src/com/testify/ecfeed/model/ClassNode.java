@@ -16,6 +16,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.ArrayList;
 
+import nu.xom.Element;
+
 public class ClassNode extends GenericNode {
 	private List<MethodNode> fMethods;
 
@@ -83,5 +85,9 @@ public class ClassNode extends GenericNode {
 	private String getLocalName(String qualifiedName){
 		int lastDotIndex = qualifiedName.lastIndexOf('.');
 		return (lastDotIndex == -1)?qualifiedName: qualifiedName.substring(lastDotIndex + 1);
+	}
+
+	public Object convert(IModelConverter converter){
+		return converter.convert(this);
 	}
 }

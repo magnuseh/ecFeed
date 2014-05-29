@@ -8,7 +8,6 @@ import static com.testify.ecfeed.parsers.Constants.CONSTRAINT_NODE_NAME;
 import static com.testify.ecfeed.parsers.Constants.CONSTRAINT_PARTITION_STATEMENT_NODE_NAME;
 import static com.testify.ecfeed.parsers.Constants.CONSTRAINT_STATEMENT_ARRAY_NODE_NAME;
 import static com.testify.ecfeed.parsers.Constants.CONSTRAINT_STATIC_STATEMENT_NODE_NAME;
-import static com.testify.ecfeed.parsers.Constants.EXPECTED_VALUE_CATEGORY_NODE_NAME;
 import static com.testify.ecfeed.parsers.Constants.METHOD_NODE_NAME;
 import static com.testify.ecfeed.parsers.Constants.NODE_NAME_ATTRIBUTE;
 import static com.testify.ecfeed.parsers.Constants.PARTITION_NODE_NAME;
@@ -28,15 +27,12 @@ import static com.testify.ecfeed.parsers.Constants.TYPE_NAME_UNSUPPORTED;
 import nu.xom.Attribute;
 import nu.xom.Element;
 
-import com.testify.ecfeed.model.AbstractCategoryNode;
+import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
-import com.testify.ecfeed.model.ExpectedCategoryNode;
-import com.testify.ecfeed.model.IGenericNode;
 import com.testify.ecfeed.model.IModelConverter;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
-import com.testify.ecfeed.model.PartitionedCategoryNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.model.constraint.BasicStatement;
@@ -47,10 +43,6 @@ import com.testify.ecfeed.model.constraint.StaticStatement;
 import com.testify.ecfeed.parsers.Constants;
 
 public class XomConverter implements IModelConverter{
-
-	public Object convert(IGenericNode node) {
-		return null;
-	}
 
 	public Object convert(RootNode node) {
 		Element rootElement = createNamedElement(ROOT_NODE_NAME, node.getName());
@@ -70,7 +62,7 @@ public class XomConverter implements IModelConverter{
 
 	public Object convert(MethodNode node) {
 		Element methodElement = createNamedElement(METHOD_NODE_NAME, node.getName());
-		for(AbstractCategoryNode category : node.getCategories()){
+		for(CategoryNode category : node.getCategories()){
 			methodElement.appendChild((Element)category.convert(this));
 		}
 		for(ConstraintNode constraint : node.getConstraintNodes()){
@@ -96,7 +88,7 @@ public class XomConverter implements IModelConverter{
 	}
 
 	private Element createTestDataElement(PartitionNode parameter) {
-		if(parameter.getCategory() instanceof ExpectedCategoryNode){
+		if(parameter.getCategory().isExpected()){
 			return createExpectedValueElement(parameter);
 		}
 		return createTestParameterElement(parameter);
@@ -112,7 +104,7 @@ public class XomConverter implements IModelConverter{
 
 	private Element createExpectedValueElement(PartitionNode parameter) {
 		Element testParameterElement = new Element(Constants.EXPECTED_PARAMETER_NODE_NAME);
-		String valueString = getValueString(parameter.getCategory().getType(), parameter.getValue());
+		String valueString = getValueString(parameter.getCategory().getType(), parameter.getValueRepresentation());
 		Attribute partitionNameAttribute = new Attribute(Constants.VALUE_ATTRIBUTE_NAME, valueString);
 		testParameterElement.addAttribute(partitionNameAttribute);
 
@@ -136,7 +128,7 @@ public class XomConverter implements IModelConverter{
 		return constraintElement;
 	}
 
-	public Object convert(PartitionedCategoryNode node) {
+	public Object convert(CategoryNode node) {
 		Element categoryElement = createNamedElement(CATEGORY_NODE_NAME, node.getName());
 		
 		Attribute typeNameAttribute = new Attribute(Constants.TYPE_NAME_ATTRIBUTE, node.getType());
@@ -148,30 +140,24 @@ public class XomConverter implements IModelConverter{
 		return categoryElement;
 	}
 
-	public Object convert(ExpectedCategoryNode node) {
-		Element categoryElement = createNamedElement(EXPECTED_VALUE_CATEGORY_NODE_NAME, node.getName());
-
-		String type = node.getType();
-		Object value = node.getDefaultValue();
-		
-		Attribute typeNameAttribute = new Attribute(Constants.TYPE_NAME_ATTRIBUTE, node.getType());
-		Attribute expectedAttribute = new Attribute(Constants.DEFAULT_EXPECTED_VALUE_ATTRIBUTE, getValueString(type, value));
-		categoryElement.addAttribute(typeNameAttribute);
-		categoryElement.addAttribute(expectedAttribute);
-
-		return categoryElement;
-	}
+//	public Object convert(CategoryNode node) {
+//		Element categoryElement = createNamedElement(EXPECTED_VALUE_CATEGORY_NODE_NAME, node.getName());
+//
+//		String type = node.getType();
+//		Object value = node.getDefaultValue();
+//		
+//		Attribute typeNameAttribute = new Attribute(Constants.TYPE_NAME_ATTRIBUTE, node.getType());
+//		Attribute expectedAttribute = new Attribute(Constants.DEFAULT_EXPECTED_VALUE_ATTRIBUTE, getValueString(type, value));
+//		categoryElement.addAttribute(typeNameAttribute);
+//		categoryElement.addAttribute(expectedAttribute);
+//
+//		return categoryElement;
+//	}
 
 	public Object convert(PartitionNode node) {
 		Element partitionElement = createNamedElement(PARTITION_NODE_NAME, node.getName());
 
-		String type = TYPE_NAME_UNSUPPORTED;
-		if(node.getCategory() != null){
-			type = node.getCategory().getType();
-		}
-		String valueString = getValueString(type, node.getValue());
-	
-		Attribute valueAttribute = new Attribute(Constants.VALUE_ATTRIBUTE, valueString);
+		Attribute valueAttribute = new Attribute(Constants.VALUE_ATTRIBUTE, node.getValueRepresentation());
 		partitionElement.addAttribute(valueAttribute);
 
 		for(String label : node.getLabels()){
@@ -251,13 +237,13 @@ public class XomConverter implements IModelConverter{
 	}
 
 	public Object convert(ExpectedValueStatement statement) {
-		ExpectedCategoryNode category = statement.getCategory();
+		CategoryNode category = statement.getCategory();
 		PartitionNode condition = statement.getCondition();
 		Element statementElement = new Element(CONSTRAINT_EXPECTED_STATEMENT_NODE_NAME);
 
 		Attribute categoryAttribute = new Attribute(STATEMENT_CATEGORY_ATTRIBUTE_NAME, category.getName());
 		Attribute valueAttribute = new Attribute(STATEMENT_EXPECTED_VALUE_ATTRIBUTE_NAME, 
-						getValueString(category.getType(), condition.getValue()));
+						getValueString(category.getType(), condition.getValueRepresentation()));
 		
 		statementElement.addAttribute(categoryAttribute);
 		statementElement.addAttribute(valueAttribute);

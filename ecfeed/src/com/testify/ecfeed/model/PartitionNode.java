@@ -22,11 +22,11 @@ public class PartitionNode extends GenericNode implements IPartitionedNode{
 	private IPartitionedNode fPartitionedParent;
 	private PartitionNode fParentPartition;
 	
-	private Object fValue;
+	private String fValue;
 	private List<PartitionNode> fPartitions;
 	private Set<String> fLabels;
 	
-	public PartitionNode(String name, Object value) {
+	public PartitionNode(String name, String value) {
 		super(name);
 		fValue = value;
 		fPartitions = new ArrayList<PartitionNode>();
@@ -114,7 +114,7 @@ public class PartitionNode extends GenericNode implements IPartitionedNode{
 		if(isAbstract()){
 			return getQualifiedName() + "[ABSTRACT]";
 		}
-		return getQualifiedName() + " [" + getValueString() + "]";
+		return getQualifiedName() + " [" + getValueRepresentation() + "]";
 	}
 
 	public String getQualifiedName(){
@@ -124,12 +124,20 @@ public class PartitionNode extends GenericNode implements IPartitionedNode{
 		return getName();
 	}
 
-	public Object getValue() {
+//	public Object getValue() {
+//		return fValue;
+//	}
+//
+//	public void setValue(Object value) {
+//		this.fValue = value;
+//	}
+	
+	public String getValueRepresentation(){
 		return fValue;
 	}
-
-	public void setValue(Object value) {
-		this.fValue = value;
+	
+	public void setValueRepresentation(String valueString){
+		fValue = valueString;
 	}
 	
 	public void setParent(IPartitionedNode parent){
@@ -140,17 +148,17 @@ public class PartitionNode extends GenericNode implements IPartitionedNode{
 		fPartitionedParent = fParentPartition = parentPartition;
 	}
 	
-	public String getValueString(){
-		if(fValue == null) return Constants.NULL_VALUE_STRING_REPRESENTATION;
-		if(fValue instanceof Character){
-			if((Character)fValue != 0) return " \\" + (int)((char)fValue ) + " ['" + fValue + "']";
-			return "\\0";
-		}
-		return String.valueOf(fValue);
-	}
+//	public String getValueString(){
+//		if(fValue == null) return Constants.NULL_VALUE_STRING_REPRESENTATION;
+//		if(fValue instanceof Character){
+//			if((Character)fValue != 0) return " \\" + (int)((char)fValue ) + " ['" + fValue + "']";
+//			return "\\0";
+//		}
+//		return String.valueOf(fValue);
+//	}
 	
 	public PartitionNode getCopy() {
-		PartitionNode copy = new PartitionNode(getName(), fValue);
+		PartitionNode copy = new PartitionNode(getName(), getValueRepresentation());
 		copy.setParent(fPartitionedParent);
 		return copy;
 	}
@@ -244,4 +252,32 @@ public class PartitionNode extends GenericNode implements IPartitionedNode{
 		}
 		return fParentPartition.level() + 1;
 	}
+	
+	@Override
+	public boolean compare(IGenericNode node){
+		if(node instanceof PartitionNode == false){
+			return false;
+		}
+	
+		boolean result = super.compare(node);
+		PartitionNode compared = (PartitionNode)node;
+		result &= getValueRepresentation().equals(compared.getValueRepresentation());
+		
+		result &= getLabels().size() == compared.getLabels().size();
+		for(String label : getLabels()){
+			result &= compared.getLabels().contains(label);
+		}
+		
+		result &= getPartitions().size() == compared.getPartitions().size();
+		for(int i = 0; i < getPartitions().size(); i++){
+			result &= getPartitions().get(i).compare(compared.getPartitions().get(i));
+		}
+		
+		return result;
+	}
+	
+	public Object convert(IModelConverter converter){
+		return converter.convert(this);
+	}
+
 }

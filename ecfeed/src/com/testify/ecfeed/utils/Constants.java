@@ -44,4 +44,7 @@ public class Constants {
 	public static final int MAX_DISPLAYED_TEST_CASES_PER_SUITE = 500;
 	public static final int TEST_SUITE_SIZE_WARNING_LIMIT = 20000;
 	public static final String DEFAULT_LABEL = "newLabel";
+	
+	public static final String PARTITION_NAME_REGEX = "[A-Za-z_][A-Za-z0-9_ ]{1,64}";
+	public static final String PARTITION_LABEL_REGEX = "[A-Za-z_][A-Za-z0-9_]{1,64}";
 }

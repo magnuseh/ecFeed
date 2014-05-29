@@ -7,18 +7,16 @@ import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.Serializer;
 
+import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
-import com.testify.ecfeed.model.ExpectedCategoryNode;
 import com.testify.ecfeed.model.IGenericNode;
 import com.testify.ecfeed.model.IModelSerializer;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
-import com.testify.ecfeed.model.PartitionedCategoryNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.model.constraint.BasicStatement;
-import com.testify.ecfeed.model.constraint.Constraint;
 import com.testify.ecfeed.model.constraint.ExpectedValueStatement;
 import com.testify.ecfeed.model.constraint.PartitionedCategoryStatement;
 import com.testify.ecfeed.model.constraint.StatementArray;
@@ -63,11 +61,7 @@ public class XmlSerializer implements IModelSerializer {
 		serializeElement((Element)fBuilder.convert(node));
 	}
 
-	public void serialize(ExpectedCategoryNode node) throws IOException {
-		serializeElement((Element)fBuilder.convert(node));
-	}
-
-	public void serialize(PartitionedCategoryNode node) throws IOException {
+	public void serialize(CategoryNode node) throws IOException {
 		serializeElement((Element)fBuilder.convert(node));
 	}
 

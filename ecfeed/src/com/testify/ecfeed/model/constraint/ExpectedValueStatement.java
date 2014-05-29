@@ -67,6 +67,6 @@ public class ExpectedValueStatement extends BasicStatement implements IRelationa
 	}
 	
 	public String toString(){
-		return getCategory().getName() + getRelation().toString() + fCondition.getValueString();
+		return getCategory().getName() + getRelation().toString() + fCondition.getValueRepresentation();
 	}
 }

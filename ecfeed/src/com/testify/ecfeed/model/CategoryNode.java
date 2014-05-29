@@ -169,12 +169,12 @@ public class CategoryNode extends GenericNode implements IPartitionedNode{
 		return fDefaultValue;
 	}
 
-	public Object getDefaultValue() {
-		return fDefaultValue.getValue();
+	public String getDefaultValue() {
+		return fDefaultValue.getValueRepresentation();
 	}
 
-	public void setDefaultValue(Object value) {
-		fDefaultValue.setValue(value);
+	public void setDefaultValue(String value) {
+		fDefaultValue.setValueRepresentation(value);
 	}
 	
 	public boolean isExpected(){
